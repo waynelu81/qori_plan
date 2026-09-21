@@ -53,19 +53,22 @@ cannot do what the step is for.
    Settings → OAuth on, add `http://localhost:8001/u/payments/stripe/finalise`
    as a redirect URI, and put the `ca_…` client id in `STRIPE_CLIENT_ID`.
    Google Cloud: `http://localhost:8001/u/connections/google/finalise` as an
-   authorised redirect URI, and the creator's and a Peer's Google accounts on
-   the consent screen's test users. Step 5 comes alive with no code.
+   authorised redirect URI. The app has been _In production_ since 20
+   September 2026, so no test users are needed unless it was switched back.
+   Step 5 comes alive with no code. Every step, and what an agent may read for
+   you in the consoles: `docs/tinker/e2e-first-share.md` in the code
+   repository.
 2. ~~**`T-159` — Drive from setup to an Episode.**~~ Done 21 September 2026.
 3. ~~**`T-160` — Open grants the Peer and sends them to Drive.**~~ Done 21
    September 2026. The owner's real Google connection from `T-044`'s walk is
    live locally, so steps 6, 9 and 14 can be walked by hand now.
-4. **`T-161` — the journey as one script (M).** Every step above in the e2e
-   runner, hardcoded only where a person must sign in or type a card: a test
-   connected account id for Stripe's sign-in, a stored Google refresh token and
-   a file picked once for Google's consent and Picker, and the checkout
-   completion delivered as a signed `checkout.session.completed` (`T-121`'s
-   second option). Then the owner walks it once by hand for real: two sign-ins
-   and a test card.
+4. **`T-161` — the journey as one script (M).** Built 21 September 2026:
+   `tests/e2e/first-share.spec.ts` walks every step above, hardcoded only where
+   a person must be at a vendor, from the owner's gitignored `.env.e2e`
+   (`D-045`). Skipped until that file exists. Next: walk steps 5, 6 and 9 once
+   for real, run `php artisan qori:e2e:capture you@… --peer=…`, then
+   `php artisan qori:e2e --only=first-share --headed`; and walk it once by hand
+   with a test card.
 5. **Then the branches**, the step-5 one first: a price without payments says
    so and offers Connect, and the public page stops offering to buy
    (`T-085`, what is left of `T-028`). Stop offering Dropbox, and Audio's
@@ -78,10 +81,10 @@ cannot do what the step is for.
 ## Asked, and carrying on meanwhile
 
 - Step 1's config — Stripe OAuth, `STRIPE_CLIENT_ID` and the two redirect URIs.
-- Which Google account plays the Peer, so it can be on the test-user list.
-- For `T-161`'s hardcoding: once you have connected both for real, may the e2e
-  runner take the connected account id and the Google refresh token from your
-  local `.env`? They stay on your machine and are never committed.
+- Which Google account plays the Peer: it goes in `QORI_E2E_PEER_GOOGLE_EMAIL`.
+- ~~May the e2e runner take the account id and the refresh token from your
+  local `.env`?~~ 21 September 2026: yes — from `.env` or a designated
+  gitignored file, skipped where it does not exist (`D-045`).
 - Naming the Group at setup also sets its slug?
 - Must a Peer agree to the creator's emails to get free access?
 - Local development uploads to R2 bucket `useqori-app-bucket` — is that the

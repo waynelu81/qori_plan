@@ -2439,3 +2439,49 @@ is not there.
 owner did not want to spend the time — and `T-109` carries that as its first
 question. `PLAN.md`'s settled line, that certificates state only what Qori can
 prove, is untouched: it governs what a certificate says when there is one.
+
+#### D-045 — End-to-end credentials live in a gitignored `.env.e2e`; absent means skipped, present means it must run
+
+**Decision.** The first-share journey's real vendor values — the owner's Stripe
+test connected account, their Google Drive refresh token, a file they picked
+through the Picker, and a second Google account that plays the Peer — live in
+**`.env.e2e`** in the code repository, gitignored, or in `.env` if the owner
+prefers. `bootstrap/app.php` loads it after `.env` and before configuration,
+only when `APP_ENV` is `local`, only for `qori:e2e` and `qori:e2e:connect`,
+only its `QORI_E2E_*` keys, and not at all when git would commit it.
+`php artisan qori:e2e:capture` writes it from what the owner did once in local
+Qori, so nobody copies a token by hand.
+
+**No file and no key anywhere, the journey is skipped and the run passes** — on
+another machine, in a fresh clone, in CI. **Once the file exists, a missing key
+or a value that no longer works fails the run** and names the key and the fix.
+The owner, 21 September 2026: "For any local test or e2e test, please read from
+.env or maybe a designated gitignore file. if the test is run on other machine
+other than local or designated not exists, just let those test pass or skip."
+
+Where a person must be at a vendor, the run is hardcoded (the owner's word, the
+same day): Stripe's sign-in and Google's consent are replaced by adopting the
+owner's account and token through `PaymentsService::adopt()` and
+`ConnectionService::adopt()`; the Picker by posting the Episode form with the
+picked file; the card by a signed `checkout.session.completed` built from the
+real session read back from Stripe (`T-121`'s second option). Node never holds
+a secret, and the run signs with a webhook secret minted for that run.
+
+**Why this shape.** A separate file lets a command own it and rewrite it whole
+without touching the owner's `.env`, and deleting it switches the journey off.
+`.env.local` was ruled out because Laravel loads it *instead of* `.env` when
+`APP_ENV=local` is in the environment; `.env.testing` is committed and is
+PHPUnit's. Skipping only when nothing was set up keeps a half-filled file from
+passing for green: the review of the first design found that skipping on any
+vendor refusal would hide a Qori regression behind "credentials do not fit".
+Loading inside PHP, before config, keeps `config/*.php` the only reader of the
+environment and keeps the refresh token out of Node, where a Playwright trace
+would keep it.
+
+**Consequences.** `T-161` builds it; `docs/tinker/e2e-first-share.md` is the
+owner's guide. PHPUnit stays fully faked and never reads the file. `qori:e2e`
+no longer empties Mailpit, whose 1025/8025 may be another project's: journeys
+read their own recipients, and the fixed Peer address reads only messages that
+arrived after the step that sent them. `qori:mail:check` still empties it →
+`T-162`. An agent may read the vendors' consoles for the owner but never signs
+in, types a secret or changes a setting without asking for that one change.
