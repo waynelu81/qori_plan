@@ -83,6 +83,7 @@ certificates (`T-005`), and any change to minting or to `completed_at`.
 | Path | Change | Notes |
 | --- | --- | --- |
 | `resources/js/composables/useFeatures.ts` | new | The sidebar and both Series forms read the switch; a composable like `useTerminology` beside them, not `usePage()` three times |
+| `tests/Feature/Series/DeleteSeriesTest.php` | edit | `test_the_sweep_keeps_the_certificate_code` opens the check page; switched on like the other three |
 
 ## Database
 

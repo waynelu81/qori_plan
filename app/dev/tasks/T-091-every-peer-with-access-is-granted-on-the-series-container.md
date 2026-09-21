@@ -1772,6 +1772,11 @@ allow-list and `ArchitectureTest` are untouched.
 
 ## Before this can be ready
 
+- **Added 21 September 2026:** the happy path — reader on one picked file for
+  the Peer's Qori email at Open — is cut out as `T-160`, so the first-share
+  journey is not held by this task's questions. What is below is now that
+  step's branches: whoever picks this up builds on `T-160`'s grant record.
+
 - ~~May one Series mix providers, one container each, or is it one provider
   per Series? The unique constraint allows mixing; the answer may tighten it
   — the owner's.~~ ~~A container dedicated to one Series, enforced by
