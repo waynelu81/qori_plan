@@ -13,23 +13,20 @@ blocks: T-169
 
 ## Why
 
-`D-047` makes USD the default currency of every plan's Stripe price. It is
-what the prices were planned in, and what a buyer pays when their own currency
-has no fixed price. The code already speaks USD, but only by accident:
+`D-048`: staff set every plan's price in USD, and every fixed currency is
+calculated from it. The code already speaks USD, but only by accident:
 
-- the literal `'USD'` is written into the console's new-price form;
-- it is the fallback in `StoreSubscriptionPriceRequest` when the field is
-  missing;
+- the literal `'USD'` is written into the console's new-price form and into
+  `StoreSubscriptionPriceRequest`'s fallback;
 - the design fixtures in `PricingSeeder` are US$19 and US$49 placeholders,
   not the planned US$39 and US$99.
 
-`T-169` needs the base currency in one place, to refuse a fixed amount in it,
-and so does `T-170`, to fall back to it.
+`T-169` calculates from the USD price and needs its currency in one place.
+`T-170` quotes it.
 
 Afterwards:
 
 - `qori.billing.currency` is that one place;
-- the console and the request both read it;
 - the fixtures carry US$39 and US$99.
 
 ## Decisions taken to make this specifiable
@@ -37,19 +34,17 @@ Afterwards:
 - **Qori's billing currency is its own key, `qori.billing.currency`, not
   `qori.payments.default_currency`.** The second is the default for a Series
   price on the creator's own Stripe account (`SeriesController` reads it), and
-  it is AUD. The first is the default currency of Qori's own plan prices. They
+  it is AUD. The first is the currency Qori's own plan prices are set in. They
   answer different questions, and a creator-facing default must not change
   because Qori's pricing did.
-- **The currency field stays editable and is not restricted to the base.**
-  Stripe's price is the authority and the row mirrors it. Refusing other
-  currencies would not catch a wrong amount either.
+- **The console's currency field is left to `T-169`, which removes it.**
+  Under `D-048` a price is always set in USD, so wiring the field to config
+  here would be undone there.
 - **The design fixtures take the planned monthly prices, US$39 and US$99, and
   get no annual row.** A design review then shows the price a creator will see.
   Annual waits until retention is understood (the 11 September review, §5).
-- **No sandbox check here.** This task was first written with an Adaptive
-  Pricing check, and Adaptive Pricing is off under `D-047`. The check that a
-  subscription paid in a fixed currency still grants its plan belongs to
-  `T-170`, where the checkout first names a currency.
+- **No sandbox check here.** The end-to-end check of the hybrid is in `T-172`,
+  where Qori first publishes a price to Stripe.
 
 ## Preconditions
 
@@ -61,33 +56,24 @@ Afterwards:
 
 **In:**
 
-- `qori.billing.currency`, set to `USD`. The console form reads it, and so
-  does `StoreSubscriptionPriceRequest` when the field is missing.
+- `qori.billing.currency`, set to `USD`.
 - `PricingSeeder`'s Start and Pro rows at 3900 and 9900 cents, in
   `qori.billing.currency`.
 
 **Out:**
 
-- Fixed amounts in the major currencies: `T-169`.
-- Quoting the visitor's currency on Qori's pages, and naming it at checkout:
-  `T-170`.
-- Plan coupons: `T-169` makes them percent-off.
-- Creating the live prices and entering the live rows: release checklist
-  (`release-prerequisites.md`, `D-047`).
+- The console form's currency field, and the fixed amounts: `T-169`.
+- Publishing prices to Stripe: `T-172`. Vouchers: `T-173`.
+- Quoting the visitor's currency on Qori's pages: `T-170`.
 - Tax: `T-168`.
 
 ## Files
 
-| Path                                                        | Change | Notes                               |
-| ----------------------------------------------------------- | ------ | ----------------------------------- |
-| `config/qori.php`                                           | edit   | `billing.currency`, with its reason |
-| `app/Http/Requests/Admin/StoreSubscriptionPriceRequest.php` | edit   | falls back to the config value      |
-| `app/Http/Controllers/Admin/PricingController.php`          | edit   | the `defaultCurrency` prop          |
-| `resources/js/pages/admin/Pricing.vue`                      | edit   | the field's value from the prop     |
-| `database/seeders/PricingSeeder.php`                        | edit   | 3900 and 9900 in the config currency |
-| `tests/Feature/Checkout/PricingModelTest.php`               | edit   | two cases                           |
-
-Flows: none — no call chain changes; only the base currency moves into config.
+| Path                                          | Change | Notes                                |
+| --------------------------------------------- | ------ | ------------------------------------ |
+| `config/qori.php`                             | edit   | the `billing` section and `currency` |
+| `database/seeders/PricingSeeder.php`          | edit   | 3900 and 9900 in the config currency |
+| `tests/Feature/Checkout/PricingModelTest.php` | edit   | one case                             |
 
 ## Database
 
@@ -98,23 +84,11 @@ None.
 ```php
 // config/qori.php — a new top-level section after 'payments'
 'billing' => [
-    // The default currency of every plan's Stripe price: what the prices are
-    // planned in, and what a buyer pays when their own currency has no fixed
-    // price (D-047).
+    // The currency staff set every plan's price in. Every fixed currency is
+    // calculated from it, rounded up to a whole unit (D-048).
     'currency' => 'USD',
 ],
 ```
-
-```php
-// StoreSubscriptionPriceRequest::prepareForValidation()
-$this->merge(['currency' => mb_strtoupper((string) $this->input('currency', config('qori.billing.currency')))]);
-
-// PricingController::index() — one more prop
-'defaultCurrency' => (string) config('qori.billing.currency'),
-```
-
-`admin/Pricing.vue` gains the prop `defaultCurrency: string`, and the currency
-input's `value="USD"` becomes `:value="defaultCurrency"`.
 
 `PricingSeeder::plans()`: `1900` becomes `3900`, `4900` becomes `9900`, and
 `'currency' => 'USD'` becomes `'currency' => config('qori.billing.currency')`.
@@ -122,7 +96,7 @@ The row ids and the fake `price_designreview…` ids are unchanged.
 
 ## Copy
 
-None. The console's labels are unchanged.
+None.
 
 ## Routes
 
@@ -130,21 +104,17 @@ None.
 
 ## Tests
 
-**Changed: `tests/Feature/Checkout/PricingModelTest.php` — 2 new cases**
+**Changed: `tests/Feature/Checkout/PricingModelTest.php` — 1 new case**
 
-1. `test_a_price_saved_without_a_currency_is_in_the_billing_currency` — with
-   `config(['qori.billing.currency' => 'EUR'])`, so the test cannot pass on
-   the old literal, a staff owner posts to `/admin/pricing/prices` with no
-   `currency`; the row's currency is `EUR`.
-2. `test_the_console_offers_the_billing_currency` — with the same config,
-   `GET /admin/pricing` as a staff owner; the `defaultCurrency` prop is `EUR`.
+1. `test_the_design_prices_are_the_planned_usd_prices` — after
+   `PricingSeeder`, Start is 3900 and Pro is 9900, both in
+   `qori.billing.currency`.
 
-Total: 2. The existing cases post `'currency' => 'USD'` explicitly and pass
-unchanged.
+Total: 1.
 
 ## Acceptance
 
-- [ ] The console's new-price form and a price saved without a currency both take `qori.billing.currency`
+- [ ] `qori.billing.currency` is `USD`, with its reason
 - [ ] `php artisan db:seed --class=PricingSeeder` writes Start at US$39 and Pro at US$99
 - [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
 - [ ] `bin/tasks --check` passes in `qori-plan`
@@ -156,17 +126,20 @@ unchanged.
 - **22 September 2026, before anyone claimed it.** Written that morning as
   "Qori's plans are priced in Australian dollars" for `D-046`: an AUD base, a
   console defaulting to AUD, A$55 and A$139 fixtures, and a sandbox check that
-  an Adaptive-Priced subscription still grants its plan. The same afternoon,
-  `D-047` moved the base to USD, gave the major currencies fixed prices, and
-  switched Adaptive Pricing off. Everything was rewritten except the config key
-  and the console wiring: the title, Why, the Decisions on fixtures and on the
-  check, Preconditions, Scope, Files and Tests. The file was renamed from
-  `T-167-qoris-plans-are-priced-in-australian-dollars.md`, and the fixed
-  amounts went to `T-169`.
+  an Adaptive-Priced subscription still grants its plan. That afternoon
+  `D-047` moved the base to USD and switched Adaptive Pricing off. The task was
+  rewritten and renamed from
+  `T-167-qoris-plans-are-priced-in-australian-dollars.md`; the fixed amounts
+  went to `T-169`.
+- **22 September 2026, that evening, still unclaimed.** `D-048` keeps USD as
+  the currency staff set, but calculates every other one from it and switches
+  Adaptive Pricing back on. `T-169` now removes the console's currency field,
+  so the form and request wiring left this task. So did its second test.
+  Files, Code and Tests shrank to match.
 
 ## Notes
 
 - The USD literals were found while writing the first version:
   `Pricing.vue` has `value="USD"`, and
   `StoreSubscriptionPriceRequest::prepareForValidation()` falls back to
-  `'USD'`.
+  `'USD'`. `T-169` removes both.

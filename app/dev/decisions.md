@@ -158,8 +158,9 @@ answer is written into the task.
 - `T-109` — The certificate's new sentences, including "marked every Episode
   done"; and whether "Issued by" and "This certifies that" overstate too.
 - `T-170` — Whether Qori's pricing and billing pages offer a currency menu
-  beside the prices, or pick from the visitor's country alone (22 September
-  2026, `D-047`).
+  beside the prices, or pick from the visitor's country alone; and what they
+  show a visitor whose currency has no fixed price (22 September 2026, `D-047`,
+  `D-048`).
 
 ### Open decision: promotional content in access confirmations (2026-09-13)
 
@@ -2690,3 +2691,121 @@ Adaptive Pricing, and "Qori's own pages quote AUD".
 - `T-167` is re-scoped to a USD base. `T-169` holds the fixed amounts on the
   price row and in the console. `T-170` quotes and charges the visitor's
   currency.
+
+#### D-048 — Qori sets each plan's price in USD and calculates the fixed currencies from it; Stripe's price is in AUD with Adaptive Pricing for the rest; Qori publishes prices and vouchers to Stripe (amends `D-047`)
+
+**Decision.**
+
+- **Staff set one number per plan: its USD price** (Start US$39, Pro US$99),
+  in Qori. They type nothing else about money.
+- **Every fixed currency is calculated from it**: the USD amount at the day's
+  mid-market rate, **rounded up to a whole unit** of that currency. US$39 is
+  A$54.64, so **A$55**; €33.94, so **€34**; £29.12, so **£30**.
+- **Stripe's price has AUD as its default currency**, at the calculated AUD
+  amount, and carries the other fixed currencies as `currency_options`. USD is
+  among them, at the USD price itself.
+- **Adaptive Pricing is on.** It converts from AUD for every currency that has
+  no fixed price.
+- **Qori is the source of truth, and it writes to Stripe.** Publishing a price
+  creates the Stripe price. Changing one never edits a Stripe price: Qori
+  creates a new one and archives the old. Existing subscribers stay on the
+  price they bought until someone deliberately moves them. That move is a
+  separate decision, not taken here. Plan vouchers are created in Stripe by
+  Qori the same way.
+
+The owner, 22 September 2026, after `D-047`: "When I said price is base on
+USD i mean USD $39 for starter, use 39 to calculate and get $55 for AUD and
+set AUD to 55 in stripe, same goes with EUR GBP etc. All the price is base on
+USD. when I change price I only edit Qori USD price and every other fix
+currency calculate from USD round up to full dollar. Base turn on adaptive
+pricing in stripe which is base on AUD for otther currency outside of fixed
+one." Earlier, on who holds the truth: "can the stripe pricing be injected
+from Qori and Qori is the source of truth? same goes for voucher?"
+
+**Why AUD is Stripe's default currency when USD is Qori's.** Adaptive Pricing
+converts only a price in a currency the account settles in, and Qori's account
+settles in AUD. The AUD amount is itself calculated from USD, so every price
+traces back to the USD figure, including the ones Adaptive Pricing converts
+from AUD.
+
+**The fixed prices, calculated.** The European Central Bank's reference rates
+of 21 September 2026: USD 1.1490 to the EUR, AUD 1.6098, GBP 0.85780, CAD
+1.6091, NZD 2.0035, SGD 1.4647, HKD 9.0144, MYR 4.6850. The result replaces
+`D-047`'s hand-rounded table. The owner's rule, not a price point, decides
+the figure: €34 and £30, not €35 and £29.
+
+| Currency                  | Start, from US$39     | Pro, from US$99         |
+| ------------------------- | --------------------- | ----------------------- |
+| AUD (Stripe's default)    | A$55 (54.64)          | A$139 (138.70)          |
+| EUR                       | €34 (33.94)           | €87 (86.16)             |
+| GBP                       | £30 (29.12)           | £74 (73.91)             |
+| CAD                       | C$55 (54.62)          | C$139 (138.64)          |
+| NZD                       | NZ$69 (68.00)         | NZ$173 (172.63)         |
+| SGD                       | S$50 (49.72)          | S$127 (126.20)          |
+| HKD, if added             | HK$306 (305.97)       | HK$777 (776.70)         |
+| MYR, if added             | RM160 (159.02)        | RM404 (403.67)          |
+
+Rounding up is to the whole unit, and a figure already whole stays as it is.
+The NZD Start figure is 68.0039 before rounding, so it becomes NZ$69.
+
+**Where the rates come from (decided, not asked).** The European Central
+Bank's daily reference rates. They are free, official and need no account,
+and they cover every currency above; the rate between two non-euro
+currencies is worked out through the euro. The rates used are stored with each
+published price, so any figure can be explained later. Another source is one
+integration to swap.
+
+**Why Qori writes to Stripe.** Stripe does not let an amount be edited once it
+exists:
+
+- a price's `unit_amount` and currency are not updatable
+  ([Stripe](https://docs.stripe.com/api/prices/update));
+- a coupon's "currency, duration, amount_off" are "by design, not editable"
+  ([Stripe](https://docs.stripe.com/api/coupons/update)).
+
+So a price that changes is a new Stripe price whatever happens. Typing the
+same amounts into Stripe and into Qori, across as many as eight currencies,
+is how the page and the charge come to disagree.
+
+**What it costs.**
+
+- An Australian's A$55 carries no conversion fee.
+- A sale in any other fixed currency pays Stripe's 2% conversion, on Qori's
+  side.
+- Everyone else pays through Adaptive Pricing: the buyer pays Stripe's 2–4%,
+  and Qori receives AUD with no conversion fee.
+- USD payouts, which would cut USD sales to 1%, remain optional (`D-047`).
+
+**What stands from `D-047`:**
+
+- fixed prices for the major currencies;
+- the checkout names the currency for a fixed-price buyer, so Stripe's page
+  shows the price Qori's page showed;
+- plan coupons are percent-off;
+- each currency option needs a tax behaviour before Stripe Tax calculates.
+
+**What this supersedes in `D-047`:**
+
+- USD as Stripe's default currency;
+- Adaptive Pricing off;
+- "USD for everyone else";
+- the hand-rounded table.
+
+**Consequences.**
+
+- **The checkout names the currency only when it is a fixed one.** For any
+  other currency it names none, so Adaptive Pricing converts (`T-170`).
+- What Qori's page shows a visitor whose currency has no fixed price is the
+  owner's call, asked the same day. The proposal is the USD price, with a line
+  saying checkout charges their own currency.
+- A price that has not been re-published does not follow the market. Its
+  fixed amounts stay as calculated until staff re-publish.
+- Tasks:
+  - `T-167` keeps USD as Qori's currency.
+  - `T-169` calculates the fixed prices.
+  - `T-172` publishes prices to Stripe, and `T-173` creates vouchers in
+    Stripe.
+  - `T-170` names the currency only for a fixed-price buyer.
+- The release checklist turns Adaptive Pricing back on. Prices and coupons
+  are no longer created by hand in Stripe's dashboard: Qori's admin publishes
+  them.

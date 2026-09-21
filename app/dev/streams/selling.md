@@ -112,12 +112,19 @@ neither stream's goal describes any of this.
 23. `T-168` — Qori's checkout asks a business for its tax number: `D-046`
     keeps Qori's billing on Stripe rather than a merchant of record, so a
     business's VAT or GST number is Qori's to collect
-24. `T-169` — A plan's price holds a fixed amount in each major currency:
-    the owner, 22 September 2026, "i can't let customer see fluctuating price
-    every day" (`D-047`)
-25. `T-170` — Qori's pages and checkout use the visitor's currency: the
+24. `T-169` — A plan's fixed prices are calculated from its USD price: the
+    owner, 22 September 2026, "when I change price I only edit Qori USD price
+    and every other fix currency calculate from USD round up to full dollar"
+    (`D-048`)
+25. `T-172` — Qori publishes each plan's price to Stripe: the owner asked
+    whether Qori can be the source of truth, and Stripe will not let an amount
+    be edited anyway
+26. `T-173` — Qori creates plan vouchers in Stripe: "same goes for voucher?",
+    and an amount-off voucher would undo a fixed price
+27. `T-170` — Qori's pages and checkout use the visitor's currency: the
     owner, "make sure the price is same when they landed in stripe page"; the
-    owner decides whether there is a currency menu
+    owner decides whether there is a currency menu, and what a visitor with no
+    fixed price sees
 
 `T-050` went first because it was small and entirely specified, `T-054` for the
 same reason. The four payouts tasks come before the rest because a price

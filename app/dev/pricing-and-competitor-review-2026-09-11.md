@@ -2,7 +2,7 @@
 
 Reviewed: **11 September 2026**. Status: **research and proposals for discussion**, not an approved price change or implementation brief.
 
-**22 September 2026:** the owner set Start and Pro at this review's figures: **US$39** and **US$99** a month as the base price, with fixed prices in the major currencies — A$55 and A$139, €35 and €89, £29 and £75 among them — and USD for everyone else ([`D-047`](decisions.md), amending [`D-046`](decisions.md)). The review's conditions on Pro, annual billing and a US$49 Start test stand.
+**22 September 2026:** the owner set Start and Pro at this review's figures, **US$39** and **US$99** a month, in USD. Each major currency's fixed price is calculated from it and rounded up — A$55 and A$139, €34 and €87, £30 and £74 among them — and Stripe's Adaptive Pricing converts the rest ([`D-048`](decisions.md), after `D-046` and `D-047`). The review's conditions on Pro, annual billing and a US$49 Start test stand.
 
 [Product plan](../project-plan.md#51-competitors-and-pricing-review) · [Product and pricing research](product-and-pricing.md) · [Current release plan](../../PLAN.md)
 
