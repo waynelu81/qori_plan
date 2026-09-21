@@ -31,5 +31,4 @@ stops them recurring, not this file.
 - Public Series page: Continue is disabled until consent is ticked, with no
   hint why (21 Sep)
 - A file Episode shows "No materials" under itself straight after upload (21 Sep)
-- The dashboard's rename card still says "Name your Group" once named → `T-086` (seen three times, again 21 Sep)
 - CI reads a `.nvmrc` that was never committed (`T-081` listed it). `.github/workflows/tests.yml` (21 Sep)

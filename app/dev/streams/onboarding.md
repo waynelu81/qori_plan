@@ -97,6 +97,10 @@ has to honour the setup record.
     connector to offer
 13. `T-025` — Consume the saved timezone consistently across dates; separate
     from capturing it
+14. `T-174` — Making a Series ready lands on its share link: the first-share
+    walk of 21 September 2026 found the link at the foot of a long page
+15. `T-175` — The code email names the Series and who shared it: the same walk
+    found a bare "Your Qori code" from a name the Peer did not know
 
 `T-008`, in the identity stream, fixed the confirmed verification-return defect
 and established context ownership before the onboarding continuations.

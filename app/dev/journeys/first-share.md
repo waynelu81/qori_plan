@@ -22,11 +22,11 @@ cannot do what the step is for.
 | 4 | Names their Group | Rough — the URL keeps the name Qori made up, forever |
 | 5 | **Connects their Stripe account**: Stripe's sign-in, and back to setup | Works — the owner connected through Stripe's sign-in on 21 September 2026, once `STRIPE_CLIENT_ID` was set |
 | 6 | **Connects their Google Drive**: Google's consent, and back to setup | Built (`T-159`) — setup part 3 links to it; one page via Integrations, where the account kind is chosen |
-| 7 | Lands on their dashboard, told what to do next | Rough — the rename form again (`T-086`) |
+| 7 | Lands on their dashboard, told what to do next | Works — the name card offers a rename once named (`T-086`) |
 | 8 | Names their first Series and gives it a price | Works |
 | 9 | **Adds the first Episode by picking a file from their Drive** | Built (`T-159`) — the Picker has not yet run against a real account |
-| 10 | Makes it ready and copies the link | Rough — the link is at the bottom of a very long page |
-| 11 | A Peer opens the link, gives name and email, types the code | Works — the code email never names who shared it |
+| 10 | Makes it ready and copies the link | Works — making it ready lands on the share link with Copy focused (`T-174`) |
+| 11 | A Peer opens the link, gives name and email, types the code | Works — the code email names the Series and who shared it (`T-175`) |
 | 12 | **The Peer pays on Stripe's checkout** | Built — checkout, direct charge and webhook fulfilment; never walked with a connected account (`T-121`) |
 | 13 | The Peer lands on the Series: "Confirming your payment", then in | Built (`T-074`) |
 | 14 | **The Peer presses Open on the Drive Episode, is granted reader on that one file, and lands in Drive** | Built (`T-160`) — a real refusal walked; a real grant not yet |
@@ -77,9 +77,10 @@ cannot do what the step is for.
    refusal on a page without the app shell is seen). ~~Stop offering Dropbox, and
    Audio's Dropbox-only choice, on the Episode form while nothing can connect
    it~~ (`T-171`, done 22 September 2026).
-6. **Rough edges on the path (S each)**: the slug at step 4, the step-7
-   dashboard (`T-086`), the share link after ready, the code email naming the
-   Group and Series.
+6. **Rough edges on the path (S each)**: the slug at step 4 (asked), the
+   step-7 dashboard (~~`T-086`~~), the share link after ready (~~`T-174`~~),
+   the code email naming the Group and Series (~~`T-175`~~) — the last three
+   done 22 September 2026.
 7. **Everything else is [`fixups.md`](../fixups.md).**
 
 ## Asked, and carrying on meanwhile
