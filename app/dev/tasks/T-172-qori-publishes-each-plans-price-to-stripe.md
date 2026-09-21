@@ -88,8 +88,10 @@ owned by a user.
 
 - The Stripe sandbox, with `STRIPE_SECRET` in `.env`.
 - **Adaptive Pricing switched on in the sandbox** (Settings → Adaptive
-  Pricing). It is an account setting, so the owner switches it on; _asked_ 22
-  September 2026.
+  Pricing). It is an account setting, so the owner switches it on: asked 22
+  September 2026, and the owner confirmed it on the same evening. Stripe keeps
+  the setting separately for the sandbox and live, so if the check shows AUD
+  where yen is expected, the sandbox's setting is the first thing to look at.
 - `stripe listen --forward-to localhost:8001/webhooks/stripe` running.
 - A browser signed in to `/admin` as a staff owner.
 
