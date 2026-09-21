@@ -2,7 +2,7 @@
 id: T-160
 title: Open grants the Peer on the Drive file and sends them to Drive
 stream: storage
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-159
@@ -77,6 +77,12 @@ implementation; the Drive resolver; the service; the step in
 | `docs/flows/storage.md` | edit | Opening a Drive Episode |
 | `tests/Feature/Storage/OpenDriveEpisodeTest.php` | new | |
 
+### Added during execution
+
+| Path | Change | Notes |
+| --- | --- | --- |
+| `tests/Feature/Storage/OpenEpisodeTest.php` | edit | its fallback case used `pending`, which now has a line of its own |
+
 ## Database
 
 `vendor_grants`: `id` ulid primary; `group_id` FK cascade; `access_id` FK
@@ -114,12 +120,12 @@ None.
 
 ## Acceptance
 
-- [ ] A Peer with access pressing Open on a Drive Episode is granted reader and lands on the file
-- [ ] A refusal lands them back on the Series with the reason
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] A Peer with access pressing Open on a Drive Episode is granted reader and lands on the file — against Google faked with `T-093`'s bodies; a real grant is `T-161`'s by-hand walk
+- [x] A refusal lands them back on the Series with the reason — walked against Google's real 401
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 
@@ -127,4 +133,6 @@ None.
 
 ## Notes
 
-None.
+- **21 September 2026, wording tier:** the first Acceptance line now says what
+  was verified; a real grant needs the owner's Google connection and a second
+  Google account, which is `T-161`'s by-hand walk.

@@ -21,15 +21,15 @@ cannot do what the step is for.
 | 3 | Confirms their address from the email | Works — the email is Laravel's stock text (`T-055`) |
 | 4 | Names their Group | Rough — the URL keeps the name Qori made up, forever |
 | 5 | **Connects their Stripe account**: Stripe's sign-in, and back to setup | **Breaks** — the door is built (`T-063`) and needs `STRIPE_CLIENT_ID`, which is not set |
-| 6 | **Connects their Google Drive**: Google's consent, and back to setup | **Breaks** — the connector is built and tested (`T-044`) and switched off (`T-159`) |
+| 6 | **Connects their Google Drive**: Google's consent, and back to setup | Built (`T-159`) — setup part 3 links to it; one page via Integrations, where the account kind is chosen |
 | 7 | Lands on their dashboard, told what to do next | Rough — the rename form again (`T-086`) |
 | 8 | Names their first Series and gives it a price | Works |
-| 9 | **Adds the first Episode by picking a file from their Drive** | **Breaks** — no Google Drive Episode and no Picker (`T-159`) |
+| 9 | **Adds the first Episode by picking a file from their Drive** | Built (`T-159`) — the Picker has not yet run against a real account |
 | 10 | Makes it ready and copies the link | Rough — the link is at the bottom of a very long page |
 | 11 | A Peer opens the link, gives name and email, types the code | Works — the code email never names who shared it |
 | 12 | **The Peer pays on Stripe's checkout** | Built — checkout, direct charge and webhook fulfilment; never walked with a connected account (`T-121`) |
 | 13 | The Peer lands on the Series: "Confirming your payment", then in | Built (`T-074`) |
-| 14 | **The Peer presses Open on the Drive Episode, is granted reader on that one file, and lands in Drive** | **Breaks** — the grant is a comment in `PlaybackTicketService::open()` (`T-160`) |
+| 14 | **The Peer presses Open on the Drive Episode, is granted reader on that one file, and lands in Drive** | Built (`T-160`) — a real refusal walked; a real grant not yet |
 | 15 | The Peer marks it done | Works (certificates suspended, `T-158`) |
 
 ## Branches, hung off their step
@@ -55,15 +55,10 @@ cannot do what the step is for.
    Google Cloud: `http://localhost:8001/u/connections/google/finalise` as an
    authorised redirect URI, and the creator's and a Peer's Google accounts on
    the consent screen's test users. Step 5 comes alive with no code.
-2. **`T-159` — Drive from setup to an Episode (M).** Switch the Google
-   connector on so setup part 3 and Integrations offer it; a Google Drive
-   Episode provider; "Choose from Drive" on the Episode form opens Google's
-   Picker with a fresh token from `ConnectionService::fresh()`. `drive.file`
-   makes the Picker the only way a file becomes Qori's to share (`T-093`).
-3. **`T-160` — Open grants the Peer and sends them to Drive (M).** The happy
-   path of `T-091`: at Open, reader on that one file for the Peer's Qori email,
-   then Drive's viewer (`D-040`). `T-091`'s questions become this step's
-   branches, not its gate.
+2. ~~**`T-159` — Drive from setup to an Episode.**~~ Done 21 September 2026.
+3. ~~**`T-160` — Open grants the Peer and sends them to Drive.**~~ Done 21
+   September 2026. The owner's real Google connection from `T-044`'s walk is
+   live locally, so steps 6, 9 and 14 can be walked by hand now.
 4. **`T-161` — the journey as one script (M).** Every step above in the e2e
    runner, hardcoded only where a person must sign in or type a card: a test
    connected account id for Stripe's sign-in, a stored Google refresh token and
