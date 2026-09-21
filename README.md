@@ -14,6 +14,7 @@ server into a reload. Splitting them leaves the code repository to the code.
 | [`app/PLAN.md`](app/PLAN.md)   | **Start here** — intent, build status, release gates  |
 | [`app/dev/`](app/dev/)         | Process, streams, tasks, decisions, product specs     |
 | [`app/design/`](app/design/)   | Brand, UI documents, design reviews                   |
+| [`playbook/`](playbook/)       | Reusable modules distilled from what Qori actually built |
 | [`ios/`](ios/)                 | Planning for the iOS app                              |
 | [`android/`](android/)         | Planning for the Android app                          |
 
