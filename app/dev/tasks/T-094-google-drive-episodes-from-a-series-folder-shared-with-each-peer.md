@@ -935,6 +935,10 @@ the Peer's identity comes from `T-092`'s `VendorIdentityFactory`.
 
 ## Before this can be ready
 
+- **Added 21 September 2026:** connecting from setup and picking a file for an
+  Episode is cut out as `T-159`, for the first-share journey. This task keeps
+  what is left once that exists.
+
 - ~~**`T-091` carries grants on an item.** Its draft has one row per (Access,
   container) and a contract taking a `SeriesContainer`.~~ **Written into
   `T-091` on 20 September 2026:** `GrantTarget` and `grantsOn()`, the

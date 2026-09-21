@@ -6,7 +6,7 @@ status: done
 owner: claude
 estimate: L
 depends: T-067, T-093
-blocks: T-028, T-090, T-091, T-094, T-096, T-098, T-100, T-141, T-151, T-152, T-153
+blocks: T-028, T-090, T-091, T-094, T-096, T-098, T-100, T-141, T-151, T-152, T-153, T-159
 ---
 
 # T-044 — Connect a storage account, from onboarding or from a settings page

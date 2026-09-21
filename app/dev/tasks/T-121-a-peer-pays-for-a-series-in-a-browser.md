@@ -131,6 +131,10 @@ To be written with the Code section.
 
 ## Before this can be ready
 
+- **Added 21 September 2026:** `T-161` takes the second option below — the
+  completion read back from Stripe and delivered to `POST /webhooks/stripe`
+  signed with the run's secret — for the first-share journey's script.
+
 - The connected account id and the webhook decision — the owner's, under
   **Blocked on**.
 - Whether the seeded account id is one env key (`QORI_E2E_CONNECT_ACCOUNT`)
