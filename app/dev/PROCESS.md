@@ -59,6 +59,14 @@ There are three layers and they do different jobs.
 A **stream** is a line of work one person can pick up end to end without
 waiting on another stream. A **task** is one commit's worth of that line.
 
+Two views sit beside the layers. A **journey** ([`journeys/`](journeys/)) is
+what a person meets end to end, one page each: the happy path first, every
+step marked works, rough or breaks, and the branches hung off the step they
+leave from. It is how the product is reviewed and what orders the work — build
+the path until it walks clean, then the branches. **Fixups**
+([`fixups.md`](fixups.md)) are the small slips — a word, a label, a rename's
+leftover — fixed by whoever is in the file, one line each and never a task.
+
 **`PLAN.md` moves when release state moves.** Whoever's work ticks a release
 gate or changes the build state updates it, in the commit that closes the task.
 Its intent and its **Settled** list change only through a decision in

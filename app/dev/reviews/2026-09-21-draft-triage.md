@@ -130,6 +130,17 @@ a clean bill of health.
 
 ---
 
+### Corrected the same day: the consent line is not what a buyer sees
+
+The **T-118** row above says a buyer who leaves the consent box unticked sees
+*"Please agree to be peered before granting."* today. **They do not.** The
+browser walk on 21 September 2026 found the public page disables Continue
+until the box is ticked, and pressing Enter does not submit past it, so the
+line is only reachable by bypassing the page's own check. The string is still
+wrong and still belongs to `T-118`, but it is a fixup, not a live defect. What
+a person does meet is a button that looks dead with no reason given — see the
+onboarding walk in `walkthroughs.md`.
+
 ## What this says about the plan as a whole
 
 **70 drafts against 8 ready is the wrong ratio**, and the board's own target is

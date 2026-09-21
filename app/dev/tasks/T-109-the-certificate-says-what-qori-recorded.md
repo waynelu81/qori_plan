@@ -146,6 +146,16 @@ No existing case changes; `test_a_stranger_can_check_a_certificate` still holds.
 
 ## Before this can be ready
 
+- **Added 21 September 2026: certificates are suspended (`T-158`, `D-044`).**
+  The owner found the implementation does not work and switched it off rather
+  than fix it now. This task is now where it comes back: whoever picks it up
+  first finds out from the owner what fails — _asked_ is the state to record —
+  then fixes it, rewords the lines that mention certificates while it was off
+  (`lang/en/series.php` `delete_confirm`, `deletion_notice_for_peer`,
+  `purged_for_peer`; `resources/js/pages/share/settings/Vocabulary.vue`), puts
+  back the e2e steps `T-158` took out of `tests/e2e/public-link.spec.ts`, and
+  sets `QORI_CERTIFICATES=true`. Codes minted during the suspension are valid.
+
 - Approve the three sentences, and whether to say "marked every Episode done"
   or "finished". The stream owner's.
 - Decide whether "Issued by" and "This certifies that" in the header also
