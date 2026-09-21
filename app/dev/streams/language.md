@@ -1,6 +1,5 @@
 ---
 stream: language
-owner: wayne
 ---
 
 # Stream: language

@@ -1,6 +1,5 @@
 ---
 stream: delivery
-owner: wayne
 ---
 
 # Stream: delivery

@@ -1,6 +1,5 @@
 ---
 stream: fixture
-owner: someone
 ---
 
 # Stream: fixture

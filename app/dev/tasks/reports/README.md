@@ -2,7 +2,7 @@
 
 > What a worker hands back when they finish, or when they stop.
 
-[Process](../../PROCESS.md) | Board: `php artisan qori:tasks` | [Tasks](../)
+[Process](../../PROCESS.md) | Board: `bin/tasks` | [Tasks](../)
 
 ## Why these exist
 
@@ -76,12 +76,12 @@ and `TaskBoardTest` refuses a report that leaves one off:
 | Tag                    | Means                                                                                                                    |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | `→ T-###`              | An existing task owns it. Add a line to that task if it does not already say so.                                         |
-| `→ draft T-###`        | It needs a task, and you wrote the draft — `php artisan qori:tasks --new <stream> <slug>` — with the finding in its Why. |
+| `→ draft T-###`        | It needs a task, and you wrote the draft — `bin/tasks --new <stream> <slug>` — with the finding in its Why.              |
 | `→ decided: <why not>` | It is not worth a task, and this is the reason. A later reader can disagree with a reason; they cannot with silence.     |
 
 The tag is the last thing in the bullet. Older reports are not rewritten:
-`php artisan qori:tasks` prints how many of their bullets are still untriaged,
-and that number is the stream owners' backlog.
+`bin/tasks` prints how many of their bullets are still untriaged, and anyone
+between tasks may work that number down.
 
 ## What a report is for, and what it is not
 

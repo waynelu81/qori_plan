@@ -18,20 +18,30 @@ starts with it, no need to go looking:
 
 Planning is three layers: `app/PLAN.md` holds intent and release gates;
 `app/dev/streams/` says why each line of work exists; `app/dev/tasks/T-###-*.md`
-is one task each, specified down to column and method names. Read
+is one task each. Read
 [`app/dev/PROCESS.md`](app/dev/PROCESS.md) before picking anything up. The rules
 that matter most:
 
-- **Never start a `draft`.** Only `ready` tasks may be claimed.
+- **Nobody approves** (`D-043`). Pick up any stream or task. A `draft` is
+  yours to bring to `ready`: answer its **Before this can be ready** bullets
+  from the code, decide and record them under **Decisions**, or ask.
+- **Missing information or a prerequisite: ask wayne, and keep going.** The
+  product owner is who you ask — for a product call, an account, a real
+  sign-in, or a change to something settled — not who you wait for. Write the
+  question in the task as _asked_ and carry on with everything that does not
+  depend on it. An agent asks in its conversation; it never guesses.
+- **Legal, policy, pricing and production setup are release checklist** on
+  `app/PLAN.md`'s gate, never a prerequisite. Build the place in the product;
+  the words land before release.
 - Claim by setting `status: doing` and `owner:` in the front matter.
-- **A `ready` spec is frozen.** If the code disagrees with it, write what you
-  found under **Re-scope log**, set `status: rescope`, and stop. Do not
-  improvise. This is deliberately expensive.
+- **A `ready` spec changes openly, never silently.** If the code disagrees with
+  it, write what you found under **Re-scope log**, rewrite what it changes, and
+  carry on. Ask first only when the change alters what a person sees or does,
+  or contradicts a `D-###`. Handing it back instead? Set `status: rescope`.
 - Below re-scope sits the **departure** tier: a file the table forgot may be
   touched if it is added to the task under **Added during execution** and listed
-  under **Departures** in the report. Every stream file carries an `owner:` who
-  approves specs, clears `blocked` and arbitrates a file clash; a `blocked` task
-  carries `## Blocked on`; a `ready` `L` task names its split; a task touching
+  under **Departures** in the report. A `blocked` task carries
+  `## Blocked on`; a `ready` `L` task names its split; a task touching
   `app/Http`, `app/Services`, `app/Listeners` or `routes/` names its
   `docs/flows` file or says why there is none; decisions are cited as `D-###`;
   every "Found, not fixed" bullet in a report ends in a disposition (`→ T-###`,

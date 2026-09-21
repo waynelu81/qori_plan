@@ -1,6 +1,5 @@
 ---
 stream: reachability
-owner: wayne
 ---
 
 # Stream: reachability

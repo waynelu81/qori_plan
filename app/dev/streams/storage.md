@@ -1,6 +1,5 @@
 ---
 stream: storage
-owner: wayne
 ---
 
 # Stream: storage

@@ -1,14 +1,15 @@
 # Streams
 
-A stream is a line of work one person can own end to end without waiting on
-another stream. Its tasks touch a mostly disjoint set of files, which is what
+A stream is a line of work one person can pick up end to end without waiting
+on another stream. Its tasks touch a mostly disjoint set of files, which is what
 makes them safe to run in parallel — see [`../PROCESS.md`](../PROCESS.md).
 
-Every stream file carries `owner:` in its front matter. The owner is who
-rewrites a rescoped spec, clears a `blocked` task, approves a draft somebody
-else specified, and arbitrates when two tasks want one file. A stream file says
-what the stream is for, when it is done, and its tasks in order with one line
-of reason each — never a status: the board says what is done.
+**Nobody owns a stream and nobody approves its tasks** (`D-043`). Pick one up by
+claiming its next task; while you are on it, keep its order and its reasons
+true. Questions only the product owner can answer go to wayne, and the work
+carries on around them. A stream file says what the stream is for, when it is
+done, and its tasks in order with one line of reason each — never a status: the
+board says what is done.
 
 | Stream                          | Owns                                                                                          | Blocks release? |
 | ------------------------------- | --------------------------------------------------------------------------------------------- | --------------- |

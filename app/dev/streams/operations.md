@@ -1,6 +1,5 @@
 ---
 stream: operations
-owner: wayne
 ---
 
 # Stream: operations
