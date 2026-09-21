@@ -42,7 +42,7 @@ cannot do what the step is for.
 | 6 | Connects Dropbox | Not built — and `D-042`'s free-or-drop call is open (`T-095`) |
 | 8 | A free Series — no price, no checkout | Works — walked end to end on 21 September 2026 |
 | 9 | Uploads a document to Qori instead | Works |
-| 9 | Picks Audio, or Dropbox | Rough — offered, then refused on save: "That storage can't be connected to Qori yet" (`T-152`); Audio offers nothing else |
+| 9 | Picks Audio, or Dropbox | Built (`T-171`) — Dropbox is no longer offered for any kind, and Audio offers Google Drive |
 | 11 | Gives access by email to someone with no account | Not built (`T-043`) |
 | 12 | The creator's Stripe account cannot take payments | The Peer still reaches Stripe's Checkout — test mode creates it — and cannot pay there; the owner accepts that, and the creator is the one told (`T-164`, 22 September 2026) |
 | 11 | Doesn't want emails from the creator | **Breaks** — consent is required to get in, and the button just looks dead |
@@ -74,8 +74,9 @@ cannot do what the step is for.
 5. **Then the branches**, the step-5 one first: a price without payments says
    so and offers Connect, and the public page stops offering to buy
    (~~`T-085`~~, done 22 September 2026, with a Toaster on every layout so a
-   refusal on a page without the app shell is seen). Stop offering Dropbox, and
-   Audio's Dropbox-only choice, on the Episode form while nothing can connect it.
+   refusal on a page without the app shell is seen). ~~Stop offering Dropbox, and
+   Audio's Dropbox-only choice, on the Episode form while nothing can connect
+   it~~ (`T-171`, done 22 September 2026).
 6. **Rough edges on the path (S each)**: the slug at step 4, the step-7
    dashboard (`T-086`), the share link after ready, the code email naming the
    Group and Series.

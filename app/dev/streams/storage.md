@@ -129,6 +129,9 @@ ones make it.
 22. `T-149` — One dialog adds files from any connected storage: Upload,
     Google Drive, Dropbox and OneDrive in one place, once two providers'
     choosers exist and `T-150` has said what Upload can be
+23. `T-171` — The Episode form offers only storage that can be connected: the
+    first-share walk of 21 September 2026 met Dropbox offered and refused on
+    every save
 
 The spikes come before their provider because each provider's spec has to cite
 an observed response, and one result can change the design: whether the narrow
