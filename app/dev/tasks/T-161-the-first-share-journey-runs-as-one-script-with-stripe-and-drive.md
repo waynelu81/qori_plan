@@ -22,17 +22,12 @@ vendor or type a card, the script is **hardcoded** — the owner's word for it:
 
 ## Blocked on
 
-What: the owner's `.env.e2e` — Stripe OAuth turned on with the redirect URI
-and `STRIPE_CLIENT_ID` in `.env`, Google Drive's redirect URI, then steps 5, 6
-and 9 walked once in local Qori and `php artisan qori:e2e:capture you@…
---peer=…` — and one walk of the journey by hand with a test card. Everything
-that can be built and tested without them is built, committed and green
-(code `25da989`); the journey is skipped until the file exists.
+What: one walk of the journey by hand, for real — Stripe's own Checkout page
+and a test card — recorded in `walkthroughs.md`. The script passes end to end
+against the owner's `.env.e2e` (21 September 2026); that walk is the last box.
 
-Who: wayne. `docs/tinker/e2e-first-share.md` in the code repository lists
-every console step and what an agent may read there for you. When the file
-exists, run `php artisan qori:e2e --only=first-share --headed`; whoever sees it
-pass ticks the two open product boxes and closes the task.
+Who: wayne. `docs/tinker/e2e-first-share.md` in the code repository, "The walk
+by hand, with a real card".
 
 ## Decisions taken to make this specifiable
 
@@ -60,8 +55,10 @@ a Playwright trace kept on failure would keep it.
 the real session read back from Stripe (`T-121`'s second option), posted by
 `qori:e2e:checkout-paid` with a webhook secret `qori:e2e` mints per run.
 
-**Neither vendor's page is loaded.** Stripe's Checkout and Drive are stood in
-for in the browser; the run checks where Qori sent the Peer.
+**Stripe's Checkout page is stood in for; Drive is checked by its request.**
+Checkout is reached by an ordinary navigation, which a route can answer. Open
+sends the Peer to Drive with a redirect, and Playwright routes only the first
+URL of one, so the run checks the request to the file's Drive address.
 
 **Mailpit is read, never emptied.** Its 1025/8025 may be another project's.
 The fixed Peer address reads only messages whose ids were not there before the
@@ -197,7 +194,7 @@ None.
 - [x] A `.env.e2e` missing a key fails the run, naming the key and never a value
 - [x] The other three journeys pass with Mailpit no longer emptied
 - [x] PHPUnit never reads `.env.e2e`, and every vendor stays faked
-- [ ] With the owner's `.env.e2e`, `php artisan qori:e2e --only=first-share` passes end to end
+- [x] With the owner's `.env.e2e`, `php artisan qori:e2e --only=first-share` passes end to end
 - [ ] The owner walks the journey once by hand for real — two sign-ins and a test card — recorded in `walkthroughs.md`; it is also `T-159`'s first real run of the Picker
 - [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
 - [ ] `bin/tasks --check` passes in `qori-plan`
@@ -225,5 +222,20 @@ None.
   command found past a leading `-v`, and the gitignore test pointed at the
   root rule. The lens that walked the spec against the real pages found no
   step that fails.
+- First real run, 21 September 2026: passed in 45 s. It needed two things
+  the spec had not planned. Stripe's form left both creator-style test
+  accounts unable to charge — an AU ID document due on one, an unfinished
+  profile and a risk review on the other, neither with a login to finish it —
+  so the run uses a platform-controlled Accounts v2 test account
+  (`acct_1UI6URKUCxZU2qfd`), made with test identity values and charging at
+  once; the guide says how. And the Drive stand-in never answered (a redirect
+  target is not routed), so step 14 checks the request instead.
+- Found on the way: Disconnect fails for an account Qori created on Accounts
+  v2 before `D-023` — Stripe's OAuth deauthorize refuses v2 accounts, and
+  `PaymentsService::disconnect()` calls it before clearing the id → draft
+  `T-163`.
+- At the owner's request, `PaymentsService::keep()` now asks Stripe for
+  `card_payments` and `transfers` right after an account is handed over
+  (`Connect::requestCapabilities()`).
 - The owner, on the loader hook: "Pretty sure can detect environment is
   production and skip." It runs only when `APP_ENV` is `local`.
