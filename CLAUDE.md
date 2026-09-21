@@ -69,6 +69,7 @@ The one exception is a task whose work is planning itself; it names paths here.
 | `app/dev/`           | Process, streams, tasks, decisions, product specs          |
 | `app/design/`        | Brand, UI documents, design reviews                        |
 | `ios/`, `android/`   | Planning for the native apps                               |
+| `playbook/`          | Reusable modules: what a product of this shape costs        |
 | `bin/tasks`          | The board, formerly `php artisan qori:tasks`               |
 | `tools/TaskBoard.php`| The reader and every rule it applies                       |
 
