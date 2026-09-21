@@ -1,6 +1,5 @@
 ---
 stream: recovery
-owner: wayne
 ---
 
 # Stream: recovery

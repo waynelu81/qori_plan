@@ -99,7 +99,7 @@ Twelve, ordered by what blocks release; each is one person's line of work.
       dead page
 - [ ] Backup and restore have been exercised
 - [ ] Privacy policy, terms, refund responsibility and support ownership match
-      the direct-charge model
+      the direct-charge model — a checklist, never a prerequisite (`D-043`)
 - [ ] Five representative creators can create and share a Series without
       developer help; invited Peers understand how to get access and continue
 - [ ] `composer ci:check` green from a clean checkout

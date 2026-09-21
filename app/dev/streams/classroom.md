@@ -1,6 +1,5 @@
 ---
 stream: classroom
-owner: wayne
 ---
 
 # Stream: classroom
@@ -125,9 +124,9 @@ day 1 by whoever holds the Zoom account.
 ## Claim order
 
 **Claim in the order above.** The dependencies already serialise most of this;
-where they do not, the stream owner adds one rather than letting two people
-meet in a merge (`PROCESS.md`). A task that has to jump the queue asks the
-owner first, because two `doing` tasks claiming one file fail the board.
+where they do not, whoever claims second adds one rather than letting two
+people meet in a merge (`PROCESS.md`). A task that jumps the queue checks the
+board first, because two `doing` tasks claiming one file fail it.
 
 These are the files more than three tasks touch, each with its claimants in
 order. Every new card is its own component, so a page edit is a mount and the
@@ -200,6 +199,6 @@ to 19 is promised for the sprint.
 
 **Owner's day-one items** (`D-031`): a month of Zoom Workplace Pro and the
 development app for `T-122`; answers to `T-089`'s three open questions so the
-Peer lane can start (answered 19 September 2026: none is left, and `T-089`
-waits only on the stream owner's approval); the schedule interval for `qori:sessions:notify` against
+Peer lane can start (answered 19 September 2026: none is left, and since
+`D-043` nothing waits on an approval); the schedule interval for `qori:sessions:notify` against
 Laravel Cloud's sleep timeout, chosen with `T-091`'s.

@@ -1,6 +1,5 @@
 ---
 stream: onboarding
-owner: wayne
 ---
 
 # Stream: onboarding

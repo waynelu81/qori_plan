@@ -2361,3 +2361,56 @@ programme is worth more when it is open — ninety renewable days against
 thirty — so it is asked for first; but a plan built on one before eligibility
 is checked is a plan resting on a fact nobody verified, which is how this
 record came to state one.
+
+### 21 September 2026
+
+#### D-043 — Nobody approves a task: whoever picks it up brings it to ready, and asks for what is missing
+
+**Decision.** Streams have no owner and tasks have no approver. A developer
+picks up a stream or a task, takes a draft to `ready` themselves, and builds
+it. What only the product owner can supply — a product call, an account, a
+real sign-in, a change to something recorded as settled — is **asked**,
+written into the task as asked, and worked around meanwhile; it is not a gate.
+A `ready` spec found wrong is rewritten by whoever found it, with the finding
+logged, rather than stopped for planning to rewrite. **Release checklist items
+— privacy policy, terms, refund wording, support ownership, production
+configuration, pricing, a vendor's app review — sit on `PLAN.md`'s release
+gate and never hold a task.** The owner, 21 September 2026: "The developer
+need to be able to just pickup a stream, a task to work on. It should be able
+to change from draft to ready. If there are missing information or
+prerequisite just ask." And earlier the same day: "How can a privacy or terms
+and condition stopping a stream to go into development. Those honestly would
+be just pure checklist prerelease."
+
+**Why.** Every stream named an owner, and all twelve named the same person, so
+every draft-to-ready approval, every `blocked` clearance and every rescope
+rewrite queued on one desk. On the morning of this record the board stood at
+77 done, 8 ready and 69 draft, with drafts carrying up to 39 open questions
+each (`T-091`), and some of those questions were legal and policy ones no line
+of code depends on: `T-044` handed "the privacy-and-terms disclosure before
+Connect" to the stream owner, and `T-101` held a paid Teams Series "until the
+terms are read". Specification had become the bottleneck rather than building.
+The approval step bought review, and its price was that nothing moved while the
+one reviewer was elsewhere.
+
+**What is kept, because it is the record and not the gate.** The Re-scope log
+is still required — a spec changed halfway through with no log is one nobody
+can review — and only the stop-and-wait is gone. Decisions still get ids and
+reasons. Every "Found, not fixed" bullet still ends in a disposition. The
+board's collision and dependency rules still fail the gate, because they
+protect two developers from each other, not from a missing signature. How much
+a ready spec must name now follows from who builds it: literal names when it is
+written for somebody else, less when the writer is the builder.
+
+**Consequences.** `PROCESS.md`'s "The stream owner" section is replaced by
+"Who does what" and "Release checklist is not a prerequisite". `owner:` leaves
+every stream file's front matter, `bin/tasks --check` no longer requires it,
+and the board prints who is on each stream from the tasks in `doing`.
+`PLAN.md` is updated by whoever's work moves release state, in the closing
+commit; its intent and **Settled** list still change only through a decision
+here. Rule 0 of the code repository's `CLAUDE.md` changes to match. `T-089`,
+recorded in the classroom stream as waiting "only on the stream owner's
+approval", waits on nothing. The existing drafts are not rewritten in a sweep:
+each keeps its **Before this can be ready** list, and whoever picks one up
+works through it under these rules — moving a legal or policy bullet onto the
+release gate where that is all it was.

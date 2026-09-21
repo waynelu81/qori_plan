@@ -54,9 +54,15 @@ is the one file every session reads.
 
 - **File overlap caps parallelism, not the number of ready tasks.** Two ready
   tasks touching one controller are one task.
-- **A frozen specification is the point.** If the code disagrees with the spec,
-  the task goes back to planning rather than being improvised — deliberately
-  expensive, because improvisation is how two people build different things.
+- **A specification changes in the open, never silently.** If the code
+  disagrees with the spec, whoever found it logs what they found, rewrites the
+  part that changed, and carries on. Qori first made this a full stop back to
+  planning, behind a single approver, and the queue in front of that approver
+  became the bottleneck (`D-043`). Keep the log; drop the wait.
+- **Nobody approves, and release checklist is not a prerequisite.** Whoever
+  picks a task up brings it to ready and asks the product owner only for what
+  only they have. Legal copy, pricing and production setup go on the release
+  gate, never in a task's dependencies.
 - **Every finding ends in a disposition.** "Found, not fixed" with no next step
   is a note nobody will read again.
 - **A worktree cut before a big structural change still carries the old

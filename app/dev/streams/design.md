@@ -1,6 +1,5 @@
 ---
 stream: design
-owner: wayne
 ---
 
 # Stream: design

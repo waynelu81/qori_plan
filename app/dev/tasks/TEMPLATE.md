@@ -11,7 +11,7 @@ blocks: none
 
 # T-000 — One line, imperative, naming the object
 
-> Start one with `php artisan qori:tasks --new <stream> <slug>`, which copies
+> Start one with `bin/tasks --new <stream> <slug>`, which copies
 > this file under the next free id. Keep every heading, and delete the
 > guidance in quotes. A section that does not apply says **None**, so a reader
 > can tell "nothing to do here" from "nobody thought about it".
@@ -172,24 +172,28 @@ class Thing
 
 - [ ] …
 - [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `php artisan qori:tasks --check` passes
+- [ ] `bin/tasks --check` passes in `qori-plan`
 - [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
 - [ ] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
-> Drafts only: what has to be decided, read or measured before the sections
-> above can be written with literal names. One bullet per question, and say
-> whose question it is — the owner's, or anyone's. Strike a bullet with a
-> date when it is answered; delete the section when the task is `ready`.
+> Drafts only: what has to be decided, read or measured before whoever builds
+> this can start. Whoever picks the draft up answers each bullet — from the
+> code, by deciding and recording it under **Decisions**, or by asking the
+> product owner when only they can answer (mark it _asked_ and keep going).
+> Release checklist items — policy, terms, pricing, production config — are
+> not bullets here; they are on `PLAN.md`'s release gate. Strike a bullet with
+> the date and the answer; delete the section when the task is `ready`.
 
 - …
 
 ## Re-scope log
 
 > Empty until something in the spec turns out to be wrong. Then: what was
-> expected, what was found, and what it means for the spec. Set
-> `status: rescope` and stop.
+> expected, what was found, and what it means for the spec. Rewrite the
+> sections it changes and carry on — or, if you are handing the task back,
+> set `status: rescope` so the next person rewrites it.
 
 None.
 

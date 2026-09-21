@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  * file, should fail the gate — that is cheaper than either being discovered
  * in a merge.
  *
- * The rules themselves live in TaskBoard, so `qori:tasks --check` and this
+ * The rules themselves live in TaskBoard, so `bin/tasks --check` and this
  * suite apply one implementation. Each test here asserts one rule holds on the
  * live directory; the fixture shows the rule firing.
  *
@@ -248,18 +248,6 @@ class TaskBoardTest extends TestCase
     }
 
     /**
-     * The stream owner rewrites a rescoped spec, clears `blocked` and
-     * arbitrates a file clash. A stream with nobody named has nobody to ask.
-     */
-    public function test_every_stream_has_an_owner(): void
-    {
-        $this->assertNotEmpty($this->board()->streams());
-        $this->assertSame('someone', $this->fixture()->streams()['fixture']['owner']);
-
-        $this->assertSame([], $this->board()->streamsWithoutOwner());
-    }
-
-    /**
      * Status lives in task files only. A stream that says "done" or strikes a
      * line through is a second copy of the board, and it is the copy that
      * conflicts when two people close tasks in one stream on one afternoon.
@@ -362,7 +350,7 @@ class TaskBoardTest extends TestCase
         $this->assertSame('T-003', $this->fixture()->nextId());
     }
 
-    /** A draft nobody may start still says why it is not ready. */
+    /** A draft says what stands between it and ready, so whoever picks it up starts there. */
     public function test_every_draft_says_what_it_is_waiting_on(): void
     {
         foreach ($this->board()->tasks() as $task) {
@@ -381,9 +369,9 @@ class TaskBoardTest extends TestCase
     /**
      * A stopped task keeps its evidence.
      *
-     * `rescope` is the signal that a specification was wrong, and the log is
-     * the whole of what planning has to work from. A status set without one is
-     * a task nobody can rewrite.
+     * `rescope` is a task handed back with its specification found wrong, and
+     * the log is the whole of what the next person has to work from. A status
+     * set without one is a task nobody can rewrite.
      */
     public function test_every_rescoped_task_says_what_it_found(): void
     {

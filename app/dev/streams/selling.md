@@ -1,6 +1,5 @@
 ---
 stream: selling
-owner: wayne
 ---
 
 # Stream: selling

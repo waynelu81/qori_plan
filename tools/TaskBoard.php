@@ -272,7 +272,6 @@ class TaskBoard
             ...$this->blockedWithoutReason(),
             ...$this->largeWithoutSplit(),
             ...$this->rewiresWithoutFlow(),
-            ...$this->streamsWithoutOwner(),
             ...$this->streamsWithStatusWords(),
             ...$this->streamsNamingMissingTasks(),
             ...$this->streamsNotIndexed(),
@@ -432,20 +431,6 @@ class TaskBoard
         return $problems;
     }
 
-    /** @return list<string> */
-    public function streamsWithoutOwner(): array
-    {
-        $problems = [];
-
-        foreach ($this->streams as $slug => $stream) {
-            if ($stream['owner'] === null || $stream['owner'] === '') {
-                $problems[] = "Stream {$slug} has no owner: in its front matter.";
-            }
-        }
-
-        return $problems;
-    }
-
     /**
      * Status lives in task files only. A stream file that says "done" or
      * strikes a line through is a second copy of the board, kept by hand.
@@ -557,6 +542,26 @@ class TaskBoard
         foreach ($this->byStream() as $stream => $tasks) {
             $lines[] = '## '.$stream;
             $lines[] = '';
+
+            // Nobody owns a stream (D-043). Whoever has a task in it in
+            // progress is on it, and that is all the board needs to say.
+            $onIt = [];
+
+            foreach ($tasks as $task) {
+                if ($task['status'] === 'doing') {
+                    $onIt[$task['owner']][] = $task['id'];
+                }
+            }
+
+            if ($onIt !== []) {
+                $lines[] = 'On it: '.implode('; ', array_map(
+                    fn (string $who, array $ids): string => $who.' ('.implode(', ', $ids).')',
+                    array_keys($onIt),
+                    $onIt,
+                ));
+                $lines[] = '';
+            }
+
             $lines[] = '| Task | Title | Status | Owner | Est | Depends | Blocks |';
             $lines[] = '| ---- | ----- | ------ | ----- | --- | ------- | ------ |';
 
@@ -705,7 +710,7 @@ class TaskBoard
     }
 
     /**
-     * Every stream file but the index, with its owner and the tasks it names.
+     * Every stream file but the index, with the tasks it names.
      *
      * @return array<string, array<string, mixed>>
      */
@@ -722,7 +727,6 @@ class TaskBoard
             }
 
             $contents = (string) file_get_contents($path);
-            $front = $this->frontMatter($contents);
             $bodyOffset = $this->bodyOffset($contents);
 
             preg_match_all('/\bT-\d{3}\b/', $contents, $names);
@@ -736,7 +740,6 @@ class TaskBoard
 
             $streams[basename($path, '.md')] = [
                 'file' => basename($path),
-                'owner' => $front['owner'] ?? null,
                 'contents' => $contents,
                 'bodyOffset' => $bodyOffset,
                 'bodyLine' => substr_count(substr($contents, 0, $bodyOffset), "\n"),

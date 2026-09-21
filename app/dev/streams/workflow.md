@@ -1,6 +1,5 @@
 ---
 stream: workflow
-owner: wayne
 ---
 
 # Stream: workflow

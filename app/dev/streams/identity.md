@@ -1,6 +1,5 @@
 ---
 stream: identity
-owner: wayne
 ---
 
 # Stream: identity
