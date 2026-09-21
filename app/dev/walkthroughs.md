@@ -518,3 +518,12 @@ given; Enter does not submit past it, so `lang/en/accesses.php`'s mangled
 `consent.required` is not reachable from the page.
 
 **Copy:** the fixups are listed once in [`fixups.md`](fixups.md), not here.
+
+**Corrected the same day.** The third bullet above says a creator "can build
+an Episode no Peer can open" with Audio or Dropbox. They cannot: that was read
+from `DropboxStorage::linkFor()` without trying the add, and
+`EpisodeService::guardProviderConnected()` (`T-152`) refuses the Episode on
+save with `errors.series.provider_not_available` — "That storage can't be
+connected to Qori yet" — because no Dropbox connector is bound. The fault is
+milder: the form offers a choice it will always refuse, and for Audio it offers
+nothing else.

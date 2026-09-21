@@ -41,7 +41,7 @@ cannot do what the step is for.
 | 6 | Connects Dropbox | Not built — and `D-042`'s free-or-drop call is open (`T-095`) |
 | 8 | A free Series — no price, no checkout | Works — walked end to end on 21 September 2026 |
 | 9 | Uploads a document to Qori instead | Works |
-| 9 | Picks Audio, or Dropbox | **Breaks** — saves an Episode no Peer can open |
+| 9 | Picks Audio, or Dropbox | Rough — offered, then refused on save: "That storage can't be connected to Qori yet" (`T-152`); Audio offers nothing else |
 | 11 | Gives access by email to someone with no account | Not built (`T-043`) |
 | 11 | Doesn't want emails from the creator | **Breaks** — consent is required to get in, and the button just looks dead |
 | 14 | The Peer's Google account is not their Qori email | Not built (`T-092`); the happy path grants the Qori email |
@@ -73,8 +73,8 @@ cannot do what the step is for.
    and a test card.
 5. **Then the branches**, the step-5 one first: a price without payments says
    so and offers Connect, and the public page stops offering to buy
-   (`T-085`, what is left of `T-028`). Hide Audio and Dropbox on the Episode
-   form until Dropbox can connect.
+   (`T-085`, what is left of `T-028`). Stop offering Dropbox, and Audio's
+   Dropbox-only choice, on the Episode form while nothing can connect it.
 6. **Rough edges on the path (S each)**: the slug at step 4, the step-7
    dashboard (`T-086`), the share link after ready, the code email naming the
    Group and Series.
