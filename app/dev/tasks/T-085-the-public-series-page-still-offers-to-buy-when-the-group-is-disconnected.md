@@ -68,3 +68,12 @@ None.
 
 `T-064`'s report and `T-074`'s report; `T-074`'s case 4 is what a buyer meets
 today.
+
+22 September 2026, from `T-164`: for an account that is connected and cannot
+take payments, the owner accepts a Peer meeting Stripe's refusal — "We just
+notify and advice … that's for the creator to deal with" — and `T-164` tells the
+creator. In test mode Stripe creates the Checkout Session for such an account
+(observed that day), so the buyer reaches Stripe's page rather than Qori's
+refusal. Whether the account takes payments is now remembered on
+`groups.payments_readiness` by every account read, which is the cached answer
+the first bullet below asks about; the price field already reads it.

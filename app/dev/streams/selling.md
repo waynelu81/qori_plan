@@ -96,6 +96,16 @@ neither stream's goal describes any of this.
 17. `T-146` — The Stripe sign-in's code says payments, begin and finalise:
     the owner, 19 September 2026, "the creator does not get payout from
     Qori", and no step is named `return` (`D-032`)
+18. `T-163` — Disconnect lets go of an account Stripe will not deauthorize:
+    the owner's Disconnect failed twice on a v2 account, 21 September 2026
+19. `T-164` — The creator is told exactly what Stripe needs before it takes
+    payments: the owner, 22 September 2026, "detail so they can go there and
+    enable exactly the setting"
+20. `T-165` — Integrations survives an account Stripe no longer knows: a
+    deleted account's id turns the page into a 502 with no way to disconnect
+21. `T-166` — Payments readiness moves when Stripe says the account changed:
+    until then the dashboard's warning outlives the fix until Integrations is
+    opened
 
 `T-050` went first because it was small and entirely specified, `T-054` for the
 same reason. The four payouts tasks come before the rest because a price

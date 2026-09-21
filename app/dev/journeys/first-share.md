@@ -38,11 +38,13 @@ cannot do what the step is for.
 | --- | --- | --- |
 | 3 | Opens the verification link on another device, signed out | Rough — "Log in" with no context; an email link then verifies and continues |
 | 5 | Skips payments, later sets a price | **Breaks** — saves silently; the public page offers to buy; pressing it does nothing visible (`T-085`, `T-028`) |
+| 5 | Connects an account Stripe will not let charge yet — a document, a detail or the terms still due | Built (`T-164`) — Integrations lists each thing Stripe asked for with a link to its page in the creator's Stripe dashboard; connecting says where the list is; the dashboard and the price field say payments are held back |
 | 6 | Connects Dropbox | Not built — and `D-042`'s free-or-drop call is open (`T-095`) |
 | 8 | A free Series — no price, no checkout | Works — walked end to end on 21 September 2026 |
 | 9 | Uploads a document to Qori instead | Works |
 | 9 | Picks Audio, or Dropbox | Rough — offered, then refused on save: "That storage can't be connected to Qori yet" (`T-152`); Audio offers nothing else |
 | 11 | Gives access by email to someone with no account | Not built (`T-043`) |
+| 12 | The creator's Stripe account cannot take payments | The Peer still reaches Stripe's Checkout — test mode creates it — and cannot pay there; the owner accepts that, and the creator is the one told (`T-164`, 22 September 2026) |
 | 11 | Doesn't want emails from the creator | **Breaks** — consent is required to get in, and the button just looks dead |
 | 14 | The Peer's Google account is not their Qori email | Not built (`T-092`); the happy path grants the Qori email |
 | 14 | The grant is refused — no Google account for that email, the file moved | The vendor's reason is shown and Open again retries (`D-040`) |

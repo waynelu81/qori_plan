@@ -17,9 +17,10 @@ blocks: none
 `T-112` and `T-113` moved Stripe's client and onboarding there. The rest of
 what knows how Stripe works is still outside `app/Integrations/Stripe`:
 
-- `ConnectAccount::fromStripe()`, `HostedCheckout::fromStripe()` and
-  `GroupSubscription::fromStripe()` in `app/Data`, and `StripePeriod` in
-  `app/Support`.
+- `HostedCheckout::fromStripe()` and `GroupSubscription::fromStripe()` in
+  `app/Data`, and `StripePeriod` in `app/Support`. `ConnectAccount::fromStripe()`
+  moved to `App\Integrations\Stripe\ConnectAccountReader` in `T-164`
+  (22 September 2026), when reading the account grew to its requirements.
 - `StripeWebhookController` computes Stripe's signature itself and reads event
   types, `mode`, `payment_status` and metadata.
 - `BillingService::applySubscription()` takes Stripe's raw subscription array
