@@ -30,7 +30,9 @@ class TaskBoardTest extends TestCase
 
     private function board(): TaskBoard
     {
-        return new TaskBoard(self::root());
+        $code = dirname(self::root()).'/qori';
+
+        return new TaskBoard(self::root(), is_dir($code) ? $code : null);
     }
 
     private function fixture(): TaskBoard
@@ -215,7 +217,7 @@ class TaskBoardTest extends TestCase
     public function test_a_files_row_may_not_be_a_bare_basename(): void
     {
         $this->assertSame(
-            ['T-002 lists `Bare.php` with no directory, and no such file is at the repository root.'],
+            ['T-002 lists `Bare.php` with no directory, and no such file is at the code repository\'s root.'],
             $this->fixture()->bareBasenames(),
         );
 
@@ -437,6 +439,24 @@ class TaskBoardTest extends TestCase
     }
 
     /** The template is not a task, and must never appear on the board. */
+    /**
+     * `--new <stream> <slug>` is the form PROCESS.md documents, and until
+     * 21 September 2026 it read the stream as the slug and refused every call.
+     * A stream nobody wrote makes both forms stop before writing anything, and
+     * the refusal names the stream it was given.
+     */
+    public function test_new_reads_the_stream_in_both_forms(): void
+    {
+        foreach (['--new no-such-stream some-slug', '--new=no-such-stream/some-slug'] as $arguments) {
+            exec(PHP_BINARY.' '.escapeshellarg(self::root().'/bin/tasks').' '.$arguments.' 2>&1', $output, $status);
+
+            $this->assertNotSame(0, $status, $arguments);
+            $this->assertStringContainsString('streams/no-such-stream.md', implode("\n", $output), $arguments);
+
+            $output = [];
+        }
+    }
+
     public function test_the_template_is_not_counted(): void
     {
         $this->assertFileExists(self::root().'/'.TaskBoard::TEMPLATE);
