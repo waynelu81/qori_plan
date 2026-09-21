@@ -2,8 +2,8 @@
 id: T-167
 title: Qori's plans are priced from a US dollar base
 stream: selling
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: S
 depends: none
 blocks: T-169
