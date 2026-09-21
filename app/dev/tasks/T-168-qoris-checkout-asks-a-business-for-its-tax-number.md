@@ -2,8 +2,8 @@
 id: T-168
 title: Qori's checkout asks a business for its tax number
 stream: selling
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: S
 depends: none
 blocks: T-169, T-170
