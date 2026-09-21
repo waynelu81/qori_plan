@@ -25,18 +25,18 @@ test-mode Checkout with the `4242` card, and sees the access arrive.
 
 ## Blocked on
 
-What: a connected account in Stripe's test mode that the run's Group can
-carry as `connect_account_id`, and a decision on how the completed session's
-webhook reaches a server on `127.0.0.1` — `stripe listen
---forward-connect-to`, run by the command, or the journey fetching the session
-from Stripe's API and delivering it to `POST /webhooks/stripe` signed with the
-run's webhook secret.
+What: the owner's `.env.e2e` (`D-045`) and `T-161`'s first run with it.
+`T-161`'s first-share journey now pays for a Series in a browser: a real
+Checkout Session on the owner's test account, completed by a signed
+`checkout.session.completed` built from the session read back from Stripe —
+this task's second webhook option, taken, with neither secret in Node (the run
+signs with a secret it mints). What `T-161` does not do is drive Stripe's own
+Checkout page with the `4242` card; the owner walks that by hand as its last
+box. When that walk is recorded, this task is either closed as covered or
+narrowed to the Checkout page alone.
 
-Who: wayne. `T-063` built the door and `PLAN.md` still lists "Connect OAuth in
-the sandbox" as waiting on the owner; the account id comes from walking that
-door once in the sandbox. The webhook choice is a decision (a `D-###`),
-because the second option puts the platform secret and the webhook secret in
-the Node process for the length of a run.
+Who: wayne — the `.env.e2e` values (`docs/tinker/e2e-first-share.md` in the
+code repository) and the walk.
 
 ## Decisions taken to make this specifiable
 
