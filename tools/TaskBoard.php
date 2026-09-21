@@ -62,11 +62,18 @@ class TaskBoard
     /** @var list<array<string, mixed>> */
     private array $reports;
 
+    /** Where a Files row's paths point: the code repository, not this one. */
+    private string $codeRoot;
+
     /**
-     * @param  string  $root  Absolute path to the repository root.
+     * @param  string  $root  Absolute path to the planning repository root.
+     * @param  ?string  $codeRoot  Absolute path to the code repository a task's
+     *                             Files rows name paths in. Defaults to $root,
+     *                             which is what the fixture wants.
      */
-    public function __construct(private string $root)
+    public function __construct(private string $root, ?string $codeRoot = null)
     {
+        $this->codeRoot = $codeRoot ?? $root;
         $this->tasks = $this->read();
         $this->streams = $this->readStreams();
         $this->reports = $this->readReports();
@@ -297,11 +304,11 @@ class TaskBoard
             }
 
             foreach ($task['files'] as $file) {
-                if (str_contains($file, '/') || in_array($file, $task['new'], true) || file_exists($this->root.'/'.$file)) {
+                if (str_contains($file, '/') || in_array($file, $task['new'], true) || file_exists($this->codeRoot.'/'.$file)) {
                     continue;
                 }
 
-                $problems[] = "{$task['id']} lists `{$file}` with no directory, and no such file is at the repository root.";
+                $problems[] = "{$task['id']} lists `{$file}` with no directory, and no such file is at the code repository's root.";
             }
         }
 
@@ -945,12 +952,12 @@ class TaskBoard
             return [$path];
         }
 
-        $matches = glob($this->root.'/'.$path, GLOB_BRACE) ?: [];
+        $matches = glob($this->codeRoot.'/'.$path, GLOB_BRACE) ?: [];
 
         if ($matches === []) {
             return [$path];
         }
 
-        return array_map(fn (string $match): string => substr($match, strlen($this->root) + 1), $matches);
+        return array_map(fn (string $match): string => substr($match, strlen($this->codeRoot) + 1), $matches);
     }
 }

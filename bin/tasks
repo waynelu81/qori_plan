@@ -61,10 +61,18 @@ if (isset($options['help'])) {
     exit(SUCCESS);
 }
 
-$board = new TaskBoard($root);
+// A task's Files rows name paths in the code repository, checked out beside
+// this one. Without it, globs stay unexpanded and bare basenames cannot be
+// confirmed, so the collision check is weaker but nothing else changes.
+$code = dirname($root).'/qori';
+$board = new TaskBoard($root, is_dir($code) ? $code : null);
 
 if (isset($options['new'])) {
-    exit(stub($board, $root, is_string($options['new']) ? $options['new'] : '', $arguments[0] ?? null));
+    // `--new=<stream>/<slug>` carries both in the option; `--new <stream> <slug>`
+    // leaves the option bare and both words in the arguments.
+    exit(is_string($options['new'])
+        ? stub($board, $root, $options['new'], $arguments[0] ?? null)
+        : stub($board, $root, $arguments[0] ?? '', $arguments[1] ?? null));
 }
 
 $problems = $board->problems();
