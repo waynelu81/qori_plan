@@ -106,6 +106,12 @@ neither stream's goal describes any of this.
 21. `T-166` — Payments readiness moves when Stripe says the account changed:
     until then the dashboard's warning outlives the fix until Integrations is
     opened
+22. `T-167` — Qori's plans are priced in Australian dollars: the owner, 22
+    September 2026, "subscription use Adaptive Pricing" (`D-046`), and the
+    console still fills in USD
+23. `T-168` — Qori's checkout asks a business for its tax number: `D-046`
+    keeps Qori's billing on Stripe rather than a merchant of record, so a
+    business's VAT or GST number is Qori's to collect
 
 `T-050` went first because it was small and entirely specified, `T-054` for the
 same reason. The four payouts tasks come before the rest because a price

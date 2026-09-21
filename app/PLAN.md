@@ -1,6 +1,6 @@
 # Qori — current plan
 
-Updated: 21 September 2026
+Updated: 22 September 2026
 
 This file is the entry point: what Qori is for, where it stands, and what blocks
 release. **It does not list tasks.** Work is organised into parallel streams,
@@ -135,7 +135,7 @@ Changing one of these belongs in [`decisions.md`](dev/decisions.md), not a task.
 ## Waiting on the owner
 
 - ~~Domain, Postmark, DNS, the Laravel Cloud scheduler~~ — done 11 September 2026
-- Live Stripe configuration and webhook endpoint; Connect OAuth in the sandbox (`T-063`)
+- Live Stripe account, priced in AUD with Adaptive Pricing (`D-046`), and its webhook endpoint; Connect OAuth in the sandbox (`T-063`)
 - Where an alert should go when Qori notices something broken — see `T-019`
 - A month of Zoom Workplace Pro and the development app (`T-122`); `T-089`'s
   three open questions; the notify interval against the sleep timeout (`D-028`)

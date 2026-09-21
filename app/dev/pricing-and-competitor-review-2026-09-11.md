@@ -2,6 +2,8 @@
 
 Reviewed: **11 September 2026**. Status: **research and proposals for discussion**, not an approved price change or implementation brief.
 
+**22 September 2026:** the owner set Start and Pro at this review's figures, priced in AUD at the day's rate — **A$55** and **A$139** a month, about US$39 and US$99 — and shown in a buyer's own currency by Stripe's Adaptive Pricing ([`D-046`](decisions.md)). The review's conditions on Pro, annual billing and a US$49 Start test stand.
+
 [Product plan](../project-plan.md#51-competitors-and-pricing-review) · [Product and pricing research](product-and-pricing.md) · [Current release plan](../../PLAN.md)
 
 ## Assessment

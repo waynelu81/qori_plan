@@ -2485,3 +2485,91 @@ read their own recipients, and the fixed Peer address reads only messages that
 arrived after the step that sent them. `qori:mail:check` still empties it →
 `T-162`. An agent may read the vendors' consoles for the owner but never signs
 in, types a secret or changes a setting without asking for that one change.
+
+### 22 September 2026
+
+#### D-046 — Qori's subscription is priced in Australian dollars and shown in the buyer's currency by Adaptive Pricing; no merchant of record at launch
+
+**Decision.** Qori sells its plans from its own Stripe account through Stripe
+Billing, as built, with every price in **AUD**, and switches on Stripe's
+**Adaptive Pricing** so that Stripe's checkout shows a buyer outside Australia
+the price in their own currency. Stripe pays out AUD to a Wise Business account
+(or an ordinary Australian bank account); Wise converts to USD only what Qori
+spends with suppliers who bill in USD. There is no merchant of record at launch.
+The owner, 22 September 2026: "I don't mind getting paid AUD … i can
+absolutely get paid aud and use wise business just to pay my service charge",
+then "subscription use Adaptive Pricing. I want to get to price where i plan
+earlier close to my competitor pricing."
+
+**The prices.** Each AUD price is the planned USD price of the
+[11 September review](pricing-and-competitor-review-2026-09-11.md#5-recommended-plan-structure)
+at the mid-market rate, rounded to a whole dollar. At 0.7126 USD to the AUD
+(21 September 2026):
+
+| Plan          | Planned  | AUD price  | What a buyer in the US pays, with Stripe's 2–4% conversion |
+| ------------- | -------- | ---------- | ---------------------------------------------------------- |
+| Start monthly | US$39    | **A$55**   | about US$40–41                                             |
+| Pro monthly   | US$99    | **A$139**  | about US$101–103                                           |
+| Start annual  | US$390   | A$550      | about US$400–408                                           |
+| Pro annual    | US$990   | A$1,390    | about US$1,010–1,030                                       |
+
+A buyer who chooses to pay in AUD on Stripe's page avoids Stripe's conversion
+fee and pays their own bank's rate instead. The review's conditions still
+stand: Pro's price needs a demonstrated reason to upgrade before it is promoted
+broadly, annual waits until retention is understood, and US$49 for Start
+(A$69) is a later test, not the launch price.
+
+**Why AUD, not USD.** Adaptive Pricing converts a price only when its
+currency is one the account settles in
+([Stripe](https://docs.stripe.com/payments/currencies/localize-prices/adaptive-pricing.md?payment-ui=stripe-hosted)),
+and an Australian account settles AUD. USD payouts for Australian accounts are
+offered to "a limited number of businesses in Australia", only to an
+Australian bank's USD account and never to Wise, for 1% per payout with a
+US$10 minimum
+([Stripe](https://support.stripe.com/questions/receiving-usd-nzd-payouts-for-australia-users)).
+USD prices without that cost Qori Stripe's 2% conversion on every charge and
+still show a foreign buyer USD. AUD with Adaptive Pricing costs Qori nothing in
+conversion at checkout; the buyer pays the conversion, as they would to their
+bank for any foreign price. Wise's roughly 0.5% applies only to what Qori
+spends in USD.
+
+**Why the mid-market rate, not the buyer's.** Setting the AUD price so the US
+buyer's figure lands on US$39 after Stripe's fee would make Start A$53 and Pro
+A$135: Qori would absorb the buyer's conversion fee on every sale, Australians'
+included.
+
+**Why no merchant of record.** Paddle (about 5% + 50¢, the most established),
+Polar, Creem and Dodo (about 4%, younger), Lemon Squeezy (slowing since Stripe
+bought it) and Stripe Managed Payments (Stripe's fees plus 3.5%, mainly US
+businesses so far) were compared on 22 September 2026. What they add is
+worldwide sales-tax handling. Qori's buyers are mostly businesses — a business
+abroad that gives a VAT or GST number accounts for the tax itself — and Qori is
+registered nowhere, so at launch that work is small, while a merchant of record
+would be a second billing integration. `BillsGroups` keeps the switch to one
+contained, and it is worth revisiting if many buyers turn out to be private
+individuals in the EU or UK, where VAT is owed from the first such sale.
+
+**Consequences.**
+
+- `project-plan.md` §5's "Currency (locked for SaaS): USD" and §7's plans "in
+  USD" are superseded, and it says so where they stood. §7.1's Wise Business
+  payout in AUD stands.
+- Pricing stays release checklist (`D-043`). The live AUD prices, Adaptive
+  Pricing and Stripe Tax monitoring switched on, and the account's own setup are
+  in [`release-prerequisites.md`](release-prerequisites.md). The AUD prices are
+  re-derived on the day they are created if the rate has moved more than 5%
+  from 0.7126. A later change is a new Stripe price, and existing subscribers
+  stay on theirs until they are moved.
+- Qori's own pages quote AUD. `formatMoney()` writes `A$55` for a reader
+  outside Australia and `$55` for one inside it (`T-058`), so no page quotes a
+  foreign price Qori does not charge.
+- `T-167`: the console and the design fixtures default to AUD, and a sandbox
+  subscription paid in USD proves the plan is still granted. `T-168`: the
+  checkout asks a business for its tax number; tax calculation stays off until
+  Qori registers somewhere.
+- Whether to register for GST below the A$75k threshold (overseas suppliers add
+  10% GST to what they bill Qori until it is registered), and whether the AUD
+  price includes GST once it is, are questions for Qori's accountant, on the
+  release checklist.
+- Apple's in-app purchase for a subscription sold inside an iOS app is
+  untouched: native apps are deferred (`PLAN.md`, Settled).
