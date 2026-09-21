@@ -157,6 +157,9 @@ answer is written into the task.
   same course framing.
 - `T-109` — The certificate's new sentences, including "marked every Episode
   done"; and whether "Issued by" and "This certifies that" overstate too.
+- `T-170` — Whether Qori's pricing and billing pages offer a currency menu
+  beside the prices, or pick from the visitor's country alone (22 September
+  2026, `D-047`).
 
 ### Open decision: promotional content in access confirmations (2026-09-13)
 
@@ -2573,3 +2576,117 @@ individuals in the EU or UK, where VAT is owed from the first such sale.
   release checklist.
 - Apple's in-app purchase for a subscription sold inside an iOS app is
   untouched: native apps are deferred (`PLAN.md`, Settled).
+
+#### D-047 — Qori's plans are priced from a USD base, with fixed prices in the major currencies; Adaptive Pricing is off (amends `D-046`)
+
+**Decision.**
+
+- Each plan's Stripe price has **USD as its default currency**: US$39 for
+  Start and US$99 for Pro, the figures the prices were planned in.
+- It also carries **fixed amounts in the major currencies**, which the owner
+  sets, as Stripe `currency_options`: AUD, EUR, GBP, CAD, NZD and SGD to begin
+  with.
+- A buyer pays the fixed price in their own currency if it has one, and the
+  USD price otherwise.
+- **Adaptive Pricing is switched off**, so no price Qori quotes moves with the
+  exchange rate.
+- Qori's pages decide the currency and name it on the checkout session, so
+  Stripe's page shows the price Qori's page showed.
+
+The owner reached this over the afternoon of 22 September 2026, after
+`D-046`:
+
+- "i can't let customer see fluctuating price every day, i need Hybrid Setup
+  for price and I define majority flat price for major currency".
+- For a currency without a fixed price: "USD for everyone else", then "I mean
+  Base on USD price".
+- "my goal is to avoid stripe 2% charge". Three trade-offs were offered: AUD
+  and USD only, many fixed currencies, or AUD for everyone. The owner chose
+  **many fixed currencies**, accepting the fee.
+
+**Why USD is the default currency.** When a price has no option for the
+buyer's currency, "the Session presents to the customer in the default
+currency"
+([Stripe](https://docs.stripe.com/payments/checkout/localize-prices/manual-currency-prices.md?payment-ui=stripe-hosted)).
+With USD as the default, Stripe's own fallback is the owner's rule, even for a
+session that names no currency. USD is also the currency the prices were
+planned in, the one competitors charge in, and the one Qori's console and
+design fixtures already use.
+
+**Why Adaptive Pricing is off.** Every buyer now meets a fixed price, so
+Adaptive Pricing has nothing left to convert. It converts only a price in a
+currency the account settles in, which is AUD, no longer the default. Fixed
+prices override it for their own currencies anyway ("Manually defined
+multi-currency prices override Adaptive Pricing for those currencies, even if
+it's enabled"). Switching it off makes sure no session ever shows a converted
+amount.
+
+**Why Qori names the currency.** Stripe decides the currency on its own page,
+from where the buyer is when they open it, and has no call that tells Qori
+beforehand what that will be. Naming the currency on the session reverses
+this: whatever Qori quoted, Stripe charges ("the Checkout Session's currency is
+always EUR (`eur`) regardless of the customer's location"). The owner asked
+for exactly that guarantee: "make sure the price is same when they landed in
+stripe page".
+
+**What it costs.** Qori's Stripe account settles in AUD, so every charge in
+another currency is converted, and Stripe's conversion fee of 2% falls on
+Qori: about 80¢ on a US$39 plan. Only an Australian's A$55 escapes it. The
+only ways to avoid the fee are charging in AUD, or Adaptive Pricing, which
+moves the buyer's price, so the owner took fixed prices over the fee. It can
+shrink two ways:
+
+- **USD payouts.** If Stripe admits the account (it serves "a limited number
+  of businesses in Australia"), USD charges settle in USD, and the 2% becomes
+  1% per payout, with a US$10 minimum
+  ([Stripe](https://support.stripe.com/questions/receiving-usd-nzd-payouts-for-australia-users)).
+  The payouts must go to an Australian bank's USD account — NAB, not Wise —
+  and Qori's USD suppliers can be paid from there.
+- **Natural hedge.** Qori's costs are mostly USD, so USD revenue moves with
+  them.
+
+**Proposed fixed prices.** US$39 and US$99 at the rates of 21 September 2026,
+rounded to a local price point. The rates: EUR 1.1473, GBP 1.3373, NZD 0.5722
+and AUD 0.7126 USD; 1.4013 CAD and 1.2759 SGD to the USD. The owner sets the
+final figures when the live prices are created (release checklist).
+
+| Currency      | Start  | Pro     | At the rate          |
+| ------------- | ------ | ------- | -------------------- |
+| USD (default) | $39    | $99     | —                    |
+| AUD           | A$55   | A$139   | A$54.7 / A$138.9     |
+| EUR           | €35    | €89     | €34.0 / €86.3        |
+| GBP           | £29    | £75     | £29.2 / £74.0        |
+| CAD           | C$55   | C$139   | C$54.7 / C$138.7     |
+| NZD           | NZ$69  | NZ$175  | NZ$68.2 / NZ$173.0   |
+| SGD           | S$49   | S$129   | S$49.8 / S$126.3     |
+
+HKD (HK$299 / HK$779) and MYR (RM159 / RM399) can join the list the same way.
+A buyer in any other currency pays in USD, and their own bank converts. That
+includes JPY, which `amount_cents` could not describe (`T-054`).
+
+**What stands from `D-046`:** Stripe Billing, no merchant of record, AUD
+payouts to Wise Business, prices anchored on US$39 and US$99 at the mid-market
+rate, the GST questions for the accountant, and `T-168`.
+
+**What this supersedes in `D-046`:** AUD as the prices' default currency,
+Adaptive Pricing, and "Qori's own pages quote AUD".
+
+**Consequences.**
+
+- Qori's pricing and billing pages quote the visitor's price — their
+  currency's fixed amount, or USD — and the checkout names that currency
+  (`T-170`). How Qori picks a visitor's currency is the owner's call, asked
+  the same day.
+- **Plan coupons are percent-off.** Stripe shows a buyer their own currency
+  only when the session's discounts carry that currency too, so an amount-off
+  coupon in one currency would pull the session back to the default (`T-169`).
+- **Tax, later:** once Stripe Tax calculates (`T-168`'s switch), each currency
+  option needs a `tax_behavior`, or Stripe presents the default currency
+  instead.
+- Release checklist: Adaptive Pricing stays off, and each live price is
+  created in USD with the owner's fixed amounts as currency options. Applying
+  for USD payouts, and opening a NAB USD account for them, is optional and
+  worth doing once USD sales are steady.
+- `T-167` is re-scoped to a USD base. `T-169` holds the fixed amounts on the
+  price row and in the console. `T-170` quotes and charges the visitor's
+  currency.
