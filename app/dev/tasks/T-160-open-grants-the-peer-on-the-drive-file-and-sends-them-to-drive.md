@@ -2,8 +2,8 @@
 id: T-160
 title: Open grants the Peer on the Drive file and sends them to Drive
 stream: storage
-status: draft
-owner: unassigned
+status: doing
+owner: claude
 estimate: M
 depends: T-159
 blocks: T-161
