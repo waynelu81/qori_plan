@@ -2812,3 +2812,35 @@ is how the page and the charge come to disagree.
 - The release checklist turns Adaptive Pricing back on. Prices and coupons
   are no longer created by hand in Stripe's dashboard: Qori's admin publishes
   them.
+
+#### D-049 — A Peer agrees to the terms of what they get, Qori's own until creators write theirs; emails from the creator are optional (amends §9)
+
+**Decision.** Before a Peer gets a Series — free or paid, from the stranger's
+form, the signed-in button or checkout — they tick one required box: they
+agree to the terms for that Series, shown on the page. Until a creator can
+supply their own terms (`T-179`: a setup step, or a template picked per
+Series), the terms are a static agreement Qori supplies, versioned, and the
+version and time are recorded on the Access. Agreeing to hear from the creator
+by email stays on the page as its own box, **optional and unticked**: a Peer
+who leaves it gets access and is not emailed by campaigns.
+
+The owner, 22 September 2026, asked whether a Peer must agree to the creator's
+emails to get free access: "I think creator must create their own terms &
+agreement to show on screen for their sale for their peer. might be one of the
+setup too, or allow to set a template pick in each series. For now please
+draft a static and use as Qori supplied agreement."
+
+**Why this shape.** What a Peer is entering is an agreement with the creator
+about what they get, which is what the terms say. Consent to marketing is a
+different thing, and making it the price of access is the bundling privacy
+law treats as consent not freely given. §9 asked for consent explicitly and
+blocking so that no Peer was created without the question; the question is
+still asked on the same screen, and a Peer who says no is simply not a
+campaign recipient.
+
+**Consequences.** `T-178` builds it and changes `ConsentTest`, whose rule this
+reverses. A paid Peer's choices travel in the checkout session's metadata to
+the webhook that grants the access, so a purchase records consent only when
+the box was ticked. The agreement's words are a draft Qori supplies, and a
+legal read before release is on the release checklist. Accesses a creator
+gives by hand carry no terms: nobody was shown a screen.
