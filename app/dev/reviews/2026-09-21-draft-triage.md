@@ -19,7 +19,7 @@ Ordered to the stated priority: **onboarding and storage integration first.**
 | --- | --- | --- |
 | **Keep** | Wanted, and the spec still matches the code | 52 |
 | **Re-scope** | Wanted, but part of it is already built or a decision moved under it | 11 |
-| **Superseded** | Delivered elsewhere; propose closing as done-by | 4 |
+| ~~**Superseded**~~ | Guessed at 4 — **checked, and none of them were** | 0 |
 | **Split** | Too large to be made ready as written | 3 |
 
 ---
@@ -73,17 +73,29 @@ reversed their design, and `T-094` says so at the top. Two notes:
 
 ## The rest, by stream
 
-### Superseded — propose closing as done-by
+### ~~Superseded~~ — checked, and **none of the four were**
 
-| Task | Done by | Note |
+> **Verified 21 September 2026, same day.** The four checks named below were
+> run. **Zero were superseded.** The classification was made from titles and the
+> done-list without reading the code, and reading the code reversed all four.
+> This is the argument for the rule that nothing is deleted on a suspicion.
+
+| Task | Guess | What the check actually found |
 | --- | --- | --- |
-| **T-014** — Finish or explicitly hide each unreachable capability | `T-012`, `T-046`, `T-067` | The scan, the seat count and the Integrations page covered the named cases. Re-run the scan; if it is empty, close. |
-| **T-104** — The public pricing page leads somewhere | `T-050` | `T-050` gave creators the link to their public page; check whether the pricing page's dead end survived it. |
-| **T-118** — The words the renames mangled are put right | `T-041`, `T-056`, `T-116` | Three rename-repair tasks landed after this was written. Likely nothing left; verify by grep. |
-| **T-153** — The Integrations page is checked for what it claims | `T-067` | `T-067` made Integrations a settings page. Overlaps heavily; keep only the "what it claims" audit, if anything. |
+| **T-014** — unreachable capabilities | done by `T-012`/`T-046`/`T-067` | **Half right, and the good half is real.** `qori:reachability` now reports **no unreachable routes at all** — that part of the task is satisfied. What remains is two `public` service methods nothing calls from outside their own class (`AccessService::peerFor`, `SuppressionService::suppress`); both are called internally, so the fix is `private` or an allow-list entry with a reason. **Re-scope to S**, do not close. |
+| **T-104** — pricing page leads somewhere | done by `T-050` | **No.** `resources/js/pages/Pricing.vue` is 92 lines with no `Link`, no `href`, no lockup, no header and no call to action. The dead end is exactly as reported. **Keep.** |
+| **T-118** — words the renames mangled | done by `T-041`/`T-056`/`T-116` | **No — and this one should be raised.** `T-116` fixed only the string a password manager reads. Everything else is still there: `guardGrantlable()` ×4, "grantlable" ×8, "Grantling" ×6, `/w/` in the flow docs ×8. Including **a live buyer-facing string**: `lang/en/accesses.php:76` reads *"Please agree to be peered before granting."* A buyer who leaves the consent box unticked sees that sentence today. **Keep, and treat the lang line as a defect rather than a tidy-up.** |
+| **T-153** — Integrations page claims | done by `T-067` | **No.** The task had already narrowed itself: its own **Why** records the count query as *verified, no defect*, and its remaining scope is one assertion — what a non-owner collaborator sees when a write is refused in a browser. **Keep at one test row.** |
 
-**None of these are safe to delete unverified** — each needs the one command or
-grep named above. That is twenty minutes total.
+### The reachability scan has a blind spot worth knowing
+
+`qori:reachability` reporting "routes nothing links to: none" does **not** mean
+nothing built is invisible. It cannot flag a capability that has **no routes at
+all** — which is precisely `T-045`, campaigns: built, tested, and with no route
+to be unreachable. The scan answers "is every route linked", not "is everything
+built reachable", and the plan's own headline still says three features had no
+way in. Worth a line in the `reachability` stream so a clean scan is not read as
+a clean bill of health.
 
 ### Re-scope — a decision moved under them
 
@@ -147,4 +159,6 @@ Three observations:
 4. **`T-025`** — timezones, before the classroom stream multiplies the bug.
 5. **`T-091` split and specified**, with a fresh reader. Unblocks eight.
 6. **The free-or-drop call** on `T-095`, `T-097`, `T-099`, `T-122`.
-7. **The four supersession checks**, twenty minutes, then close what is closed.
+7. ~~**The four supersession checks.**~~ **Done — none were superseded.** The
+   by-product worth acting on: `lang/en/accesses.php:76` shows buyers
+   *"Please agree to be peered before granting."* today.
