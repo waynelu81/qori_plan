@@ -98,10 +98,13 @@ grep named above. That is twenty minutes total.
 
 ### Keep as written
 
-**delivery** `T-017`, `T-032`, `T-055` — and **`T-032` is the most urgent task
-in the plan that nobody has claimed**: mail sends from an authenticated domain
-and *none is confirmed arriving*. Everything access-related depends on mail
-that works.
+**delivery** `T-017`, `T-055`.
+
+> **`T-032` closed the same day this was written.** It was called the most
+> urgent unclaimed task here; the owner cleared it on 21 September 2026 and
+> mail is confirmed arriving. What that leaves is narrower and still open: the
+> SPF/DKIM/DMARC result and the receiving providers were not recorded, and
+> `T-017` will need them.
 
 **design** `T-040`, `T-088`, `T-105`, `T-106`, `T-107`, `T-108`, `T-109`,
 `T-110`, blocked `T-022`.
@@ -135,7 +138,9 @@ Three observations:
 
 ## Recommended order
 
-1. **`T-032`** — prove mail arrives. Nothing else is trustworthy until it does.
+1. ~~**`T-032`** — prove mail arrives.~~ **Done, 21 September 2026.** Worth one
+   line in `walkthroughs.md` recording which providers and whether
+   authentication passed, which `T-017` will need.
 2. **`T-086`** — the rename card. `S`, no dependencies, three reports.
 3. **`T-028` re-scoped down** to the seller prompt and the honest storage
    stage. Closes the onboarding ↔ storage junction with what is already built.

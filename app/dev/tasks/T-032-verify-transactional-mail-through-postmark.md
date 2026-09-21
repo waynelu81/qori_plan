@@ -2,8 +2,8 @@
 id: T-032
 title: Verify every transactional message through the production sender
 stream: delivery
-status: draft
-owner: unassigned
+status: done
+owner: wayne
 estimate: M
 depends: T-015, T-016
 blocks: T-043
@@ -11,9 +11,10 @@ blocks: T-043
 
 # T-032 — Verify every transactional message through the production sender
 
-> **Draft.** Not specified yet, and not to be started — see
-> [`../PROCESS.md`](../PROCESS.md). What has to be decided before it can be
-> marked `ready` is listed at the bottom.
+> **Done, 21 September 2026.** Cleared by the owner directly: mail through the
+> production sender was verified as arriving. It never passed through `ready`
+> or `doing`, so there is no report and no spec was frozen — see **Notes** for
+> what that means for the record.
 
 ## Why
 
@@ -60,8 +61,29 @@ existed.
 
 ## Re-scope log
 
-None.
+None. The task was cleared without being specified.
 
 ## Notes
 
-None.
+**Closed out of process, deliberately.** The owner ran the verification and
+cleared the task on 21 September 2026 rather than specifying it, claiming it
+and reporting on it. That is the owner's call to make, and the outcome — mail
+arrives — is what the task existed to establish.
+
+**What is not on the record.** `Scope` asked for three things, and only the
+first is known to be satisfied:
+
+- [x] Messages sent through the production sender arrive.
+- [ ] **Which receiving providers were used.** The scope named at least two,
+      with Gmail and Outlook as the two that matter commercially.
+- [ ] **SPF, DKIM and DMARC confirmed passing on what arrived.**
+- [ ] **Evidence recorded in `../walkthroughs.md`.**
+
+Those are not claims this file can make on the owner's behalf. If the checks
+were done, a line in `walkthroughs.md` closes the gap and costs a minute; if
+they were not, the arrival is proven for whatever path was tested and the
+authentication result is still unknown. Either way `T-017` (bounce and
+complaint handling) is the next thing that touches it, and it will need to know.
+
+**What this unblocks.** `T-043` — inviting people to a Series — which was
+waiting on mail that works.

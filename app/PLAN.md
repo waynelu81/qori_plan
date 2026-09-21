@@ -1,6 +1,6 @@
 # Qori — current plan
 
-Updated: 17 September 2026
+Updated: 21 September 2026
 
 This file is the entry point: what Qori is for, where it stands, and what blocks
 release. **It does not list tasks.** Work is organised into parallel streams,
@@ -43,7 +43,7 @@ The immediate goal: that one loop, safe, reachable, understandable and measurabl
   uploads, playback, campaigns, staff authentication and the admin shell are
   built. Stripe test mode and R2 have been exercised against their real APIs,
   and the core loop has been walked in a browser on the current schema.
-- Mail sends from `useqori.com` through Postmark; **none confirmed arriving** (`T-032`).
+- Mail from `useqori.com` **arrives** (`T-032`); SPF/DKIM/DMARC unrecorded.
 - **The loop does not close for a new person.** A creator can only grant access
   to an existing account (`T-043`); a Series link now returns there (`T-008`).
 - **Built, with no way in**: connections and campaigns (`T-044`, `T-045`).
