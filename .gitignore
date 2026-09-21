@@ -1,0 +1,30 @@
+.DS_Store
+/vendor
+/.idea
+/.vscode
+/.zed
+
+# The board is derived from app/dev/tasks by `bin/tasks`. It used to be
+# committed, and every claim or close rewrote its count line and re-sorted its
+# tables, so two people finishing on one day conflicted in a file neither had
+# edited. Render it locally; CI prints it as a job summary.
+app/dev/BOARD.md
+
+# Screenshots are evidence for whoever is reading a report on the machine that
+# produced them, and a repository of PNGs of a dialog box helps nobody a year
+# later. A report has to stand on its own in words.
+app/**/*.png
+app/**/*.jpg
+app/**/*.jpeg
+app/**/*.gif
+app/**/*.webp
+app/**/*.mp4
+app/**/*.mov
+
+# ...except the brand assets, which are the deliverable rather than evidence.
+!app/design/brand/**
+
+# Design-review runs written by `php artisan qori:design-review` in the code
+# repository. Ignored for the same reason task-report evidence is.
+/app/design/reviews/runs/
+.phpunit.result.cache

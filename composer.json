@@ -1,0 +1,24 @@
+{
+    "name": "qori/plan",
+    "description": "Planning, design and brand for Qori. The code is in the qori repository.",
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^12.0"
+    },
+    "autoload-dev": {
+        "classmap": ["tools/"]
+    },
+    "scripts": {
+        "check": [
+            "@php bin/tasks --check",
+            "@php vendor/bin/phpunit"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

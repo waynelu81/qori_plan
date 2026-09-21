@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="116" viewBox="0 0 300 116" role="img">
+<title>Qori reverse logo</title>
+<g transform="translate(8 8)">
+  <g transform="scale(1.04)">
+
+<g fill="none" stroke="#F0B85A" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="50" cy="50" r="31" stroke-dasharray="158 37" transform="rotate(42 50 50)"/>
+  <path d="M66 66 L83 83"/>
+</g>
+</g>
+  <g fill="none" stroke="#FAF8F5" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="146" cy="60" r="22"/>
+    <path d="M191 82 V39 M191 57 C197 45 207 39 220 43"/>
+    <path d="M247 55 V82"/>
+  </g>
+  <circle cx="247" cy="39" r="5" fill="#FAF8F5"/>
+</g>
+
+</svg>
