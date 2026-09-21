@@ -19,10 +19,6 @@ stops them recurring, not this file.
   peers can share" — lowercase and hardcoded. `resources/js/pages/share/series/Index.vue` (21 Sep)
 - Episode form: "Let anyone preview this episode" — lowercase and hardcoded.
   Series page, New Episode panel (21 Sep)
-- Public Series page consent: "…can email me about this series." — lowercase.
-  `lang/en/accesses.php` `consent.peer` (21 Sep)
-- Checkout refusal: "This series isn't ready to take payments yet." — lowercase.
-  `lang/en/errors.php` (21 Sep)
 - `consent.required` reads "Please agree to be peered before granting." — a
   rename's leftover; not reachable from the page, which disables Continue.
   `lang/en/accesses.php:76` → `T-118` holds the rest of that rename's debris (21 Sep)

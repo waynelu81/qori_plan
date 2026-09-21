@@ -20,7 +20,7 @@ cannot do what the step is for.
 | 2 | Picks "I want to share", gives name, email, password | Rough — "Set up a school"; four fields and no passwordless sign-up |
 | 3 | Confirms their address from the email | Works — the email is Laravel's stock text (`T-055`) |
 | 4 | Names their Group | Rough — the URL keeps the name Qori made up, forever |
-| 5 | **Connects their Stripe account**: Stripe's sign-in, and back to setup | **Breaks** — the door is built (`T-063`) and needs `STRIPE_CLIENT_ID`, which is not set |
+| 5 | **Connects their Stripe account**: Stripe's sign-in, and back to setup | Works — the owner connected through Stripe's sign-in on 21 September 2026, once `STRIPE_CLIENT_ID` was set |
 | 6 | **Connects their Google Drive**: Google's consent, and back to setup | Built (`T-159`) — setup part 3 links to it; one page via Integrations, where the account kind is chosen |
 | 7 | Lands on their dashboard, told what to do next | Rough — the rename form again (`T-086`) |
 | 8 | Names their first Series and gives it a price | Works |
@@ -37,7 +37,7 @@ cannot do what the step is for.
 | Step | Branch | Today |
 | --- | --- | --- |
 | 3 | Opens the verification link on another device, signed out | Rough — "Log in" with no context; an email link then verifies and continues |
-| 5 | Skips payments, later sets a price | **Breaks** — saves silently; the public page offers to buy; pressing it does nothing visible (`T-085`, `T-028`) |
+| 5 | Skips payments, later sets a price | Built (`T-085`) — the price field says nobody can pay until Stripe is connected, with a Connect link (`T-054`); the public page names the Group and says it isn't taking payments yet, in place of the forms |
 | 5 | Connects an account Stripe will not let charge yet — a document, a detail or the terms still due | Built (`T-164`) — Integrations lists each thing Stripe asked for with a link to its page in the creator's Stripe dashboard; connecting says where the list is; the dashboard and the price field say payments are held back |
 | 6 | Connects Dropbox | Not built — and `D-042`'s free-or-drop call is open (`T-095`) |
 | 8 | A free Series — no price, no checkout | Works — walked end to end on 21 September 2026 |
@@ -51,7 +51,7 @@ cannot do what the step is for.
 
 ## What to do, in order
 
-1. **Config only the owner can set (minutes).** Stripe, test mode: Connect →
+1. ~~**Config only the owner can set (minutes).**~~ Set on 21 September 2026. Stripe, test mode: Connect →
    Settings → OAuth on, add `http://localhost:8001/u/payments/stripe/finalise`
    as a redirect URI, and put the `ca_…` client id in `STRIPE_CLIENT_ID`.
    Google Cloud: `http://localhost:8001/u/connections/google/finalise` as an
@@ -73,8 +73,9 @@ cannot do what the step is for.
    with a test card.
 5. **Then the branches**, the step-5 one first: a price without payments says
    so and offers Connect, and the public page stops offering to buy
-   (`T-085`, what is left of `T-028`). Stop offering Dropbox, and Audio's
-   Dropbox-only choice, on the Episode form while nothing can connect it.
+   (~~`T-085`~~, done 22 September 2026, with a Toaster on every layout so a
+   refusal on a page without the app shell is seen). Stop offering Dropbox, and
+   Audio's Dropbox-only choice, on the Episode form while nothing can connect it.
 6. **Rough edges on the path (S each)**: the slug at step 4, the step-7
    dashboard (`T-086`), the share link after ready, the code email naming the
    Group and Series.
@@ -82,8 +83,11 @@ cannot do what the step is for.
 
 ## Asked, and carrying on meanwhile
 
-- Step 1's config — Stripe OAuth, `STRIPE_CLIENT_ID` and the two redirect URIs.
-- Which Google account plays the Peer: it goes in `QORI_E2E_PEER_GOOGLE_EMAIL`.
+- ~~Step 1's config — Stripe OAuth, `STRIPE_CLIENT_ID` and the two redirect
+  URIs.~~ Set on 21 September 2026.
+- ~~Which Google account plays the Peer: it goes in
+  `QORI_E2E_PEER_GOOGLE_EMAIL`.~~ Answered in the owner's `.env.e2e`, 21
+  September 2026.
 - ~~May the e2e runner take the account id and the refresh token from your
   local `.env`?~~ 21 September 2026: yes — from `.env` or a designated
   gitignored file, skipped where it does not exist (`D-045`).
