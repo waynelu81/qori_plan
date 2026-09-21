@@ -157,10 +157,13 @@ answer is written into the task.
   same course framing.
 - `T-109` — The certificate's new sentences, including "marked every Episode
   done"; and whether "Issued by" and "This certifies that" overstate too.
-- `T-170` — Whether Qori's pricing and billing pages offer a currency menu
+- ~~`T-170` — Whether Qori's pricing and billing pages offer a currency menu
   beside the prices, or pick from the visitor's country alone; and what they
   show a visitor whose currency has no fixed price (22 September 2026, `D-047`,
-  `D-048`).
+  `D-048`).~~ **Answered 22 September 2026:** USD, EUR and AUD always, plus
+  the visitor's own currency when it is none of those; a visitor without a
+  fixed price sees the USD price with a line saying checkout charges their
+  own currency.
 
 ### Open decision: promotional content in access confirmations (2026-09-13)
 

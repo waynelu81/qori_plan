@@ -122,9 +122,9 @@ neither stream's goal describes any of this.
 26. `T-173` — Qori creates plan vouchers in Stripe: "same goes for voucher?",
     and an amount-off voucher would undo a fixed price
 27. `T-170` — Qori's pages and checkout use the visitor's currency: the
-    owner, "make sure the price is same when they landed in stripe page"; the
-    owner decides whether there is a currency menu, and what a visitor with no
-    fixed price sees
+    owner, "make sure the price is same when they landed in stripe page", and
+    "I would show 3 fixed currency + visitor's country if different from 3,
+    USD EUR AUD"
 
 `T-050` went first because it was small and entirely specified, `T-054` for the
 same reason. The four payouts tasks come before the rest because a price
