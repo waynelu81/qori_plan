@@ -37,7 +37,9 @@ vendor or type a card, the script is **hardcoded** — the owner's word for it:
 - `php artisan qori:e2e` empties Mailpit first, and the Mailpit on 1025/8025 is
   another project's; the runner reads by recipient instead of emptying.
 - Then the owner walks the journey once by hand for real — two sign-ins and a
-  test card — and the result goes in `walkthroughs.md`.
+  test card — and the result goes in `walkthroughs.md`. That walk is also
+  `T-159`'s first run of Google's Picker against a real account, which no test
+  can reach.
 
 ## Re-scope log
 

@@ -2,7 +2,7 @@
 id: T-159
 title: Google Drive connects from setup, and an Episode is picked from it
 stream: storage
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-044
@@ -80,6 +80,18 @@ folders; an admin choosing files.
 | `docs/flows/storage.md` | edit | the Picker and the Drive Episode |
 | `tests/Feature/Share/DriveEpisodeTest.php` | new | the cases below |
 
+### Added during execution
+
+| Path | Change | Notes |
+| --- | --- | --- |
+| `lang/en/connections.php` | edit | Google Drive's copy was the folder design's; rewritten per file (`D-036`, `D-040`) |
+| `app/Support/ProviderSections.php` | edit | `common.folder` → `common.one_file` |
+| `tests/Feature/Share/IntegrationsProvidersTest.php` | edit | reads `one_file` |
+| `tests/Feature/Share/EpisodeServiceTest.php` | edit | Google Drive is account-bound |
+| `docs/flows/onboarding.md` | edit | part three's link |
+| `.env.example` | edit | the Picker's two keys |
+| `tests/Feature/Share/ConnectionsConnectTest.php` `tests/Feature/Share/ConnectionAccountChangeTest.php` `tests/Feature/Console/RefreshConnectionsCommandTest.php` | edit | docblocks |
+
 ## Database
 
 None. `episodes.content` is jsonb and takes the new shape.
@@ -116,12 +128,12 @@ None.
 
 ## Acceptance
 
-- [ ] Setup part 3 and Integrations offer Google Drive
-- [ ] The Episode form's Google Drive choice opens the Picker and saves the chosen file
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Setup part 3 and Integrations offer Google Drive
+- [x] The Episode form's Google Drive choice asks for the owner's token and saves the file the Picker hands back; the Picker against a real Google account is walked in `T-161`
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 
@@ -129,4 +141,7 @@ None.
 
 ## Notes
 
-None.
+- **21 September 2026, wording tier:** the second Acceptance line said the
+  choice "opens the Picker". Opening it needs a Google sign-in, which an agent
+  does not do, so the line now says what was verified and hands the real walk
+  to `T-161`, whose by-hand pass exists for exactly this.
