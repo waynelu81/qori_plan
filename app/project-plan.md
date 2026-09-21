@@ -103,9 +103,10 @@ not a confirmed live offer. School was subsequently made available on request,
 without a public $499 price. Current vocabulary and beta scope follow `PLAN.md`.
 See §5.1 for the current competitor review and proposed packaging.
 
-**22 September 2026 (`D-046`):** Start and Pro are set at the review's figures,
-priced in AUD — A$55 and A$139 a month — and shown in a buyer's own currency
-at checkout by Stripe's Adaptive Pricing.
+**22 September 2026 (`D-046`, `D-047`):** Start and Pro are set at the
+review's figures, US$39 and US$99, with fixed prices of their own in the
+major currencies — A$55 and A$139 among them. Everyone else pays the USD
+price; no price moves with the exchange rate.
 
 Price **courses**, not individual lessons inside a series. **0% platform fee** on student checkout. Creators pay **Stripe’s** processing on **direct charges** (not a Qori cut, not a destination-charge recoup). Qori **eats** Stripe fees on **SaaS** — bake them into Start/Pro/School; no card surcharge.
 
@@ -129,7 +130,7 @@ Price **courses**, not individual lessons inside a series. **0% platform fee** o
 
 **3-month friction:** inconvenience for the **creator** (banner, freeze edits, or hibernate the teaching side). **Enrolled students keep access.** Do not expire paid content out from under buyers.
 
-**Currency for SaaS:** **AUD** for Qori Start/Pro, the settlement currency of Qori's Stripe account, with **Adaptive Pricing** showing a buyer abroad their own currency at checkout (`D-046`, 22 September 2026; this line said USD, locked, before then). Student course prices live on **their** Connect account (their currency). GST on Qori SaaS to AU customers applies once Qori registers for it.
+**Currency for SaaS:** **USD** is the base price of Qori Start/Pro, and the major currencies — AUD, EUR, GBP, CAD, NZD, SGD — carry **fixed prices** the owner sets. A buyer in any other currency pays USD, and Adaptive Pricing is off (`D-047`, 22 September 2026, amending `D-046`'s AUD base the same day). Qori's Stripe account settles in AUD, so every non-AUD sale pays Stripe's 2% conversion. Student course prices live on **their** Connect account (their currency). GST on Qori SaaS to AU customers applies once Qori registers for it.
 
 ---
 
@@ -171,7 +172,7 @@ One Stripe platform account: **Qori's own platform account**. SaaS subscriptions
 
 | Money                | Where it runs                                           | Charge type                          | What                            |
 | -------------------- | ------------------------------------------------------- | ------------------------------------ | ------------------------------- |
-| Creator pays Qori    | **Qori's platform account** (Billing / invoices)        | Ordinary Subscriptions               | Start / Pro in **AUD** (`D-046`) |
+| Creator pays Qori    | **Qori's platform account** (Billing / invoices)        | Ordinary Subscriptions               | Start / Pro in **USD**, fixed in major currencies (`D-047`) |
 | Student pays creator | **Creator's connected account** (under Qori's platform) | **Direct charges**, Standard Connect | One-off course in v1            |
 
 No platform wallet. No in-app course buy. Xiaohongshu / shop later = redeem code or webhook → enrol, not in-app pay.
@@ -182,7 +183,7 @@ No platform wallet. No in-app course buy. Xiaohongshu / shop later = redeem code
 
 - **New** Stripe account for Qori only. Do not reuse an old unverified account. Do not reuse the exit company/trust.
 - Payout: **Wise Business AU BSB** (AUD) is fine vs a local bank. AU Stripe still wants a BSB; it will **not** take Wise’s US routing number to skip FX.
-- Prices are **AUD** (`D-046`). A buyer abroad pays in their own currency through Adaptive Pricing, with Stripe's 2–4% conversion in their price; Qori receives AUD with no conversion fee and Wise converts only what Qori spends in USD. USD settlement for Australian accounts exists for a limited number of businesses, to an Australian bank's USD account and not Wise, at 1% per payout (US$10 minimum); do not assume USD-in-USD-out.
+- Prices are **USD at base, fixed in the major currencies** (`D-047`). Every sale not in AUD settles through Stripe's 2% conversion, which Qori pays; an Australian's A$55 does not. Wise converts only what Qori spends in USD. USD settlement for Australian accounts exists for a limited number of businesses, to an Australian bank's USD account and not Wise, at 1% per payout (US$10 minimum); do not assume USD-in-USD-out.
 - Volume for a cheaper Stripe **SaaS** rate comes from Qori subscriptions, not from pushing lesson money through the platform.
 
 ### 7.2 Lesson checkout (Connect) — direct, not destination
@@ -331,7 +332,7 @@ Expire **tickets and junk**, not courses students already paid for.
 
 ## 16. V1 in / out
 
-**In:** webapp; forever-free 1 course; Start/Pro invoices on Qori Stripe in **AUD** with Adaptive Pricing (`D-046`); thin School if delta is real; Connect **direct** one-off checkout; magic link + QR; EDM to in-system contacts; 10 EDM/day if unpaid; no public list if unpaid; Qori S3 + Dropbox + Vimeo tickets; Zoom/Teams live lessons; completion certificates; en + zh-Hans; 20 admin cap on paid; 2 sessions.
+**In:** webapp; forever-free 1 course; Start/Pro invoices on Qori Stripe from a **USD** base, fixed prices in major currencies (`D-047`); thin School if delta is real; Connect **direct** one-off checkout; magic link + QR; EDM to in-system contacts; 10 EDM/day if unpaid; no public list if unpaid; Qori S3 + Dropbox + Vimeo tickets; Zoom/Teams live lessons; completion certificates; en + zh-Hans; 20 admin cap on paid; 2 sessions.
 
 **Out:** student memberships, CSV blasts, Drive / YouTube as paywall, IAP, EDM designer on mobile, accredited CPD, 4 languages, 5 currencies, SMS OTP, selling seats, video/audio hosting/proxy, Skool-style feed as acquisition, destination charges / fee recoup on lessons, Tyro-style Stripe rebate as a v1 revenue line.
 

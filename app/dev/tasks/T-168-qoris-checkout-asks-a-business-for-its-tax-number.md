@@ -6,7 +6,7 @@ status: ready
 owner: unassigned
 estimate: S
 depends: none
-blocks: none
+blocks: T-170
 ---
 
 # T-168 — Qori's checkout asks a business for its tax number
@@ -99,12 +99,15 @@ against the sandbox and written in the report:
 
 - Registering for tax anywhere, setting up Stripe Tax, and whether the prices
   include tax. These are release checklist (`D-046`, `release-prerequisites.md`).
+  So is giving each currency option a tax behaviour before the switch goes on:
+  without one, Stripe shows that buyer the USD price (`D-047`).
 - Requiring the number (`tax_id_collection[required]`). See Decisions.
 - Storing the number in Qori. Stripe keeps it on the customer and prints it on
   invoices; nothing in Qori reads it.
 - Editing tax numbers in the Customer Portal. That is a portal setting in
   Stripe's dashboard, not code.
-- The currency of the prices: `T-167`.
+- The currency of the prices, and naming it on the session: `T-167`, `T-169`
+  and `T-170`. `T-170` edits `subscribeUrl()` after this task.
 
 ## Files
 
