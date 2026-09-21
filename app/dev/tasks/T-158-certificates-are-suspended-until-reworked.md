@@ -78,6 +78,12 @@ certificates (`T-005`), and any change to minting or to `completed_at`.
 | `docs/flows/series.md` | edit | the certificates section says it is suspended and how |
 | `docs/tinker/e2e.md` | edit | the journey no longer reaches a certificate |
 
+### Added during execution
+
+| Path | Change | Notes |
+| --- | --- | --- |
+| `resources/js/composables/useFeatures.ts` | new | The sidebar and both Series forms read the switch; a composable like `useTerminology` beside them, not `usePage()` three times |
+
 ## Database
 
 None. `accesses.certificate_code` and `series.hours` are unchanged and still written.

@@ -2414,3 +2414,28 @@ approval", waits on nothing. The existing drafts are not rewritten in a sweep:
 each keeps its **Before this can be ready** list, and whoever picks one up
 works through it under these rules — moving a legal or policy bullet onto the
 release gate where that is all it was.
+
+#### D-044 — Certificates are suspended, not removed, until they are reworked
+
+**Decision.** Certificates and the hours log are switched off behind one flag,
+`config('qori.certificates.enabled')` (`QORI_CERTIFICATES`), off by default.
+Every surface is hidden or answers 404 — the public check page, the Peer's
+record and its nav item, the certificate link on a finished Series, and the
+creator's Hours field — and **minting is unchanged**: a finished Access still
+gets its code. `T-109` is where they come back. The owner, 21 September 2026:
+"suspend certificate feature first, the current implementation does not work.
+I do not want to spend effort right now to correct it. Shall pick it up in the
+future."
+
+**Why this shape.** Deleting the code would make the rework rebuild what exists;
+leaving it visible shows Peers something the owner says does not work. A flag
+keeps the code under test — the existing certificate tests switch it on — and
+keeps the data growing, so a Peer who finishes during the suspension has a
+valid code on the day it returns. The routes answer 404 rather than an error
+because an error that names a feature nobody can see is worse than a page that
+is not there.
+
+**Consequences.** `T-158` builds it. What exactly fails was not recorded — the
+owner did not want to spend the time — and `T-109` carries that as its first
+question. `PLAN.md`'s settled line, that certificates state only what Qori can
+prove, is untouched: it governs what a certificate says when there is one.

@@ -467,3 +467,54 @@ pages rendered local dependency errors. Application source remained identical
 across the relevant concurrent commits by the comparison recorded in R-004.
 No application fixes or commits were made. This entry supplies bounded
 keyboard/journey evidence to T-022/T-026/T-027 without changing task status.
+
+## 21 September 2026 — a creator's first share, landing page to a Peer finishing
+
+Claude, in the built-in browser against `localhost:8001` on `main` at
+`eacde65`, desktop width, one pass. The creator was registered through
+`CreateNewUser` and the `Registered` event in tinker rather than the form,
+because the agent does not type passwords; everything after that was walked in
+the browser, and the Peer side entirely so. Test people:
+`walk-0921@example.test` (Walk Studio) and `walk-peer-0921@example.test`.
+
+**The loop closes.** Landing → register → verify → three setup parts →
+dashboard → first Series → first Episode (a PDF uploaded to Qori) → ready →
+share link → a stranger opens it, gets a six-digit code, is in, opens the
+Episode (a signed R2 URL, three minutes) and marks it done. No step errored.
+
+**Where it stops being a product:**
+
+- **Setup part 2, Get paid, is a dead end locally**: "Payments can't be
+  connected here yet." `STRIPE_CLIENT_ID` is unset, so Connect OAuth is not
+  configured; the only way on is "Set this up later".
+- **Setup part 3, Where your files live, has nothing to connect.**
+  `IntegrationServiceProvider` tags an empty `account-connectors`: Google's
+  connector is built and tested and hidden until `T-094`'s picker (owner,
+  20 September 2026), and `T-094` waits on `T-091`. "Continue" and "Set this
+  up later" do the same thing from the creator's side.
+- **The Episode form offers storage that cannot work.** Audio's only option is
+  Dropbox and File offers it too, with a typed path; no Dropbox connection can
+  exist, so `DropboxStorage::linkFor()` refuses every play. A creator can build
+  an Episode no Peer can open. Video asks for a Vimeo *id*, not a link.
+- **A price saves without payments, silently.** The public page then offers
+  "Get access — A$20.00"; pressing it posts, the server answers
+  `unsupported_operation` ("This series isn't ready to take payments yet…"),
+  and the page shows nothing (`T-085`, `T-028`).
+- **The Group's slug is the name Qori made up.** Naming it "Walk Studio" in
+  part 1 left `walks-group` in every URL, including the public share link.
+  `GroupService::rename()` keeps slugs on purpose; at setup nothing has been
+  shared yet.
+- The dashboard's second card is the full "Name your Group" form again, just
+  after part 1 (`T-086`); nothing mentions the skipped payments.
+- The share link sits below the Episode form, details, price, statement copy
+  and Peers on one long page; "ready to share" does not move you to it.
+- "Give access" needs the person to already have an account (`T-043`).
+
+**Branches seen:** opening the verification link signed out lands on "Log in
+to Qori" with no word about verifying; signing in by email link then verifies
+the address and continues into setup, so it recovers. On the public page,
+Continue stays disabled until the email-consent box is ticked, with no reason
+given; Enter does not submit past it, so `lang/en/accesses.php`'s mangled
+`consent.required` is not reachable from the page.
+
+**Copy:** the fixups are listed once in [`fixups.md`](fixups.md), not here.
