@@ -2,7 +2,7 @@
 id: T-158
 title: Certificates are suspended until reworked
 stream: design
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -120,13 +120,13 @@ registered and answer 404 while suspended.
 
 ## Acceptance
 
-- [ ] With `QORI_CERTIFICATES` unset: no "View your certificate", no "My record", no Hours field, and `/certificates/{code}` and `/shared/record` answer 404
-- [ ] A Peer finishing a Series still gets a `certificate_code`
-- [ ] With it set to `true`, everything behaves as before
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] With `QORI_CERTIFICATES` unset: no "View your certificate", no "My record", no Hours field, and `/certificates/{code}` and `/shared/record` answer 404
+- [x] A Peer finishing a Series still gets a `certificate_code`
+- [x] With it set to `true`, everything behaves as before
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 
