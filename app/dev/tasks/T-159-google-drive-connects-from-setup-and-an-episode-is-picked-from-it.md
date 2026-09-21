@@ -2,8 +2,8 @@
 id: T-159
 title: Google Drive connects from setup, and an Episode is picked from it
 stream: storage
-status: draft
-owner: unassigned
+status: doing
+owner: claude
 estimate: M
 depends: T-044
 blocks: T-160, T-161
@@ -26,22 +26,102 @@ Afterwards: setup part 3 and Integrations offer Connect Google Drive, the round
 trip lands back on setup (`ConnectionsDestination`, already built), and the
 Episode form's Google Drive option opens the Picker and saves the chosen file.
 
-## Before this can be ready
+## Decisions taken to make this specifiable
 
-- How the Picker gets a token: an owner-only route answering
-  `ConnectionService::fresh()`'s access token with the API key and the project
-  number (`GOOGLE_API_KEY`, `GOOGLE_PROJECT_NUMBER`, both set). Name the route
-  by `D-032`/`D-033`, and decide whether it is the first JSON response in a v1
-  that is otherwise Inertia-only.
-- Which Episode kinds take Google Drive — File, Video and Audio all preview in
-  Drive's viewer.
-- What an Episode stores from the Picker: file id, name and MIME type, shaped
-  from `tests/Fixtures/google/files-get-episode-file.json`.
-- The line beside the option, by `D-037`: it changes who can open the file in
-  the creator's Drive, never the file.
-- Walking it needs the owner's config — the Google redirect URI and the test
-  users (journey, "What to do" 1) — and one real Google sign-in, which an agent
-  does not do.
+- **The connector is switched on here**, by tagging `GoogleAccounts` in
+  `account-connectors`. The owner's condition of 20 September 2026 — hidden
+  "until the picker that makes it useful lands with it" — is met by this task.
+- **The Picker's token is an `Inertia::optional()` prop, `drivePicker`, on the
+  Series page**, loaded by a partial reload when "Choose from Google Drive" is
+  pressed. v1 stays Inertia-only; no JSON route. It answers
+  `ConnectionService::fresh()`'s access token with `services.google.api_key`
+  and `services.google.project_number`, and null for anyone but the Group's
+  owner or without a live connection: the token opens the owner's Drive, and an
+  admin must not browse it.
+- **Google Drive is offered for File, Video and Audio**, first for File and
+  Audio and after Vimeo for Video. Audio stops offering only a choice that is
+  always refused.
+- **An Episode stores `file_id`, `name` and `mime_type`** in `content`, the
+  shape of `tests/Fixtures/google/files-get-episode-file.json`. The Picker's
+  choice arrives as `reference` plus `drive_name` and `drive_mime`.
+- **Copy comes from `lang/en/series.php` through a `drive` prop**, like
+  `live.copy`; the provider's name is `T-044`'s
+  `connections.providers.google_drive.name`, so no vendor is named that was not
+  named before (`D-035`). The line beside the choice is `D-037`'s second shape:
+  it changes who can open the file in the creator's Drive, never the file.
+- **A Peer opening a Drive Episode is `T-160`'s**, which lands with this one.
+
+## Preconditions
+
+The Picker needs the owner's Google sign-in and the redirect URI and test users
+the journey asks for; the tests fake Google (`Http::fake()`), as `T-044`'s do.
+
+## Scope
+
+**In:** the connector tagged; the Google Drive Episode provider; the Picker on
+the Episode form, its token prop, and the saved content; copy; the flow doc.
+
+**Out:** the grant at Open (`T-160`); editing an existing Episode's file;
+folders; an admin choosing files.
+
+## Files
+
+| Path | Change | Notes |
+| --- | --- | --- |
+| `app/Providers/IntegrationServiceProvider.php` | edit | tag `GoogleAccounts` |
+| `app/Enums/EpisodeProvider.php` | edit | `GoogleDrive`, account-bound |
+| `app/Enums/EpisodeType.php` | edit | allowed for File, Video, Audio |
+| `app/Http/Requests/Share/StoreEpisodeRequest.php` | edit | rules and `content()` for Drive |
+| `app/Http/Controllers/Share/SeriesController.php` | edit | `drive` and `drivePicker` props |
+| `config/services.php` | edit | `google.api_key`, `google.project_number` |
+| `lang/en/series.php` | edit | `drive.*` |
+| `resources/js/pages/share/series/Show.vue` | edit | the provider mirror and the Drive field |
+| `resources/js/components/series/DrivePicker.vue` | new | loads Google's Picker and hands back the choice |
+| `docs/flows/storage.md` | edit | the Picker and the Drive Episode |
+| `tests/Feature/Share/DriveEpisodeTest.php` | new | the cases below |
+
+## Database
+
+None. `episodes.content` is jsonb and takes the new shape.
+
+## Code
+
+`EpisodeProvider::GoogleDrive = 'google_drive'`; `connection()` answers
+`ConnectionProvider::GoogleDrive`, `isAccountBound()` true. The rest is named
+in Decisions.
+
+## Copy
+
+`series.drive.choose`, `series.drive.choose_again`, `series.drive.chosen`,
+`series.drive.touches` (D-037), `series.drive.not_connected`,
+`series.drive.owner_only`, `series.drive.loading`, `series.drive.failed`.
+
+## Routes
+
+None.
+
+## Tests
+
+**New: `tests/Feature/Share/DriveEpisodeTest.php` — 6 cases**
+
+1. `test_google_drive_has_a_section_once_its_connector_is_bound`
+2. `test_a_drive_episode_is_saved_with_the_picked_file`
+3. `test_a_drive_episode_is_refused_without_a_live_connection`
+4. `test_a_drive_episode_needs_a_file`
+5. `test_the_picker_token_is_the_owners_fresh_token`
+6. `test_nobody_but_the_owner_gets_a_picker_token`
+
+**Changed:** whatever asserted that no connector is bound; listed under
+**Added during execution** when found.
+
+## Acceptance
+
+- [ ] Setup part 3 and Integrations offer Google Drive
+- [ ] The Episode form's Google Drive choice opens the Picker and saves the chosen file
+- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [ ] `bin/tasks --check` passes in `qori-plan`
+- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [ ] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 
