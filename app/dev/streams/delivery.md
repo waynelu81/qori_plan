@@ -18,10 +18,12 @@ verification _is_ what a new account receives — and **Qori sends no receipt at
 all**, although two model docblocks describe one. Found while specifying
 `T-016`, and recorded in its notes.
 
-**State, updated 13 September 2026.** T-016 rendered and read all six messages
-in local Mailpit; T-015 configured the production sender. T-032 still needs to
-prove arrival through that sender. Local rendering does not establish email
-client compatibility or link correctness. The proposed
+**State, updated 21 September 2026.** T-016 rendered and read all six messages
+in local Mailpit; T-015 configured the production sender; **T-032 confirmed
+arrival through it** — cleared by the owner on 21 September 2026, out of
+process, so no report exists and the authentication checks (SPF, DKIM, DMARC)
+and the receiving providers used are not on the record. Arrival is established;
+what arrives passing authentication is not. The proposed
 [system email design](../ui-system-email.md) defines the branded shell and
 future order/fulfilment compositions; it does not change this stream's six-message
 exit condition or claim the new variants are built.
@@ -35,8 +37,8 @@ exit condition or claim the new variants are built.
    verified, return path and DMARC in place, the app answering on the domain
    (11 September 2026)
 3. `T-032` — Verify every transactional message through the production sender:
-   the first proof that a message reaches somebody's hands, and the next thing
-   in this stream
+   the first proof that a message reaches somebody's hands
+   (21 September 2026)
 4. `T-017` — Bounce and complaint handling: a suppression fed by a real
    provider, so a bad address stops costing reputation
 5. `T-055` — Every transactional message in one Qori email shell: the first
@@ -53,8 +55,9 @@ Domain registration, DNS and a Postmark account with a verified sender all
 landed on 11 September 2026. `T-015` records what was verified and by what
 means.
 
-What remains is the distinction the whole stream turns on: **configuration being
-right is not the same fact as mail arriving.** `T-016` proves every template
-renders against a local inbox; `T-015` proves the domain and the sender are
-correctly set up. Neither has put a message in anybody's hands. That is `T-032`,
-and it is startable.
+The distinction the whole stream turned on — **configuration being right is not
+the same fact as mail arriving** — is settled: `T-016` proved every template
+renders, `T-015` proved the domain and sender are set up, and `T-032` put a
+message in somebody's hands on 21 September 2026. What is still unproven is the
+next layer down: that what arrives passes SPF, DKIM and DMARC at the providers
+that matter, which `T-017` will need before it can trust a bounce.
