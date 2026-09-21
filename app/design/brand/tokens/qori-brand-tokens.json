@@ -1,0 +1,46 @@
+{
+    "meta": {
+        "name": "Qori",
+        "version": "1.0",
+        "date": "2026-09-08"
+    },
+    "light": {
+        "paper": "#FAF8F5",
+        "card": "#FFFDF8",
+        "ink": "#231F1A",
+        "gold": "#98661B",
+        "goldHover": "#7F5113",
+        "mutedText": "#6E665E",
+        "softSurface": "#F1ECE5",
+        "decorativeBorder": "#DED6CB",
+        "inputBoundary": "#8A7F73",
+        "success": "#286B49",
+        "warning": "#8A5A10",
+        "destructive": "#B42318"
+    },
+    "dark": {
+        "background": "#211E19",
+        "card": "#2B2721",
+        "text": "#F8F2E8",
+        "mutedText": "#C7BCAF",
+        "border": "#4D463D",
+        "gold": "#F0B85A"
+    },
+    "shape": {
+        "radius": {
+            "control": 10,
+            "panel": 12,
+            "feature": 20
+        },
+        "unit": "px"
+    },
+    "spacing": {
+        "base": 8,
+        "unit": "px"
+    },
+    "type": {
+        "ui": "Instrument Sans",
+        "fallback": "Inter, system-ui, sans-serif",
+        "weights": [400, 500, 600, 700]
+    }
+}

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="640" viewBox="0 0 1600 640" role="img">
+
+<title>Qori brand banner - sharing is caring</title>
+<defs>
+  <linearGradient id="wash" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#F5DCA9"/>
+    <stop offset="0.55" stop-color="#D99A39"/>
+    <stop offset="1" stop-color="#8A5717"/>
+  </linearGradient>
+</defs>
+<rect width="1600" height="640" fill="#FAF8F5"/>
+<circle cx="1500" cy="52" r="235" fill="none" stroke="#98661B" stroke-width="2" opacity="0.10"/>
+<circle cx="1500" cy="52" r="175" fill="none" stroke="#98661B" stroke-width="2" opacity="0.16"/>
+<circle cx="1500" cy="52" r="116" fill="none" stroke="#98661B" stroke-width="2" opacity="0.22"/>
+<g transform="translate(88 52) scale(0.72)">
+<g transform="translate(8 8)">
+  <g transform="scale(1.04)">
+
+<g fill="none" stroke="#98661B" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="50" cy="50" r="31" stroke-dasharray="158 37" transform="rotate(42 50 50)"/>
+  <path d="M66 66 L83 83"/>
+</g>
+</g>
+  <g fill="none" stroke="#231F1A" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="146" cy="60" r="22"/>
+    <path d="M191 82 V39 M191 57 C197 45 207 39 220 43"/>
+    <path d="M247 55 V82"/>
+  </g>
+  <circle cx="247" cy="39" r="5" fill="#231F1A"/>
+</g>
+</g>
+<text x="96" y="285" font-family="Instrument Sans, DejaVu Sans, sans-serif" font-size="76" font-weight="700" letter-spacing="-3" fill="#231F1A">sharing is caring</text>
+<text x="100" y="343" font-family="Instrument Sans, DejaVu Sans, sans-serif" font-size="27" font-weight="400" fill="#6E665E">A private classroom for people you already teach.</text>
+<line x1="100" y1="395" x2="175" y2="395" stroke="#98661B" stroke-width="7" stroke-linecap="round"/>
+<text x="100" y="455" font-family="Instrument Sans, DejaVu Sans, sans-serif" font-size="19" font-weight="600" letter-spacing="2" fill="#98661B">TEACH • SHARE • CONTINUE</text>
+
+<g transform="translate(1050 92) rotate(4 225 225)" opacity="0.36">
+  <rect width="438" height="452" rx="30" fill="#F1ECE5" stroke="#DED6CB"/>
+</g>
+<rect x="946" y="94" width="480" height="470" rx="30" fill="#5C462F" opacity="0.10"/>
+<g transform="translate(930 74)">
+  <rect width="480" height="470" rx="30" fill="#FFFDF8" stroke="#DED6CB" stroke-width="2"/>
+  <rect x="24" y="24" width="432" height="224" rx="22" fill="url(#wash)"/>
+  <circle cx="381" cy="74" r="76" fill="none" stroke="#FAF8F5" stroke-width="4" opacity="0.36"/>
+  <circle cx="381" cy="74" r="45" fill="none" stroke="#FAF8F5" stroke-width="4" opacity="0.52"/>
+  <path d="M397 90 L427 120" fill="none" stroke="#FAF8F5" stroke-width="7" stroke-linecap="round" opacity="0.72"/>
+  <text x="40" y="302" font-family="Instrument Sans, DejaVu Sans, sans-serif" font-size="18" font-weight="600" letter-spacing="1.5" fill="#98661B">YOUR COURSE</text>
+  <text x="40" y="350" font-family="Instrument Sans, DejaVu Sans, sans-serif" font-size="30" font-weight="700" fill="#231F1A">Sourdough from scratch</text>
+  <text x="40" y="390" font-family="Instrument Sans, DejaVu Sans, sans-serif" font-size="20" fill="#6E665E">8 lessons  •  Continue learning</text>
+  <rect x="40" y="422" width="294" height="9" rx="4.5" fill="#F1ECE5"/>
+  <rect x="40" y="422" width="176" height="9" rx="4.5" fill="#98661B"/>
+</g>
+
+</svg>

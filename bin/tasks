@@ -1,0 +1,194 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Render app/dev/BOARD.md from the task files.
+ *
+ * This was `php artisan qori:tasks` in the code repository until the planning
+ * system moved here (21 September 2026). It is the same TaskBoard reader and
+ * the same rules; what changed is that it no longer needs Laravel to run, so
+ * the plan and the tool that checks it live in one place and the code repo
+ * carries neither.
+ *
+ * The board is derived so that nobody has to edit a shared index to record
+ * progress — which is the same reason each task is its own file
+ * (app/dev/PROCESS.md). It is not committed: every claim or close rewrote its
+ * count line and re-sorted its tables, so two people finishing on one day
+ * conflicted in a file neither had edited. `--check` is the gate's half: it
+ * parses every task file and applies every rule without writing anything;
+ * `--stdout` is what CI prints as its job summary; `--new` writes a draft stub
+ * with the next free id, so nobody picks one by hand and two people never pick
+ * the same one.
+ */
+
+require __DIR__.'/../tools/TaskBoard.php';
+
+const SUCCESS = 0;
+const FAILURE = 1;
+
+$root = dirname(__DIR__);
+
+/** @var list<string> $argv */
+$options = [];
+$arguments = [];
+
+foreach (array_slice($argv, 1) as $argument) {
+    if (str_starts_with($argument, '--')) {
+        [$name, $value] = array_pad(explode('=', substr($argument, 2), 2), 2, true);
+        $options[$name] = $value;
+
+        continue;
+    }
+
+    $arguments[] = $argument;
+}
+
+foreach (array_keys($options) as $name) {
+    if (! in_array($name, ['check', 'stdout', 'new', 'help'], true)) {
+        line('Unknown option --'.$name.'. Try --help.');
+
+        exit(FAILURE);
+    }
+}
+
+if (isset($options['help'])) {
+    line('Usage: bin/tasks [--check] [--stdout] [--new <stream> <slug>]');
+    line('');
+    line('  --check   Parse every task file and apply the rules; write nothing.');
+    line('  --stdout  Print the board instead of writing it.');
+    line('  --new     Write a draft stub with the next free id.');
+
+    exit(SUCCESS);
+}
+
+$board = new TaskBoard($root);
+
+if (isset($options['new'])) {
+    exit(stub($board, $root, is_string($options['new']) ? $options['new'] : '', $arguments[0] ?? null));
+}
+
+$problems = $board->problems();
+
+if (isset($options['check'])) {
+    foreach ($problems as $problem) {
+        error($problem);
+    }
+
+    if ($problems === []) {
+        line(sprintf('%d task files parse and the rules hold.', count($board->tasks())));
+    }
+
+    report($board);
+
+    exit($problems === [] ? SUCCESS : FAILURE);
+}
+
+if (isset($options['stdout'])) {
+    echo $board->render();
+
+    exit(SUCCESS);
+}
+
+file_put_contents($root.'/'.TaskBoard::BOARD, $board->render());
+
+line(sprintf('Wrote %s from %d tasks (not committed).', TaskBoard::BOARD, count($board->tasks())));
+
+foreach ($problems as $problem) {
+    warn($problem);
+}
+
+report($board);
+
+exit(SUCCESS);
+
+/** The counts that are worth a glance and are not failures. */
+function report(TaskBoard $board): void
+{
+    line(sprintf('Untriaged findings: %d ("Found, not fixed" bullets with no disposition).', $board->untriaged()));
+
+    $overlaps = $board->overlaps();
+
+    if ($overlaps !== []) {
+        line(sprintf('Spec overlaps (a ready task shares a file with a task reported in the last %d days — read those reports before claiming):', TaskBoard::OVERLAP_DAYS));
+
+        $grouped = [];
+
+        foreach ($overlaps as $overlap) {
+            $grouped[$overlap['id']][$overlap['file']][] = $overlap['with'];
+        }
+
+        foreach ($grouped as $id => $files) {
+            foreach ($files as $file => $reported) {
+                line(sprintf('  %s — %s (%s)', $id, $file, implode(', ', $reported)));
+            }
+        }
+    }
+
+    $ready = count(array_filter($board->tasks(), fn (array $task): bool => $task['status'] === 'ready'));
+
+    if ($ready < $board->readyTarget()) {
+        warn(sprintf('%d ready task(s); the target is %d (ready ≥ 2 × active developers, TaskBoard::READY_TARGET).', $ready, $board->readyTarget()));
+    }
+}
+
+/**
+ * Write `T-<next>-<slug>.md` as a draft from the template.
+ *
+ * Accepts `--new=<stream>/<slug>` or `--new <stream> <slug>`.
+ */
+function stub(TaskBoard $board, string $root, string $spec, ?string $slug): int
+{
+    if (is_string($slug) && $slug !== '') {
+        $stream = $spec;
+    } elseif (str_contains($spec, '/')) {
+        [$stream, $slug] = explode('/', $spec, 2);
+    } else {
+        error('Give a stream and a slug: --new <stream> <slug>, or --new=<stream>/<slug>.');
+
+        return FAILURE;
+    }
+
+    if (! preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $slug)) {
+        error('The slug is lowercase words joined by hyphens.');
+
+        return FAILURE;
+    }
+
+    if (! isset($board->streams()[$stream])) {
+        error(sprintf('No stream file %s/%s.md — write the stream first.', TaskBoard::STREAMS, $stream));
+
+        return FAILURE;
+    }
+
+    $id = $board->nextId();
+    $title = ucfirst(str_replace('-', ' ', $slug));
+    $relative = TaskBoard::DIRECTORY."/{$id}-{$slug}.md";
+
+    $contents = (string) file_get_contents($root.'/'.TaskBoard::TEMPLATE);
+    $contents = str_replace(
+        ['T-000', 'One line, imperative, naming the object', 'stream: stream-slug'],
+        [$id, $title, 'stream: '.$stream],
+        $contents,
+    );
+
+    file_put_contents($root.'/'.$relative, $contents);
+
+    line(sprintf('Wrote %s as a draft in %s. Fill in "Before this can be ready" first.', $relative, $stream));
+
+    return SUCCESS;
+}
+
+function line(string $message): void
+{
+    fwrite(STDOUT, $message."\n");
+}
+
+function warn(string $message): void
+{
+    fwrite(STDOUT, "\033[33m".$message."\033[0m\n");
+}
+
+function error(string $message): void
+{
+    fwrite(STDERR, "\033[31m".$message."\033[0m\n");
+}

@@ -1,0 +1,57 @@
+:root {
+    --qori-paper: #faf8f5;
+    --qori-card: #fffdf8;
+    --qori-ink: #231f1a;
+    --qori-gold: #98661b;
+    --qori-gold-hover: #7f5113;
+    --qori-muted: #6e665e;
+    --qori-soft: #f1ece5;
+    --qori-border: #ded6cb;
+    --qori-input: #8a7f73;
+    --qori-success: #286b49;
+    --qori-warning: #8a5a10;
+    --qori-destructive: #b42318;
+
+    --background: 40 33% 97%;
+    --foreground: 30 15% 12%;
+    --card: 40 100% 99%;
+    --card-foreground: 30 15% 12%;
+    --popover: 40 100% 99%;
+    --popover-foreground: 30 15% 12%;
+    --primary: 36 70% 35%;
+    --primary-foreground: 40 33% 97%;
+    --secondary: 34 27% 93%;
+    --secondary-foreground: 30 15% 12%;
+    --muted: 34 27% 93%;
+    --muted-foreground: 30 8% 40%;
+    --accent: 38 58% 89%;
+    --accent-foreground: 30 15% 12%;
+    --destructive: 4 76% 40%;
+    --destructive-foreground: 40 33% 97%;
+    --border: 34 20% 83%;
+    --input: 31 9% 50%;
+    --ring: 36 70% 35%;
+    --radius: 0.75rem;
+}
+
+.dark {
+    --background: 36 13% 11%;
+    --foreground: 37 53% 94%;
+    --card: 35 13% 15%;
+    --card-foreground: 37 53% 94%;
+    --popover: 35 13% 15%;
+    --popover-foreground: 37 53% 94%;
+    --primary: 39 82% 65%;
+    --primary-foreground: 36 13% 11%;
+    --secondary: 34 12% 20%;
+    --secondary-foreground: 37 53% 94%;
+    --muted: 34 12% 20%;
+    --muted-foreground: 33 15% 73%;
+    --accent: 35 22% 24%;
+    --accent-foreground: 37 53% 94%;
+    --destructive: 5 69% 58%;
+    --destructive-foreground: 36 13% 11%;
+    --border: 34 12% 27%;
+    --input: 33 10% 52%;
+    --ring: 39 82% 65%;
+}
