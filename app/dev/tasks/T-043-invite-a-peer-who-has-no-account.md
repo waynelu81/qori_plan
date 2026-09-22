@@ -2,7 +2,7 @@
 id: T-043
 title: Invite people to a Series, ten at a time
 stream: selling
-status: doing
+status: done
 owner: claude
 estimate: L
 depends: T-032
@@ -191,6 +191,12 @@ priced) for the browser walk, with the invitation sent to the local inbox.
 | `tests/Feature/Invitations/ManageInvitationsTest.php` | new | the list, send again, withdraw |
 | `tests/Feature/Invitations/InvitationLinkTest.php` | new | |
 
+## Added during execution
+
+- `tests/Feature/Mail/MailContentTest.php` — its map of which service sends
+  each notification is written by hand, and the new email is sent by
+  `InvitationService`.
+
 ## Database
 
 | Table | Column | Type | Null | Default | Index / constraint |
@@ -299,14 +305,14 @@ holds the mail check to sending it.
 
 ## Acceptance
 
-- [ ] A creator invites up to ten people to a ready Series from its page: paste fills the rows, each price starts at the Series' and can be changed or discounted, and the page says how long the invitation lasts
-- [ ] Each person gets one email with their own link; an address already invited says when, and one with access is refused
-- [ ] The list shows every invitation's status; Send again replaces the link, Withdraw stops it
-- [ ] The link lands on the Series page remembering the invitation
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] A creator invites up to ten people to a ready Series from its page: paste fills the rows, each price starts at the Series' and can be changed or discounted, and the page says how long the invitation lasts
+- [x] Each person gets one email with their own link; an address already invited says when, and one with access is refused
+- [x] The list shows every invitation's status; Send again replaces the link, Withdraw stops it
+- [x] The link lands on the Series page remembering the invitation
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -329,7 +335,9 @@ Answered 22 September 2026:
 
 ## Re-scope log
 
-None.
+- 22 September 2026, **Code**: `Series::lastSessionEndsAt()` returns
+  `?CarbonInterface`, not `?Carbon` — dates are immutable here. Nothing a
+  person sees changes.
 
 ## Notes
 
