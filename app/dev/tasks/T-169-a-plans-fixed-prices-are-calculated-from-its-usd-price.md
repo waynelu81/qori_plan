@@ -2,8 +2,8 @@
 id: T-169
 title: A plan's fixed prices are calculated from its USD price
 stream: selling
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: M
 depends: T-167, T-168
 blocks: T-170, T-172
