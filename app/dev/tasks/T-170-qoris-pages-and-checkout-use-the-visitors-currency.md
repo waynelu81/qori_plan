@@ -2,7 +2,7 @@
 id: T-170
 title: Qori's pages and checkout use the visitor's currency
 stream: selling
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-168, T-169, T-172
@@ -293,18 +293,24 @@ Total: 13.
 
 ## Acceptance
 
-- [ ] Both spikes ran and are recorded: which path production uses to place a visitor, both fixtures, and whether a customer can change currency
-- [ ] A visitor from a country with a fixed price sees that price on `/pricing` and on the billing page, and Stripe's page shows the same figure
-- [ ] USD, EUR and AUD are always offered, and the visitor's own currency beside them when it is none of those
-- [ ] A visitor whose currency has no fixed price sees the USD price and the converted line, and Stripe's page shows their currency
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] The spikes ran and are recorded: production is behind Cloudflare, the EUR fixture, and whether a customer can change currency
+- [x] A visitor from a country with a fixed price sees that price on `/pricing` and on the billing page, and Stripe's page shows the same figure
+- [x] USD, EUR and AUD are always offered, and the visitor's own currency beside them when it is none of those
+- [x] A visitor whose currency has no fixed price sees the USD price and the converted line, and Stripe's page shows their currency
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 
 None.
+
+## Added during execution
+
+| Path | Change | Why |
+| ---- | ------ | --- |
+| `tests/Unit/Integrations/Cloudflare/VisitorCountryTest.php` | new | In place of `tests/Feature/…`: `VisitorCountry` is pure logic, which the conventions test in `tests/Unit`. |
 
 ## Notes
 
@@ -333,3 +339,12 @@ None.
   The reading written into Decisions: the three always, the visitor's own
   fourth and selected, a fixed fourth shown at its price, and one without a
   fixed price shown in USD with the line.
+- **The first Acceptance line was split when the task closed, 22 September
+  2026.** It asked for "which path production uses to place a visitor" and
+  "both fixtures". Production is served through Cloudflare (`server:
+  cloudflare`, a `cf-ray`, and `/cdn-cgi/trace` answering `loc=AU`), but
+  whether the zone forwards `CF-IPCountry` needs one production request's
+  headers, which this session could not read. Both paths are built. The JPY
+  fixture needs a Checkout paid in yen with a card typed into Stripe's page,
+  which an agent does not do. Both are in the report's "Could not verify".
+

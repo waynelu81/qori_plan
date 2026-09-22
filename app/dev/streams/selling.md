@@ -125,6 +125,9 @@ neither stream's goal describes any of this.
     owner, "make sure the price is same when they landed in stripe page", and
     "I would show 3 fixed currency + visitor's country if different from 3,
     USD EUR AUD"
+28. `T-180` — A subscribed Group changes plan instead of buying a second one:
+    "Switch to Pro" opens a second subscription today, and since `D-048`
+    Stripe refuses one in another currency on the same customer
 
 `T-050` went first because it was small and entirely specified, `T-054` for the
 same reason. The four payouts tasks come before the rest because a price
