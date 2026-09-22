@@ -3087,3 +3087,23 @@ set up. The release checklist gains two lines under SES in
 production access, and an account-level suppression list that suppresses
 bounces only, since a complaint about a campaign must not stop an access
 email.
+
+#### D-055 — A downgrade charges the new plan from the next billing cycle, and an upgrade is as `D-052` wrote it (confirms `D-052`)
+
+**Decision.** The owner confirmed `D-052` as written:
+
+- **An upgrade** takes effect at once: the Group pays a full period of the
+  new plan less the unused part of the old one, the renewal date moves to
+  that day, Qori shows Stripe's figure before the owner confirms, and a
+  payment that fails changes nothing.
+- **A downgrade** is charged from the next billing cycle, not at once. The
+  Group keeps the dearer plan until the period it paid for ends. This is the
+  reading `D-052` took from Claude's cancellation, and it stands.
+- **A change stays in the currency the Group already pays in.**
+
+The owner, 22 September 2026: "Upgrade: … If the payment fails, the plan
+doesn't change. Yes", "Downgrade: start charging new plan from the next
+billing cycle, not immediately", and "Currency: … yes that's correct."
+
+**Consequences.** `T-180` is ready and builds it. The sandbox run behind it
+is in `T-180`'s Preconditions.
