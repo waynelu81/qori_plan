@@ -84,3 +84,8 @@ not reproduced as payment findings in R-003. See
 the target and remaining validation.
 
 **17 September 2026 — [R-004](../design-review/passes/R-004-2026-09-17-final-web-review.md) F-7/F-10.** Fresh receiving cards still omit Group attribution, the completed Episode count and the known named continuation; the empty `/shared` page does not guide the person back to the sender's Series link or the receiving address. Retain R-002's decision to handle this in the receiving composition. Paid entry's “Type it here and you're in” must distinguish email verification from payment (also recorded on T-011). T-073's typed code and T-074's access/payment slices are implemented work to reuse, not missing capabilities. This pass did not repeat the complete registration, code, cross-account return or payment matrix; do not take its static Series form as proof those transitions passed.
+
+- 22 September 2026: an invitation's arrival — its link landing on the
+  Series page, the invited address on the code step and the button, checkout
+  at the invitation's price — is `T-181`'s (`D-050`). This task keeps the rest
+  of the receiving journey.

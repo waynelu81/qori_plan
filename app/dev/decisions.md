@@ -2848,3 +2848,55 @@ the webhook that grants the access, so a purchase records consent only when
 the box was ticked. The agreement's words are a draft Qori supplies, and a
 legal read before release is on the release checklist. Accesses a creator
 gives by hand carry no terms: nobody was shown a screen.
+
+#### D-050 — An invitation is for one address and one Series, lasts as long as the creator says, and carries its own price (settles `T-043`'s open questions)
+
+**Decision.** A creator invites people to one Series, up to ten at a time. Each
+invitation is bound to **the address it was sent to and that Series** — one
+per pair, so the creator sees that an address was already invited, and when,
+before sending again; sending again replaces the link and the terms rather
+than adding a second invitation. Accepting it needs that address: a guest
+proves it with the code the Series page already sends, and a signed-in person
+must be signed in with it.
+
+It **expires** when the creator says: a number of days, 30 unless they choose
+otherwise, or the end of the Series' last live session when it has one ahead.
+Qori shows the creator when the date they picked runs past that last session
+and leaves the choice to them, because a Peer who can no longer join a live
+session can still want the Series. **A Series has no dates of its own**, and
+none are added: a self-paced Series has no end to watch, and its invitations
+simply expire.
+
+Each person's **price is prefilled with the Series' price** and the creator may
+change it to anything the Series could be priced at, or to nothing: free, a
+discount for one person, or a percentage off for the whole batch. The price is
+stored on the invitation, in the Series' currency; a free Series invites for
+free.
+
+The owner, 22 September 2026: "invitation tied to the address as well as series
+so it can be option to track address is already invited at date/time. it
+should still good to have ttl, watch out for series end time. Logically
+thinking a peer can still buy the series even though peer can't join the live
+session should able to do replay. I lean towards creator decide. Just thought
+series start and end shouldn't be mandatory because it can be a completely
+offline self learning." And: "A free invitation to a paid Series is simply a
+prefill set price allow override for creator. Doesn't have to be free,
+flexible enough to be like 30% discount."
+
+**Why this shape.** Binding to the address makes a forwarded link worth
+nothing to a stranger — the code goes to the invited inbox — which is what
+makes a free or discounted invitation safe to send at all, and it needs no
+single-use rule on top. Binding to the Series makes "already invited" a fact
+the page can show instead of a second email. The creator knows their course;
+a date Qori enforced against the last session would stop the sale the owner
+described.
+
+**Consequences.** `T-043` sends and lists invitations and makes the link
+resolve; `T-181` accepts them on the Series page, free or at the invitation's
+price, through the code step and checkout that already exist, and `T-027`
+keeps the rest of its receiving journey. An accepted free invitation is an
+Access given away — no price, counted against the Peer cap like any grant —
+and a paid one is a sale at the price paid. Invitations are transactional
+mail, not campaigns (`T-045`): no suppression list or monthly allowance, but a
+daily cap on the free plan, `invitations_per_day` beside `edm_per_day`, 10 as
+§5 has it. The number is pricing, and so release checklist.
