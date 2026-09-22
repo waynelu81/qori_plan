@@ -2,7 +2,7 @@
 id: T-181
 title: An invited person accepts on the Series page, free or at their price
 stream: selling
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-043
@@ -100,6 +100,11 @@ design-review world for the walk; the e2e run's own database for the journey.
 | `tests/Feature/Checkout/CheckoutTest.php` | edit | the invitation's price and metadata |
 | `tests/e2e/invitation.spec.ts` | new | the journey |
 
+## Added during execution
+
+- `app/Concerns/AcceptsInvitations.php` — what accepting does, free or priced,
+  shared by the code step and the button.
+
 ## Database
 
 None: `T-043`'s `accepted_at` and `access_id`.
@@ -162,18 +167,22 @@ opens.
 
 ## Acceptance
 
-- [ ] The invited person gets in with the invited address only — by the code as a guest, by the button signed in
-- [ ] Free is granted; a price goes to checkout at that price; either way the invitation shows accepted
-- [ ] An ended invitation, or one for someone else, says so and changes nothing else
-- [ ] The journey passes in `php artisan qori:e2e`
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] The invited person gets in with the invited address only — by the code as a guest, by the button signed in
+- [x] Free is granted; a price goes to checkout at that price; either way the invitation shows accepted
+- [x] An ended invitation, or one for someone else, says so and changes nothing else
+- [x] The journey passes in `php artisan qori:e2e`
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 
-None.
+- 22 September 2026, **Code**: `AccessService::acceptInvitation()` takes the
+  Series from its caller — a Peer is in no Group, and the invitation's own
+  relation is scoped to one. Nothing a person sees changes.
+- 22 September 2026, **Copy**: `public.price` is dropped; the page's price
+  already shows the invitation's, and the notice repeated it.
 
 ## Notes
 

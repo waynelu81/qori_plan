@@ -44,8 +44,8 @@ The immediate goal: that one loop, safe, reachable, understandable and measurabl
   built. Stripe test mode and R2 have been exercised against their real APIs,
   and the core loop has been walked in a browser on the current schema.
 - Mail from `useqori.com` **arrives** (`T-032`); SPF/DKIM/DMARC unrecorded.
-- **The loop does not close for a new person.** A creator can only grant access
-  to an existing account (`T-043`); a Series link now returns there (`T-008`).
+- **The loop closes for a new person** (22 September 2026): an invitation reaches
+  an address with no account, at its own price (`T-043`, `T-181`, `D-050`).
 - **Built, with no way in**: connections and campaigns (`T-044`, `T-045`).
 - **A live Episode is a dead end for a Peer**: no way to join, no end, no
   recording. The `classroom` stream closes it (`D-024` to `D-031`).

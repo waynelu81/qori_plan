@@ -43,7 +43,7 @@ cannot do what the step is for.
 | 8 | A free Series — no price, no checkout | Works — walked end to end on 21 September 2026 |
 | 9 | Uploads a document to Qori instead | Works |
 | 9 | Picks Audio, or Dropbox | Built (`T-171`) — Dropbox is no longer offered for any kind, and Audio offers Google Drive |
-| 11 | Gives access by email to someone with no account | Being built — invitations, bound to the address and the Series, each with its own price and expiry (`T-043` sends, `T-181` accepts, `D-050`) |
+| 11 | Gives access by email to someone with no account | Built — invitations, bound to the address and the Series, each with its own price and expiry; the person gets in with a code, or pays their price (`T-043`, `T-181`, `D-050`) |
 | 12 | The creator's Stripe account cannot take payments | The Peer still reaches Stripe's Checkout — test mode creates it — and cannot pay there; the owner accepts that, and the creator is the one told (`T-164`, 22 September 2026) |
 | 11 | Doesn't want emails from the creator | Built (`T-178`, `D-049`) — the terms are required, the emails optional; a box left unticked answers with the reason |
 | 14 | The Peer's Google account is not their Qori email | Not built (`T-092`); the happy path grants the Qori email |
