@@ -2,7 +2,7 @@
 id: T-180
 title: A subscribed Group changes plan instead of buying a second one
 stream: selling
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: none
@@ -256,11 +256,11 @@ null once changed or scheduled), `keepPlan(Group): void`,
 | `change.upgrade.converted` | `lang/en/billing.php` | Stripe charges it in :currency, at the day's exchange rate. |
 | `change.upgrade.declined` | `lang/en/billing.php` | If your bank asks for another step, or the card is declined, Stripe's page opens to finish the payment. Your plan changes once it's paid. |
 | `change.upgrade.confirm` | `lang/en/billing.php` | Pay :amount and switch |
-| `change.downgrade.summary` | `lang/en/billing.php` | You keep :current until :date, the end of the period you've paid for. :plan starts then, at :amount a :interval. |
+| `change.downgrade.summary` | `lang/en/billing.php` | You keep :current until :date, the end of the period you've paid for. :plan begins then, at :amount a :interval. |
 | `change.downgrade.confirm` | `lang/en/billing.php` | Switch to :plan on :date |
 | `change.back` | `lang/en/billing.php` | Back to billing |
 | `change.upgraded` | `lang/en/billing.php` | You're on :plan now. |
-| `change.scheduled` | `lang/en/billing.php` | :plan starts on :date. You keep :current until then. |
+| `change.scheduled` | `lang/en/billing.php` | :plan begins on :date. You keep :current until then. |
 | `change.pending` | `lang/en/billing.php` | Changes to :plan on :date. |
 | `change.keep` | `lang/en/billing.php` | Keep :plan |
 | `change.kept` | `lang/en/billing.php` | You're staying on :plan. |
@@ -327,13 +327,13 @@ Total: 22 new.
 
 ## Acceptance
 
-- [ ] A subscribed Group that switches plan has one subscription afterwards, on the new plan, in its own currency
-- [ ] An upgrade shows Stripe's figure, charges it at once and restarts the cycle; a declined one leaves the plan as it was
-- [ ] A downgrade keeps the dearer plan until the paid period ends, and can be cancelled until then
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] A subscribed Group that switches plan has one subscription afterwards, on the new plan, in its own currency
+- [x] An upgrade shows Stripe's figure, charges it at once and restarts the cycle; a declined one leaves the plan as it was
+- [x] A downgrade keeps the dearer plan until the paid period ends, and can be cancelled until then
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -350,9 +350,30 @@ Total: 22 new.
   — it does, in the menu's place (Decisions).
 - ~~A spike~~ — ran 22 September 2026 (Preconditions).
 
+## Added during execution
+
+| Path | Change | Why |
+| ---- | ------ | --- |
+| `app/Data/CurrencyOffer.php` | edit | `CurrencyOffer::only()`: the one-currency offer a subscribed Group's billing page makes, through the same props as the menu. |
+| `tests/Feature/Checkout/VisitorCurrencyTest.php` | edit | `T-170`'s webhook case hands `applySubscription()` a payload, which now goes through `SubscriptionReader`; it also checks the stored currency. |
+| `tests/Fixtures/stripe/subscription-start-eur.json`, `subscription-schedule-created-eur.json` | new | The first answers the plan change tests need: the subscription before the upgrade, and the schedule as `from_subscription` makes it. Seven bodies, not five. |
+
 ## Re-scope log
 
-None.
+- **22 September 2026, Code.** `BillingService::changePlan()` also takes
+  `string $destinationUrl`. When Stripe's answer to a declined upgrade names
+  no invoice page, the owner goes to the portal, which needs somewhere to send
+  them back, and a Service does not build routes.
+- **22 September 2026, Code.** `PlanUpgrade` carries `bool $paid` beside
+  `?string $paymentUrl`, rather than `isPaid()` reading the URL: a declined
+  charge whose answer named no page would otherwise read as paid.
+- **22 September 2026, Decisions.** A refused change goes back to the billing
+  page as a toast (`AppException::redirectTo()`), rather than to an error
+  page. `change_needs_payment` is a 402, which has no error page, and Manage
+  billing is on the billing page.
+- **22 September 2026, Copy.** `change.downgrade.summary` and
+  `change.scheduled` say ":plan begins", not ":plan starts": the browser walk
+  read "Start starts then".
 
 ## Notes
 
