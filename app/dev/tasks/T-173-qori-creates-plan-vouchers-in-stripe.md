@@ -2,7 +2,7 @@
 id: T-173
 title: Qori creates plan vouchers in Stripe
 stream: selling
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: T-172
@@ -180,13 +180,20 @@ Total: 7, one of them replacing an existing case.
 
 ## Acceptance
 
-- [ ] The spike ran: the voucher reached Stripe and applied at checkout, and what retiring it did to the existing discount is recorded
-- [ ] A voucher is created, replaced and retired from Qori's console, and its id is never typed
-- [ ] An amount-off plan voucher is refused
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] The spike ran: the voucher reached Stripe and applied at checkout, and what retiring it did to the existing discount is recorded
+- [x] A voucher is created, replaced and retired from Qori's console, and its id is never typed
+- [x] An amount-off plan voucher is refused
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
+
+## Added during execution
+
+| Path | Change | Why |
+| ---- | ------ | --- |
+| `app/Services/PricingService.php` | edit | `saveCoupon()` and `retireCoupon()` beside the price methods, where `T-169` and `T-172` put the save. The controller delegates. |
+| `lang/en/admin.php` | edit | `pricing.coupon_months`: the form had no input for a repeating voucher's months, so the spike's "20%-off, three-month voucher" could not be made from it. |
 
 ## Re-scope log
 
