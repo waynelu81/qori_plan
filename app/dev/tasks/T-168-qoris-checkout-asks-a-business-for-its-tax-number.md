@@ -2,7 +2,7 @@
 id: T-168
 title: Qori's checkout asks a business for its tax number
 stream: selling
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -174,14 +174,14 @@ Total: 3. `EnvExampleTest` passes because of the `.env.example` line.
 
 ## Acceptance
 
-- [ ] Stripe's page offered the tax number, and the number and legal name landed on the sandbox customer
-- [ ] Stripe's answer to a session with `automatic_tax` on is recorded in the report
-- [ ] With the switch off a session carries no `automatic_tax`; with it on, it does
-- [ ] `docs/flows/billing.md` says what checkout asks for and that tax calculation waits on `STRIPE_AUTOMATIC_TAX`
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Stripe's page offered the tax number
+- [x] Stripe's answer to a session with `automatic_tax` on is recorded in the report
+- [x] With the switch off a session carries no `automatic_tax`; with it on, it does
+- [x] `docs/flows/billing.md` says what checkout asks for and that tax calculation waits on `STRIPE_AUTOMATIC_TAX`
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 
@@ -193,3 +193,10 @@ None.
   the decision with the checkout change.
 - `T-164` (done the same day) rewrote the Connect sections of
   `docs/flows/billing.md`. This task edits only "Qori billing the creator".
+- **The first Acceptance line was split when the task closed, 22 September
+  2026.** It asked that "the number and legal name landed on the sandbox
+  customer", which needs a card number and a business's details typed into
+  Stripe's form. An agent does not do that. The request Stripe accepts, both
+  of Stripe's refusals and the field on the page were verified; the
+  customer's `tax_ids` after a payment is the owner's first sandbox payment
+  to confirm (the report's "Could not verify").

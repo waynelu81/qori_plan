@@ -2,7 +2,7 @@
 id: T-167
 title: Qori's plans are priced from a US dollar base
 stream: selling
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -114,12 +114,12 @@ Total: 1.
 
 ## Acceptance
 
-- [ ] `qori.billing.currency` is `USD`, with its reason
-- [ ] `php artisan db:seed --class=PricingSeeder` writes Start at US$39 and Pro at US$99
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] `qori.billing.currency` is `USD`, with its reason
+- [x] `php artisan db:seed --class=PricingSeeder` writes Start at US$39 and Pro at US$99
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 
