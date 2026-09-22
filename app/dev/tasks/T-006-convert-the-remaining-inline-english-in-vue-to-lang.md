@@ -41,6 +41,10 @@ None.
 
 ## Notes
 
+- The admin console's pages hold their labels inline too, for example
+  `resources/js/pages/admin/Pricing.vue`. `T-169` (22 September 2026) started
+  `lang/en/admin.php`, with its new labels passed to the page as props; the
+  console's older labels are the rest of that file's job.
 - `resources/js/components/auth/LinkSent.vue` still says "Use a different
   email" inline. The sign-in composition's second step says the same words
   from `auth.sign_in.change_email` (`T-087`), so that key is the one to use.
