@@ -2,8 +2,8 @@
 id: T-095
 title: Spike: Dropbox viewers on a shared folder across plans
 stream: storage
-status: draft
-owner: unassigned
+status: ready
+owner: claude
 estimate: S
 depends: none
 blocks: T-096
@@ -11,9 +11,13 @@ blocks: T-096
 
 # T-095 — Spike: Dropbox viewers on a shared folder across plans
 
-> **Draft.** Not specified yet, and not to be started — see
-> [`../PROCESS.md`](../PROCESS.md). What has to be decided before it can be
-> marked `ready` is listed at the bottom. Written on 16 September 2026 from
+> **Ready, 22 September 2026** — brought there under `D-043` by resolving the
+> nine open bullets at the bottom from the code and the vendor's own
+> contract; none needed the owner. Step 0 gained a per-file call the same day,
+> because `T-160` had shipped an item-only grant contract that a Dropbox grant
+> on a file could reuse. **Running it needs the Equipment under
+> Preconditions**, which is the owner's to supply, starting with one free
+> Basic account and a token. Written on 16 September 2026 from
 > `D-016` and the owner's BYO blueprint, and reviewed the same day against the
 > developer's review of the plan that day. Reworked on 21 September 2026 on
 > `D-042`: nothing is bought to run it, step 0 is the cheap gate that decides
@@ -101,27 +105,71 @@ at all. Three consequences run through the rest of the file. The Dropbox for
 teams trial is replaced by the **free Dropbox Business Development Account**,
 granted by request, which is asked for on day one because the lead time is
 unpublished and which step 0 does not wait for. No Plus account is
-provisioned, so under step 0's outcome A — a Basic creator _can_ add a viewer
-— every step that named `creator-plus` as the working creator runs on
-`creator-basic` instead, which outcome A has just shown can do what those
-steps need; `creator-plus` is then wanted only for rows 2, 17 and 19, the
-three answers that are about the Plus tier itself, and whether one is
-provisioned for them is the owner's. And under outcome B the spike stops,
-because `D-042` puts an integration with no free working path back in front
-of the owner to re-approach or drop, and the remaining twenty-three questions
-are not worth a day each on a path Qori may never build.
+provisioned, so whenever step 0 shows a Basic creator _can_ grant a viewer
+— on the folder (outcome A), or on a file (outcome B) — every step that named
+`creator-plus` as the working creator runs on `creator-basic` instead;
+`creator-plus` is then wanted only for rows 2, 17 and 19, the three answers
+that are about the Plus tier itself, on Dropbox's 30-day trial. Only when
+both routes are refused (outcome D) does the spike stop, because `D-042`
+puts an integration with no free working path back in front of the owner to
+re-approach or drop, and the remaining questions are not worth a day each on
+a path Qori may never build.
+
+**Step 0 asks about a file as well as a folder, because a grant on a file is
+now the cheap model** (22 September 2026). This spike was drafted when
+`D-016` meant a shared folder per Series and `T-091` was the only foundation
+anybody could build on. Since then `T-160` shipped Google Drive's grant at
+Open without waiting for `T-091`, on an **item-only** contract:
+`app/Integrations/Contracts/GrantsItemAccess.php`, with `ensureGrant()` on
+`app/Services/VendorAccessService.php` and the `vendor_grants` table, in the
+code repository. A provider that can grant on a single file reuses that
+contract as it stands and does not need `T-091`'s container machinery at all,
+and `T-091` is the largest draft in the stream and currently out of step with
+the code `T-160` built.
+
+Two facts in Dropbox's own contract make the file route worth one more call.
+`sharing_files.stone` gives `add_file_member` no `insufficient_plan` error
+anywhere in `AddFileMemberError`, where `sharing_folders.stone` documents it
+on `add_folder_member` in so many words; and `AddFileMemberArgs` defaults
+`access_level` to `viewer`. Absence from a spec is not proof — that spec has
+already been caught disagreeing with Dropbox Help about folders — so the call
+is made rather than the inference trusted. But if the file route works on a
+Basic account, a free creator can grant a Peer even where the folder route is
+refused, and the Peer-side quota trap under Why may not arise at all, since
+viewing a shared file is not joining a folder. That last part is unobserved,
+and outcome B's steps are what observe it.
+
+This spike answers which routes exist; **it does not choose `T-096`'s model**.
+That is `T-096`'s to decide from the report, and the report recommends one.
 
 **The spike calls the API from a shell and commits nothing under `app/`.**
 What `T-096` needs is observed bodies; a class written before them would be
 written twice. `DropboxStorage` is left as it is.
 
-**One fixture per call and case, the raw body, named
+~~**One fixture per call and case, the raw body, named
 `<namespace>/<route>.<case>.<status>.json`** (provisional — see below).
 `Http::fake()` needs a body and a status, and no vendor fixture convention
 exists yet. `T-093` and `T-097` both name flat files under the vendor
 directory and keep the status in the README row; whichever of the three
 spikes lands first sets the shape, and the others follow it (a wording
-change, renaming the paths under Files and Code).
+change, renaming the paths under Files and Code).~~ **Settled 22 September
+2026: `T-093` landed first, so its convention governs.** Fixtures are flat
+files in `tests/Fixtures/dropbox/` of the code repository, beside a
+`README.md` that gives every row its date, account role, HTTP status and
+seconds, as `tests/Fixtures/google/README.md` does. A success is
+`<route>-<case>.json` and a failure `errors-<route>-<status>-<reason>.json`,
+with the route's slashes and underscores as hyphens. The fixture names in the
+steps below are written in this draft's earlier dotted style and map to the
+flat one mechanically at commit — `share_folder.complete.200.json` becomes
+`share-folder-complete.json`, and
+`add_folder_member.insufficient_plan.403.json` becomes
+`errors-add-folder-member-403-insufficient-plan.json` — so two people
+committing the same run produce the same files. Redaction follows `T-093`'s
+README too: every address is its role at `example.com` rather than this
+draft's `example.test`, display names are the role's words, tokens are
+`REDACTED`, and ids stay as observed. The probe the owner was handed on
+21 September 2026 writes **raw** bodies to a scratch directory; they are
+redacted by this map before anything is committed, and never committed raw.
 
 **Redaction is a fixed map, not judgement.** Emails become the role names
 below at `example.test`; `display_name` becomes the role name; `account_id`
@@ -417,36 +465,64 @@ void() { curl -sS -i -w '\ntime_total=%{time_total}\n' -X POST "$API/$1" -H "Aut
     - (d) `dbx sharing/add_folder_member '{"shared_folder_id":"…","members":[{"member":{".tag":"email","email":"peer-roomy@example.test"},"access_level":"viewer"}],"quiet":true}'`
       — one viewer, one call. The address need not hold a Dropbox account
       for the answer to come back.
+    - (e) **Added 22 September 2026:** `dbx sharing/add_file_member '{"file":"/Qori spike/episode-1.pdf","members":[{".tag":"email","email":"peer-roomy@example.test"}],"access_level":"viewer","quiet":true}'`
+      — the same viewer, on one **file** rather than the folder. One more
+      call, and the reason it earns its place is in Decisions: the Stone
+      spec documents `insufficient_plan` on `add_folder_member` and **not on
+      `add_file_member`**, whose `access_level` defaults to `viewer`, and a
+      grant on a file is the model `T-160` has already built for Google
+      Drive. Fixture per the convention under Decisions,
+      `add-file-member-viewer-<status>.json`.
 
-    **Outcome A — a 200.** → `add_folder_member.success.200.json`, the first
-    fixture. The Help pages are right, the Stone spec's Pro-or-Business
-    sentence does not bind this route on a Basic account, and **no paid
-    Dropbox account is needed to run this spike**. Steps 1 to 20 then run as
-    written, with three adjustments: steps 1, 2, 4 and 5 are already done
-    for `creator-basic` and are not repeated, their fixtures being step 0's;
-    step 3 adds `episode-2.mp4` to the folder step 0 already shared, which
-    step 20 needs; and every step that names `creator-plus` as the working
-    creator runs on `creator-basic`, per the first decision above. The
-    stopwatch step 5 starts at the working creator's 200 therefore starts at
-    (d) here, and step 9 stops it.
+    Step 0 has four outcomes, not two, because (d) and (e) answer
+    independently:
 
-    **Outcome B — `insufficient_plan`.** Record the HTTP status, the whole
-    body, the `message` and whether `upsell_url` is present →
-    `add_folder_member.insufficient_plan.<status>.json`. **The spike stops
-    here and reports.** Under `D-042` an integration with no free working
-    path goes back to the owner, who re-approaches it or drops it, and the
-    twenty-three remaining questions are not worth answering about a path
-    Qori may never build. The report gives row 1 as observed with its
-    fixture, every other row as "not observed — the spike stopped at
+    **Outcome A — both 200.** The Help pages are right, the Stone spec's
+    Pro-or-Business sentence does not bind a Basic account on either route,
+    and **no paid Dropbox account is needed to run this spike**. Steps 1 to
+    20 then run as written, with three adjustments: steps 1, 2, 4 and 5 are
+    already done for `creator-basic` and are not repeated, their fixtures
+    being step 0's; step 3 adds `episode-2.mp4` to the folder step 0 already
+    shared, which step 20 needs; and every step that names `creator-plus` as
+    the working creator runs on `creator-basic`, per the first decision
+    above. The stopwatch step 5 starts at the working creator's 200
+    therefore starts at (d) here, and step 9 stops it. `T-096` then has a
+    real choice between the two models, and the report says which it should
+    take and why.
+
+    **Outcome B — the folder refused, the file granted.** The Stone spec is
+    right about folders and silent about files because files are not
+    restricted. **The spike does not stop**: a free Basic creator can grant a
+    Peer, on files, which is the model `T-160` built and `T-096` can reuse.
+    It runs every step that applies to a file — the grant, the open, the
+    revoke, the member list (on `sharing/list_file_members`), rate limits and
+    reconnect — and marks the folder-only ones "not applicable: the file
+    route has no folder" with that reason, rather than "not observed". The
+    folder-only steps are the ones about Join, the joined folder's quota
+    (step 11) and `preview_url` on a folder (row 5).
+
+    **Outcome C — the folder granted, the file refused.** Unlikely against
+    the spec, and recorded exactly if it happens: the steps run as in
+    outcome A on the folder route alone, and `T-096` stays on the container
+    model, which means it waits on `T-091`.
+
+    **Outcome D — both refused.** Record the HTTP status, the whole body,
+    the `message` and whether `upsell_url` is present for each →
+    `errors-add-folder-member-<status>-insufficient-plan.json` and its file
+    twin. **The spike stops here and reports.** Under `D-042` an integration
+    with no free working path goes back to the owner, who re-approaches it
+    or drops it, and the remaining questions are not worth answering about a
+    path Qori may never build. The report gives row 1 as observed with both
+    fixtures, every other row as "not observed — the spike stopped at
     step 0", and one bullet for the owner.
 
-    **What outcome B means for the product, and what it does not.** It does
+    **What outcome D means for the product, and what it does not.** It does
     not mean Dropbox stops being offered. `D-018` is unchanged and `D-042`
     says so in as many words: every tier a creator brings is offered with
     its limits stated on screen, and none is refused — `D-042` narrows what
-    Qori _spends_, not what Qori offers. So the question outcome B hands
+    Qori _spends_, not what Qori offers. So the question outcome D hands
     `T-096` is **what a Basic creator is told, and when**: at the
-    connection, at the picker, or at the failed grant. Nor does outcome B
+    connection, at the picker, or at the failed grant. Nor does outcome D
     mean an account has to be bought to carry on, because the free Business
     Development Account under Equipment is a Business-tier account and the
     Stone spec's sentence names Pro _or Business_ — so a free observation of
@@ -560,7 +636,10 @@ void() { curl -sS -i -w '\ntime_total=%{time_total}\n' -X POST "$API/$1" -H "Aut
     says a new file with the same name gets a new one); does `peer-roomy`
     see it on reload, and after how long; does `peer-small` see it through
     `preview_url` if step 7 worked.
-11. **Over quota** (run if time allows; "not run" is an honest report line).
+11. **Over quota** (run whenever step 0 found the folder route open — outcome
+    A or C — and "not applicable" on outcome B, which has no folder to join;
+    changed from "if time allows" on 22 September 2026, see Before this can
+    be ready).
     Fill `peer-roomy`'s own space to within 100 MB of 2 GB, then as
     `creator-plus` add a 300 MB file to the folder. Record whether Dropbox
     removes the folder from the Peer
@@ -595,6 +674,24 @@ void() { curl -sS -i -w '\ntime_total=%{time_total}\n' -X POST "$API/$1" -H "Aut
     URLs show afterwards. Then `list_folder_members` again →
     `list_folder_members.after_revoke.200.json`: the Peer is gone from both
     lists, or is not.
+
+    **Added 22 September 2026 for `F11`, two things this step did not
+    observe.** First, **pagination**, before the remove: call
+    `list_folder_members` once with `"limit": 1` — the folder has at least
+    its owner and two Peers by now, so the first page must carry a `cursor`
+    — and follow it with `sharing/list_folder_members/continue` until no
+    cursor comes back → `list-folder-members-page-1.json` and one
+    `list-folder-members-continue-<n>.json` per page. `granted` rests on
+    finding the Peer under `users`, so a Peer on page two has to be found
+    too; a limit of 1 observes that without needing a thousand members, and
+    `sharing_folders.stone` allows 1 to 1,000. Second, **a remove retried
+    without its job**: if the remove answered with an `async_job_id`, call
+    `remove_folder_member` once more _without_ polling or keeping that id —
+    the retry `T-096` makes after losing it — and record whether it
+    converges, a 200 or a tag saying the member is already gone, or errors.
+    On outcome B both run on the file: `sharing/list_file_members` with the
+    same `limit`, and `remove_file_member_2`.
+
 16. **One file call.** As `creator-plus`, on `/episode-4.pdf` before step 10e:
     `dbx sharing/add_file_member '{"file":"id:…","members":[{".tag":"email","email":"peer-roomy@example.test"}],"quiet":true,"access_level":"viewer"}'`
     → `add_file_member.success.200.json`. Record whether an email arrives
@@ -636,6 +733,22 @@ void() { curl -sS -i -w '\ntime_total=%{time_total}\n' -X POST "$API/$1" -H "Aut
     suspension: one `add_file_member`, to record whether the same cap blocks
     it. Probe hourly with one fresh address and record the first success:
     that is when it resets.
+
+    **Report the two limits apart** (22 September 2026, from the storage
+    review's rate-limit table). Dropbox's performance guide publishes no
+    number, holds its throttle against the authorisation rather than the
+    call, and answers it with a 429 and a `Retry-After`; the invitation cap
+    is a separate limit with its own reset. A 429 here is therefore **the
+    whole connection's**, not the one Peer's whose invite failed. The loop
+    runs ten seconds apart so that what it hits is the cap; if a 429 arrives
+    instead, it is recorded as the throttle, the loop waits out its
+    `Retry-After`, and carries on to find the cap. Row 13 is the cap and row
+    13a the throttle. On outcome B the loop is `add_file_member` rather than
+    step 5's folder call. **It runs last and does not hold the report**: the
+    report is written when the other steps finish, with row 13 marked
+    pending, and a dated note is added when the cap is found or a day has
+    passed without it.
+
 20. **Streaming, in the background from step 9.** As `peer-roomy` on
     `creator-basic`'s folder, play `episode-2.mp4` from the start and record
     where it stops
@@ -649,32 +762,33 @@ and is answered before any other row is attempted** (`D-042`); if it answers
 that a Basic creator cannot add a viewer, every other row reads "not
 observed — the spike stopped at step 0".
 
-| #   | Question                                                                               | Decides in `T-096`                                                                  |
-| --- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| 1   | Basic creator adds a viewer: success or `insufficient_plan` (step 0)                   | Whether Basic is a tier or "cannot"; and whether the spike goes on at all (`D-042`) |
-| 2   | Plus creator adds a viewer                                                             | Same, for the paid personal tier                                                    |
-| 3   | Team creator at the default, then after approving the address; the team folder itself  | The team tier's copy and error handling                                             |
-| 4   | `quiet: true`: email, bell, Shared page, apps — where and when                         | Whether Open is the Peer's only pointer                                             |
-| 5   | An invitee views the folder and a file through `preview_url` without Join              | Whether Join and storage bullets exist                                              |
-| 6   | Join: `used` delta; `peer-small`'s error; what dropbox.com says                        | The "cannot join" path                                                              |
-| 7   | Over quota after a creator upload: folder removed, and when                            | A creator warning, or nothing                                                       |
-| 8   | Added (an Episode or not), replaced (site, API, desktop) and moved-in files: `id` kept | Episode lookup by `id` or by relative path; the picker line                         |
-| 9   | Re-adding a member and an invitee: the response                                        | Whether the ensure step needs a lookup                                              |
-| 10  | Account created later on the invited address, before and after verifying               | The "no Dropbox account yet" path                                                   |
-| 11  | A second address becomes an invitee, not a member                                      | Why `T-092` collects the main address                                               |
-| 12  | `dropbox_id` of an unverified account; `share_folder` from an unverified creator       | Two error rows                                                                      |
-| 13  | Invite cap: count, first tag, reset time; file invites under it                        | The reconcile command's retry rule                                                  |
-| 14  | Revoke: async or not; the open file; time to disappear; the member list after          | Whether revoke polls a job; what `revoked` is checked against                       |
-| 15  | The four URL shapes, and which opens an Episode for the Peer                           | What Open stores or derives                                                         |
-| 16  | OIDC `sub` equals `account_id`; `email_verified` present                               | `T-092`'s stored subject                                                            |
-| 17  | `account_type` per tier                                                                | Whether the tier dropdown can be checked                                            |
-| 18  | Production approval: what the console asks, and any stated lead time                   | `release-prerequisites.md`'s Dropbox line                                           |
-| 19  | Streaming stops at 30 minutes on Basic                                                 | The tier's video line, and whether video is offered on Basic                        |
-| 20  | Seconds per call; `share_folder` asynchronous or not; the stopwatch to first open      | `REQUEST_TIMEOUT_SECONDS` against Dropbox; when to say `pending`                    |
-| 21  | `list_folder_members` before Join, after Join, after removal                           | When the grant is `granted`, and what `checkGrant()` reads                          |
-| 22  | Nesting refused: `inside_shared_folder`                                                | The picker's nesting line beside `T-091`'s folder rule                              |
-| 23  | Same account re-linked reaches the same id; a different account reading it; the rename | The reconnect, repick and rename handling (`T-091`'s triggers)                      |
-| 24  | The walkthrough under Qori's scopes: first access, later content, repeat, recovery     | The release check `T-096` cites                                                     |
+| #   | Question                                                                                | Decides in `T-096`                                                                  |
+| --- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| 1   | Basic creator adds a viewer: success or `insufficient_plan` (step 0)                    | Whether Basic is a tier or "cannot"; and whether the spike goes on at all (`D-042`) |
+| 2   | Plus creator adds a viewer                                                              | Same, for the paid personal tier                                                    |
+| 3   | Team creator at the default, then after approving the address; the team folder itself   | The team tier's copy and error handling                                             |
+| 4   | `quiet: true`: email, bell, Shared page, apps — where and when                          | Whether Open is the Peer's only pointer                                             |
+| 5   | An invitee views the folder and a file through `preview_url` without Join               | Whether Join and storage bullets exist                                              |
+| 6   | Join: `used` delta; `peer-small`'s error; what dropbox.com says                         | The "cannot join" path                                                              |
+| 7   | Over quota after a creator upload: folder removed, and when                             | A creator warning, or nothing                                                       |
+| 8   | Added (an Episode or not), replaced (site, API, desktop) and moved-in files: `id` kept  | Episode lookup by `id` or by relative path; the picker line                         |
+| 9   | Re-adding a member and an invitee: the response                                         | Whether the ensure step needs a lookup                                              |
+| 10  | Account created later on the invited address, before and after verifying                | The "no Dropbox account yet" path                                                   |
+| 11  | A second address becomes an invitee, not a member                                       | Why `T-092` collects the main address                                               |
+| 12  | `dropbox_id` of an unverified account; `share_folder` from an unverified creator        | Two error rows                                                                      |
+| 13  | Invite cap: count, first tag, reset time; file invites under it                         | What Open answers when a grant hits the cap, and for how long                       |
+| 13a | API throttle: the 429, its `Retry-After`, and that it is the connection's, not a Peer's | Whether a 429 backs off one row or every row on that connection                     |
+| 14  | Revoke: async or not; the open file; time to disappear; the member list after           | Whether revoke polls a job; what `revoked` is checked against                       |
+| 15  | The four URL shapes, and which opens an Episode for the Peer                            | What Open stores or derives                                                         |
+| 16  | OIDC `sub` equals `account_id`; `email_verified` present                                | `T-092`'s stored subject                                                            |
+| 17  | `account_type` per tier                                                                 | Whether the tier dropdown can be checked                                            |
+| 18  | Production approval: what the console asks, and any stated lead time                    | `release-prerequisites.md`'s Dropbox line                                           |
+| 19  | Streaming stops at 30 minutes on Basic                                                  | The tier's video line, and whether video is offered on Basic                        |
+| 20  | Seconds per call; `share_folder` asynchronous or not; the stopwatch to first open       | `REQUEST_TIMEOUT_SECONDS` against Dropbox; when to say `pending`                    |
+| 21  | `list_folder_members` before Join, after Join, after removal                            | When the grant is `granted`, and what `checkGrant()` reads                          |
+| 22  | Nesting refused: `inside_shared_folder`                                                 | The picker's nesting line beside `T-091`'s folder rule                              |
+| 23  | Same account re-linked reaches the same id; a different account reading it; the rename  | The reconnect, repick and rename handling (`T-091`'s triggers)                      |
+| 24  | The walkthrough under Qori's scopes: first access, later content, repeat, recovery      | The release check `T-096` cites                                                     |
 
 The report's **States** table is the same rows read the other way: each
 outcome met, the fixture, the `VendorGrantStatus` it maps to and who resolves
@@ -709,18 +823,24 @@ None. The fixtures are read by `T-096`'s tests; this task writes no test.
 
 ## Acceptance
 
-**If step 0 answers that a Basic creator cannot add a viewer, the spike stops
-there** (`D-042`) and the list below is read against that: the first box is
-ticked, the fixture box is met by step 0's four fixtures and a README gap
-list saying where the spike stopped, the answer-table box is met by row 1
+**If step 0 answers that a Basic creator cannot add a viewer on either route
+— outcome D — the spike stops there** (`D-042`) and the list below is read
+against that: the first box is ticked, the fixture box is met by step 0's
+five fixtures and a README gap list saying where the spike stopped, the answer-table box is met by row 1
 observed and every other row "not observed — the spike stopped at step 0",
 the report carries the bullet for the owner, and the boxes naming step 18,
-the States table and production approval do not apply and say so. Otherwise
-every box is read as written.
+the States table and production approval do not apply and say so. **On
+outcome B the spike carries on, on files**, and a box about a folder-only step
+(Join, step 11, row 5) is met by "not applicable: the file route has no
+folder". Otherwise every box is read as written.
 
 - [ ] Step 0 ran first — before any account but `creator-basic` existed,
       before any file was uploaded and before any other fixture was gathered
-      — and row 1 of the answer table is "observed" with its fixture
+      — and row 1 of the answer table is "observed" with its fixtures, one
+      for the folder call (d) and one for the file call (e)
+- [ ] The report says which of outcomes A to D step 0 met, and recommends
+      `T-096`'s model — folder or file — with the reason; on a file it names
+      `T-160`'s `GrantsItemAccess` as the contract `T-096` would reuse
 - [ ] Nothing was bought to run the spike, and any step that could not be
       observed on a free account says so with that reason (`D-042`)
 - [ ] Every fixture in the Files table exists, or the README's gap list says
@@ -743,7 +863,8 @@ every box is read as written.
       `files.content.write`
 - [ ] Every "Found, not fixed" bullet in the report ends in a disposition
 - [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `php artisan qori:tasks --check` passes
+- [ ] `bin/tasks --check` passes in `qori-plan` (the board moved there with
+      planning on 21 September 2026; `php artisan qori:tasks` is gone)
 - [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
 - [ ] Report written in `reports/` (see [its README](reports/README.md))
 
@@ -768,13 +889,25 @@ every box is read as written.
     in that second case, and it arrives with an observed reason in front of
     it rather than a guess.
 
-- Whether the free Business Development Account carries Business-tier
+    **22 September 2026:** the outcomes were renamed when step 0 gained its
+    per-file call, (e). What this paragraph calls outcome B — Basic refused,
+    the spike stops — is now **outcome D**, and applies only when the file
+    route is refused as well. Outcome B is now the folder refused and the
+    file granted, on which the spike carries on. The paragraph stands as it
+    was written; step 0 is where the four outcomes are defined.
+
+- ~~Whether the free Business Development Account carries Business-tier
   sharing behaviour. The Stone spec's sentence names Pro **or Business**, so
   if it does, `creator-team`'s free account is also the free observation of
   a working `add_folder_member`, and no personal paid tier is needed for
   row 1's successful case. Nothing published says either way; the request
   form is where to ask, and until it answers the roster assumes neither —
-  the owner's, on the form.
+  the owner's, on the form.~~ **Answered 22 September 2026, decided rather than asked:**
+  it is a fact about Dropbox, observed when `creator-team` exists, not a
+  product call. The roster assumes neither answer, and whether the team
+  account can add a folder viewer is recorded under the team steps like any
+  other result. It also matters less than it did: step 0's per-file call
+  (e) may show a free Basic creator granting without any Business tier.
 - ~~Whether the steps and rows that name `creator-plus` run at all, given
   that no Plus account is provisioned, leaving rows 2, 17 and 19 as "not
   observed" and `T-096`'s paid-personal-tier copy resting on nothing — an
@@ -787,20 +920,41 @@ every box is read as written.
   bandwidth, so row 19's streaming limit is recorded as measured on a trial;
   and the cancellation is diarised, because `D-042` is about not buying
   anything and a trial nobody cancelled is a purchase made by inattention.
-- Which domain the throwaway accounts and the invite loop's `spike+NNN@…`
-  addresses use — the owner's.
-- Whether the spike may apply for production approval on the App Console
+- ~~Which domain the throwaway accounts and the invite loop's `spike+NNN@…`
+  addresses use — the owner's.~~ **Answered 22 September 2026, decided: equipment, not a
+  design question**, and Preconditions already says it — "each on its own
+  mailbox the spiker can read". The domain is whoever runs the spike's
+  choice; plus-addressing on their own mailbox is the default, and if Dropbox
+  refuses a plus-addressed signup, that refusal is a result and is recorded.
+- ~~Whether the spike may apply for production approval on the App Console
   now, since that names the app `T-096` will ship with and the lead time is
-  unpublished — the owner's.
-- The fixture naming convention: `T-093` and `T-097` name flat files under
+  unpublished — the owner's.~~ **Answered 22 September 2026: not this spike's, by `D-043`**,
+  which puts "a vendor's app review" on `PLAN.md`'s release gate and says it
+  never holds a task. The spike runs in development mode, which links seven
+  accounts against a threshold of fifty; production approval is applied for
+  before release, when the app's name is the one `T-096` ships.
+- ~~The fixture naming convention: `T-093` and `T-097` name flat files under
   the vendor directory with the status in the README row, this draft names
   `<namespace>/<route>.<case>.<status>.json`; whichever spike lands first
-  sets it and the others rename — anyone's.
-- Whether the invite-cap step (19) stays in an `S` spike when its wall clock
-  is a day or more, or moves to `T-096`'s first week on a throwaway — anyone's.
-- Whether the over-quota step (11), which the developer review asks for, is
+  sets it and the others rename — anyone's.~~ **Answered 22 September 2026: `T-093` landed
+  first**, so flat files beside a README, as `tests/Fixtures/google/` has
+  them. The mapping from this draft's dotted names and the redaction map are
+  under Decisions.
+- ~~Whether the invite-cap step (19) stays in an `S` spike when its wall clock
+  is a day or more, or moves to `T-096`'s first week on a throwaway — anyone's.~~
+  **Answered 22 September 2026, decided: it stays, runs last, and does not hold the report.**
+  Under `D-040` a grant happens at Open, so a Series launching to many Peers
+  at once is exactly when the cap bites, and `T-096` should not discover it in
+  production. The report is written when the other steps finish with row 13
+  pending, and gains a dated note when the cap is found (step 19).
+- ~~Whether the over-quota step (11), which the developer review asks for, is
   worth filling a Peer's 2 GB for, or the help page's word is taken —
-  anyone's.
+  anyone's.~~ **Answered 22 September 2026, decided: it runs**, wherever step 0 found the
+  folder route open. A help page is not the observed response `PROCESS.md`
+  asks a spec to cite, and a Peer who cannot join because the folder would
+  put them over quota is the one Peer-side failure that could make `T-096`
+  refuse a sale. It is one large file uploaded and deleted. On outcome B it
+  is not applicable, because the file route has no folder to join.
 - **From the storage review's rate-limit table (20 September 2026):** Dropbox's
   performance guide (`V4`) publishes no rate number at all, holds the limit
   against the authorisation rather than the call, returns `Retry-After` on a
@@ -808,14 +962,21 @@ every box is read as written.
   connection's and not the one Peer's whose `add_folder_member` failed, and the
   invitation cap and ordinary API throttling are two limits with two resets:
   step 19 has to report them apart, and row 13 as drafted reads as one number —
-  anyone's.
+  anyone's. **Answered 22 September 2026: done.** Step 19 now reports them apart, row 13 is
+  the cap and the new row 13a the throttle, and the "Decides" column of row
+  13 no longer names "the reconcile command's retry rule" — `D-040` deleted
+  the sweep that rule belonged to. What a cap or a 429 decides in `T-096` is
+  what Open answers, under `BACKOFF_MINUTES`.
 - **From the storage review, F10 (20 September 2026):** `D-036` put Google
   Drive's grants on files rather than on the folder, and that decision reaches
   no further. Whether a Dropbox grant sits on the shared folder or on a file is
   this spike's to settle on its own evidence — rows 5 and 21 are where that
   answer comes from — and `T-091`'s container-shaped queries and tests should
   not be frozen until this spike and `T-097` have both answered — anyone's,
-  with `T-091`.
+  with `T-091`. **Answered 22 September 2026: step 0 now asks it directly**, with (d) on the
+  folder and (e) on a file, before anything else is gathered. It matters more
+  than it did when this bullet was written: `T-160` has since built the item
+  contract, so a Dropbox grant on a file needs nothing from `T-091`.
 - **From the storage review, F11 and its evidence table (20 September 2026):**
   the Dropbox row it owns asks this spike for Basic viewer capability, Join
   with too little quota, `users` against `invitees`, the OIDC claims,
@@ -827,7 +988,12 @@ every box is read as written.
   one page has no answer. What cannot safely be produced stays "not observed"
   in the Outcome table with its reason, and an exception to the evidence rule
   is the owner's to record rather than the spike's to waive — the owner's,
-  with the two bullets above.
+  with the two bullets above. **Answered 22 September 2026: both gaps are now steps, so no
+  exception is needed.** Step 15 forces pagination with `"limit": 1` on two
+  members, which `sharing_folders.stone` allows, and follows the `cursor`
+  through `list_folder_members/continue`; and it retries a remove without its
+  `async_job_id` and records whether it converges. Nothing in this bullet's
+  list is left unobservable, so there is nothing for the owner to waive.
 
 ## Re-scope log
 
@@ -873,4 +1039,6 @@ the team folder's own id. The fixtures decide which is which.
 With steps 11, 19 and 20 run in full the wall clock is past an `S`; the two
 bullets above are where that is decided, and the stopwatch steps are not the
 reason. Step 0 is unaffected either way: four calls on one free account is
-an hour, and on outcome B it is the whole task.
+an hour, and on outcome B it is the whole task. (**22 September 2026:** five
+calls now, with (e); and the stop is outcome D since the outcomes were
+renamed — outcome B carries on, on files.)
