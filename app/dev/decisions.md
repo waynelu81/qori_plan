@@ -2900,3 +2900,103 @@ and a paid one is a sale at the price paid. Invitations are transactional
 mail, not campaigns (`T-045`): no suppression list or monthly allowance, but a
 daily cap on the free plan, `invitations_per_day` beside `edm_per_day`, 10 as
 §5 has it. The number is pricing, and so release checklist.
+
+#### D-051 — The merchant-of-record revisit counts every EU and UK subscriber with no valid VAT number, business or not (amends `D-046`)
+
+**Decision.** `D-046` revisits having no merchant of record "if many buyers
+turn out to be private individuals in the EU or UK". What it counts instead
+is **EU and UK subscribers who gave no valid VAT number**, whoever they are:
+the Stripe customer's billing country is in the EU or the UK, and its
+`tax_ids` holds no VAT number, or one that Stripe's check against the
+government record has not returned as `verified`. `T-168` already saves both
+on the customer, so the count is read from Stripe and nothing in the code
+changes. The rest of `D-046`, as `D-047` and `D-048` amend it, stands, and so
+does `T-168`'s rule that the number is never required.
+
+Raised on 22 September 2026, when the owner asked how a solo developer can
+earn before working through the law, and recorded at the owner's word: "yes
+please".
+
+**Why the number, not the person.** `D-046` reasons from the number — "a
+business abroad that gives a VAT or GST number accounts for the tax itself" —
+but names its trigger by the person. The two differ for a buyer Qori will see
+often: a solo creator trading below their country's VAT threshold, who is a
+business and often has no VAT number.
+
+- **EU.** A supplier may treat a customer established in the EU who has not
+  given it a VAT identification number as a non-taxable person (Council
+  Implementing Regulation (EU) No 282/2011, Article 18(2),
+  [EUR-Lex](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32011R0282)).
+  For a supplier outside the EU, that is a consumer sale, taxed from the
+  first one.
+- **UK.** HMRC's guidance for digital services is to treat a sale with no VAT
+  registration number as business-to-consumer. Accepting other evidence that
+  the buyer is in business is the supplier's choice, not the buyer's right
+  ([GOV.UK](https://www.gov.uk/guidance/the-vat-rules-if-you-supply-digital-services-to-private-consumers)),
+  and Qori's checkout collects only the number.
+
+**The count matters from one.** Qori owes VAT in a country from its first such
+sale there, as `D-046` says, so "many" never decides whether anything is owed.
+It decides the cheaper way to pay it: registering — the EU's non-Union OSS is
+one registration and one quarterly return for every member state, and the UK
+is a registration of its own — or a merchant of record behind `BillsGroups`,
+which takes a share of every sale (`D-046` compares them).
+
+**Consequences.** Stripe Tax threshold monitoring will not raise this count at
+launch: Stripe notifies only once an account has had US$10,000 of revenue in
+the previous year ([Stripe](https://docs.stripe.com/tax/monitoring)), while
+the EU and UK owe from the first sale. Step 5 of
+[`release-prerequisites.md`](release-prerequisites.md) now says so.
+
+#### D-052 — A plan change follows Claude's billing: an upgrade is charged at once, prorated, and restarts the cycle; a downgrade takes effect when the paid period ends (settles `T-180`'s open questions)
+
+**Decision.**
+
+- **An upgrade takes effect at once.** It is any move to a dearer plan, such
+  as Start to Pro. The Group is charged one full period of the new plan, less
+  the unused part of the old one. The billing cycle restarts at that moment,
+  and the next renewal is the new plan's full price. Before the owner
+  confirms, Qori shows what will be charged.
+- **A downgrade takes effect at the end of the period already paid for.**
+  Until then the Group keeps the dearer plan. Nothing is refunded or credited.
+- **A change stays in the currency the Group already pays in.** Stripe refuses
+  a second currency on one customer (`T-170`'s sandbox check).
+- **A converted renewal may charge a different amount**, and that is
+  accepted. A buyer on Adaptive Pricing is charged at each payment's rate
+  (`T-172`).
+
+The owner, 22 September 2026: "I really like claude's pricing prorata by
+minute, can that be implemented in qori so to downgrade follow claude as
+well", and "A converted price can change at each renewal. probably can't do
+anything at this moment, just have to accept this."
+
+**What Claude's billing does, as its help pages say.** On an upgrade mid-cycle,
+"you are charged for one full billing cycle of the new plan, less a prorated
+amount for value remaining in your old plan", "you'll reset your billing
+cycle and receive an immediate invoice for the change", and "Your next
+renewal invoice charges the full price"
+([Claude Help Center](https://support.claude.com/en/articles/16607638-understanding-your-pro-or-max-plan-invoices)).
+A cancellation "will take effect at the end of your current billing period
+and you can continue using your paid plan until then"
+([Claude Help Center](https://support.claude.com/en/articles/8325617-cancel-your-pro-or-max-subscription)).
+The pages say nothing about a downgrade between two paid plans. Ending at the
+paid period is Claude's documented way of giving up a plan, and it needs no
+refund or credit, so it is the reading taken here. If the owner meant a
+downgrade prorated at once, with a credit, this decision changes.
+
+**How Stripe does it (for `T-180`).** Stripe prorates by the second, finer than
+"by minute".
+
+- An upgrade updates the subscription's item to the new price with
+  `proration_behavior=always_invoice` and `billing_cycle_anchor=now`, which is
+  Claude's shape: a full period of the new plan less the old plan's unused
+  part, invoiced at once. `payment_behavior=pending_if_incomplete` applies the
+  change only if that payment succeeds.
+- A downgrade is a subscription schedule whose next phase, at the current
+  period's end, moves to the cheaper price and the cheaper plan's metadata.
+- The price shown before an upgrade comes from Stripe's invoice preview for
+  that change, so Qori quotes the figure Stripe will charge.
+
+**Consequences.** `T-180`'s owner questions are answered. It also needs the
+subscription's own id, which Qori does not keep today (a Group holds only
+`stripe_customer_id`), and the preview and confirm step on the billing page.
