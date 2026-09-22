@@ -346,3 +346,28 @@ that §8 has not built yet.
 - Resend is a reasonable middle for the transactional half if Postmark's price
   grates ($0.40/1,000 against $1.50), but it does not change the broadcast
   answer and its marketing product bills by contacts, which is the wrong shape.
+
+## Postmark's alternative: Cloudflare Email Service — 22 September 2026
+
+Transactional mail stays on Postmark, and **Cloudflare Email Service is the one
+alternative recorded for it** (`D-054`). SES stays the broadcast provider, and
+since `D-054` it carries the "you're in" email too (`T-186`).
+
+|                                                 | Postmark Platform          | Cloudflare Email Service                 |
+| ----------------------------------------------- | -------------------------- | ---------------------------------------- |
+| Base                                            | $18/month, 10,000 included | $5/month on Workers Paid, 3,000 included |
+| Per 1,000 after                                 | $1.20                      | $0.35                                    |
+| At 747,000 a month (10,000 free creators today) | $902                       | $265                                     |
+
+Why not yet, as its documentation read on 22 September 2026: Email Sending is
+in beta and for transactional mail only; new accounts start on an unpublished
+daily quota that grows with their sending; and nothing describes bounce or
+complaint events, which `T-017` and `T-032` need. It takes a REST API or
+authenticated SMTP, so Laravel's `smtp` mailer reaches it, and `useqori.com`'s
+DNS is already on Cloudflare. Revisit when it has left beta and reports
+bounces.
+
+Sources: [pricing](https://developers.cloudflare.com/email-service/platform/pricing/),
+[overview](https://developers.cloudflare.com/email-service/),
+[limits](https://developers.cloudflare.com/email-service/platform/limits/),
+[Postmark pricing](https://postmarkapp.com/pricing).

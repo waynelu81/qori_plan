@@ -3039,3 +3039,51 @@ refund is theirs to give in any case.
 whether Send again counts against the day, whether the creator sees the
 email before sending, and whether they may change its subject or words — are
 `T-183`'s.
+
+#### D-054 — Postmark keeps Qori's transactional mail with Cloudflare Email Service as its one alternative, and the "you're in" email moves to the broadcast mailer
+
+**Decision.**
+
+- **Transactional mail stays on Postmark, and Cloudflare Email Service is the
+  one alternative recorded for it**: $5 a month on Workers Paid with 3,000
+  included, then $0.35 per 1,000, against Postmark Platform's $18 with 10,000
+  included, then $1.20, both read 22 September 2026. It is not adopted yet: it
+  is in beta, for transactional mail only, new accounts start on an
+  unpublished daily quota, and it documents no bounce or complaint events.
+  `email-and-delivery.md` holds the comparison and what would change the
+  answer. SES stays the broadcast provider, and Cloudflare replaces nothing
+  there.
+- **The "you're in" email is not transactional mail any more.**
+  `SeriesAccessNotification` sends on the broadcast mailer and domain, as
+  campaigns do (`T-186`). Nothing else about it changes: it goes to everyone
+  who gains access, whatever their consent, unsubscribe or complaint, and
+  only a permanent bounce stops it. Sign-in codes, magic links, verification,
+  password resets, email changes and invitations stay on Postmark.
+- **Not pursued.** OTP services cost 25 to 40 times Postmark per code: Twilio
+  Verify charges $0.05 a verification and its email channel needs a SendGrid
+  account of Qori's own, and Prelude sends no email at all. Identity platforms
+  such as Clerk and Stytch would replace Qori's own sign-in.
+
+The owner, 22 September 2026: "Just put CloudFlare as alternative to postmark
+only, and your suggestion is good please create a task to make you are in use
+non transactional email."
+
+**Why this shape.** Postmark is bought for mail a person is waiting on — a
+code or a link they are about to type or follow — where a late or filtered
+message is someone who cannot get in. The "you're in" email is the one
+Postmark message that is not a step in anything: a Peer who misses it loses a
+notice, not a way in, since the Series is under Shared with me once they sign
+in. When a creator gives access by hand it is how the Peer hears of it, and a
+slower or filtered delivery there is the cost accepted. At the estimate the
+owner was given the same day it is 7% of Postmark's volume, 18% once `T-185`
+lands, and SES carries it for a tenth of the price. Invitations stay: the
+selling stream's note holds that an invitation which silently does not arrive
+is worse than none.
+
+**Consequences.** `T-186` moves the email, and keeps it on the default mailer
+while the broadcast mailer is still `log`, so nothing is lost before SES is
+set up. The release checklist gains two lines under SES in
+`release-prerequisites.md`: `QORI_MAIL_BROADCAST=ses` only once SES has
+production access, and an account-level suppression list that suppresses
+bounces only, since a complaint about a campaign must not stop an access
+email.
