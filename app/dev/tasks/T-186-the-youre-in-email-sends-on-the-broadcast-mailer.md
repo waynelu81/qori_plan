@@ -2,8 +2,8 @@
 id: T-186
 title: The "you're in" email sends on the broadcast mailer
 stream: delivery
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: S
 depends: none
 blocks: none
