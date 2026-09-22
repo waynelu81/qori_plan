@@ -239,3 +239,11 @@ None.
   (`Connect::requestCapabilities()`).
 - The owner, on the loader hook: "Pretty sure can detect environment is
   production and skip." It runs only when `APP_ENV` is `local`.
+- 22 September 2026: the first push since this task was built ran the tests
+  in parallel, and the pre-push hook refused it. `GuardsEndToEndRuns` accepted
+  a database ending in `_e2e` or `_testing`, and paratest names its databases
+  `qori_testing_test_N`, so all three seams refused and six of their tests
+  failed there while passing one at a time. The guard now takes the suffix
+  `Tests\TestCase` already allows, and
+  `EndToEndConnectCommandTest::test_it_accepts_the_database_a_parallel_test_run_uses`
+  holds it.
