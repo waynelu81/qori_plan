@@ -80,6 +80,12 @@ To be settled when ready.
   server's zone and the browser's, the theme read from `localStorage`, and
   anything reading `window`.
 - Whether one shared cause — the app shell, the theme — explains every page.
+- Found on the public Series page, 22 September 2026 (`T-181`): every price.
+  The server renders "$89.00" and the browser "A$89.00", because
+  `formatMoney()` in `resources/js/lib/money.ts` formats in the runtime's own
+  locale, which differs between the server's render and the visitor's
+  browser. Whether other pages differ for the same reason — dates are the
+  likely next one — is the rest of this task.
 
 ## Re-scope log
 
