@@ -2,8 +2,8 @@
 id: T-172
 title: Qori publishes each plan's price to Stripe
 stream: selling
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: M
 depends: T-169
 blocks: T-170, T-173

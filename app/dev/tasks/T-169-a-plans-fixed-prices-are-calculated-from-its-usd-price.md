@@ -2,7 +2,7 @@
 id: T-169
 title: A plan's fixed prices are calculated from its USD price
 stream: selling
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-167, T-168
@@ -269,16 +269,24 @@ unchanged.
 
 ## Acceptance
 
-- [ ] Saving Start at US$39 stores `D-048`'s Start column, the rates and their date
-- [ ] Rounding is up to a whole unit, in decimal arithmetic
-- [ ] A price is never saved when the rates cannot be fetched
-- [ ] Editing only a price's words never recalculates it
-- [ ] The console takes a USD amount and shows each calculated currency with the rates date
-- [ ] `php artisan db:seed --class=PricingSeeder` writes `D-048`'s table
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Saving Start at US$39 stores `D-048`'s Start column, the rates and their date
+- [x] Rounding is up to a whole unit, in decimal arithmetic
+- [x] A price is never saved when the rates cannot be fetched
+- [x] Editing only a price's words never recalculates it
+- [x] The console takes a USD amount and shows each calculated currency with the rates date
+- [x] `php artisan db:seed --class=PricingSeeder` writes `D-048`'s table
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
+
+## Added during execution
+
+| Path | Change | Why |
+| ---- | ------ | --- |
+| `app/Services/PricingService.php` | new | Fetching rates, calculating and upserting is orchestration, which the conventions put in a Service rather than a controller; `T-172`'s publishing lands in the same place. The controller only delegates. |
+| `app/Support/DecimalRate.php` | new | The rate arithmetic in whole millionths, shared by the ECB reader's cross rates and `FixedPrices`. |
+| `lang/en/admin.php` | new | The console's three new labels reach the page as props: no new inline English in Vue (`../qori/CLAUDE.md`). |
 
 ## Re-scope log
 
