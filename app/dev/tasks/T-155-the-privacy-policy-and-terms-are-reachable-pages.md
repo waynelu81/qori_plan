@@ -2,8 +2,8 @@
 id: T-155
 title: The privacy policy and terms are reachable pages
 stream: reachability
-status: draft
-owner: unassigned
+status: doing
+owner: claude
 estimate: S
 depends: none
 blocks: none
