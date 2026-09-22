@@ -1,205 +1,185 @@
 ---
 id: T-178
-title: A peer agrees to the terms and chooses emails
+title: A Peer agrees to the terms and chooses emails
 stream: onboarding
-status: draft
-owner: unassigned
-estimate: S
+status: done
+owner: claude
+estimate: M
 depends: none
 blocks: T-179
 ---
 
-# T-178 — A peer agrees to the terms and chooses emails
-
-> Start one with `bin/tasks --new <stream> <slug>`, which copies
-> this file under the next free id. Keep every heading, and delete the
-> guidance in quotes. A section that does not apply says **None**, so a reader
-> can tell "nothing to do here" from "nobody thought about it".
->
-> `blocks:` is derived from every other task's `depends:` and a test asserts
-> the field agrees with the derivation; write it for the reader, and fix it
-> when the board says so.
->
-> Read [`../PROCESS.md`](../PROCESS.md) first if you have not.
+# T-178 — A Peer agrees to the terms and chooses emails
 
 ## Why
 
-> Two or three sentences. What is wrong today, and what is true afterwards. A
-> developer who finds the spec disagreeing with the code needs this to judge
-> which one is wrong — that is the whole job of this section.
+A Peer could only get a Series by ticking "I agree that :creator can email me
+about this :series": consent to the creator's emails was the price of access,
+free or paid (§9, `ConsentTest::test_refusing_consent_refuses_the_access`),
+and Continue stayed greyed out until it was ticked, with no reason given
+(`fixups.md`). The owner, 22 September 2026, asked whether that must stay:
+creators should show their own terms for what they sell, and "for now please
+draft a static and use as Qori supplied agreement" (`D-049`). Afterwards a
+Peer agrees to the terms for the Series, and says yes or no to emails.
 
 ## Decisions taken to make this specifiable
 
-> Every choice the spec makes that somebody could reasonably have made the
-> other way, each as one bold sentence and its reason. This is where a draft
-> becomes a spec: a task with a decision still open in it is not ready, and a
-> decision hidden inside the Code section is one the developer will re-make.
-> **None** only when the task genuinely had no choices in it.
+- **The terms are required on every way a Peer lets themselves in** — the
+  stranger's form, the signed-in free button, checkout — and checked on the
+  server, checkout included (`StartCheckoutRequest`), where a box that only
+  gated a button in the browser was no agreement anybody could show.
+- **The terms are Qori's static agreement**, `App\Support\PeerTerms` with its
+  words in `lang/en/terms.php`, shown on the page under "Read the terms" in the
+  Group's own nouns, and versioned (`PeerTerms::VERSION`). They are a draft
+  until a legal read before release (release checklist). A creator's own terms
+  are `T-179`.
+- **The email box stays, optional and unticked**, marked "Optional — you get
+  in either way". A Peer who leaves it gets in and is not a campaign
+  recipient; a purchase records consent only when it was ticked before paying.
+- **The Access records the terms**: `terms_version` and `terms_accepted_at`,
+  from an `AccessAgreement` carried from where the boxes were ticked — the same
+  request, `SeriesAccessPending` across the code, the checkout session's
+  metadata to the webhook. A session from before the agreement travelled
+  records no terms and no consent, the safe way round. An Access a creator
+  gives by hand carries no terms.
+- **The button is not greyed out**: pressing on without the terms answers with
+  "Agree to the terms to carry on." under the box.
 
 ## Preconditions
 
-> Anything that must be true of the machine before this task can be done or
-> verified — a running container, a generated directory, credentials, seeded
-> data. **None** if it runs from a clean checkout.
->
-> Worth its own section because a check that silently reads an empty directory
-> reports success. `resources/js/routes` is generated and gitignored, so
-> anything analysing it needs `php artisan wayfinder:generate --with-form`
-> first, and finds nothing at all without it.
+None.
 
-**Data this task verifies against:** > The rows the check needs — a seeded
-world, a Group in a particular state, a realistic row count — and how to get
-them (`php artisan qori:reset …`, a factory, a fixture). **A clean database**
-when nothing more is needed.
+**Data this task verifies against:** a clean database for the tests; the
+design-review world's "Reading a Room Before You Speak" for the walk.
 
-**Equipment:** > A visible browser, vendor credentials, a mailbox, a phone —
-whatever a check needs that a shell does not have. **None** when everything
-can be verified from the terminal.
-
-> **Spike, for vendor-facing work.** A spec that names a vendor payload cites
-> where the shape came from: an observed response (the date and the call), or
-> a committed fixture under `tests/Fixtures/<vendor>/`. Guessing the field
-> names from documentation is how `contact_email` became `peer_email` and
-> how a v2 requirements summary read "nothing outstanding" for an account
-> that had not started. If nobody has seen the response, the first step is a
-> spike that does, and its result is a fixture, not a memory.
+**Equipment:** a browser.
 
 ## Scope
 
 **In:**
 
-- …
+- The terms box and the terms on the public Series page; the optional email
+  box; the agreement carried to the Access; the terms recorded on it.
 
 **Out:**
 
-- …
-
-> Name the things a reader would reasonably assume are included and are not.
-> "Out" is the section that prevents a task from growing while it is being done.
+- A creator's own terms, or a template per Series (`T-179`).
+- The creator's "I have permission to email this person" on Give access, which
+  is their assertion and unchanged.
 
 ## Files
 
-| Path             | Change | Notes |
-| ---------------- | ------ | ----- |
-| `app/…`          | new    | …     |
-| `resources/js/…` | edit   | …     |
+| Path | Change | Notes |
+| --- | --- | --- |
+| `app/Support/PeerTerms.php` | new | the static terms, versioned; the page's props |
+| `lang/en/terms.php` | new | the words, a draft |
+| `app/Data/AccessAgreement.php` | new | the terms' version and time, and the email choice |
+| `database/migrations/2026_09_22_000100_add_terms_to_accesses.php` | new | `terms_version`, `terms_accepted_at` |
+| `app/Models/Access.php` | edit | the two columns |
+| `app/Services/AccessService.php` | edit | `selfGrant(…, AccessAgreement)`; `grant()` writes the terms |
+| `app/Services/CheckoutService.php` | edit | `begin(…, AccessAgreement)`; `fulfil()` reads it back |
+| `app/Integrations/Contracts/SellsSeries.php` | edit | `checkoutFor(…, AccessAgreement)` |
+| `app/Integrations/Stripe/Connect.php` | edit | the metadata |
+| `app/Support/SeriesAccessPending.php` | edit | remembers the agreement across the code |
+| `app/Http/Requests/StartSeriesAccessRequest.php` | edit | terms required, consent optional |
+| `app/Http/Requests/GrantInSeriesRequest.php` | edit | the same |
+| `app/Http/Requests/StartCheckoutRequest.php` | new | the same, for checkout |
+| `app/Http/Controllers/SeriesAccessController.php` | edit | carries the agreement |
+| `app/Http/Controllers/PublicAccessController.php` | edit | the same |
+| `app/Http/Controllers/CheckoutController.php` | edit | the same |
+| `app/Http/Controllers/PublicSeriesController.php` | edit | `terms`, `consentOptional` |
+| `resources/js/components/series/PeerTermsBox.vue` | new | the box and the terms |
+| `resources/js/pages/public/Series.vue` | edit | both forms |
+| `lang/en/accesses.php` | edit | `consent.optional` |
+| `docs/flows/accesses.md` | edit | terms and consent at access |
+| `docs/flows/checkout.md` | edit | the agreement through checkout |
+| `docs/flows/campaigns.md` | edit | who is a recipient |
+| `tests/Feature/Access/ConsentTest.php` | edit | the rule, rewritten |
+| `tests/Feature/Access/SeriesAccessContinueTest.php` | edit | terms required; leaving the email box |
+| `tests/Feature/Access/SeriesAccessCodeTest.php` | edit | posts the terms |
+| `tests/Feature/Auth/StaleDestinationTest.php` | edit | posts the terms |
+| `tests/Feature/PublicSeriesTest.php` | edit | posts the terms |
+| `tests/Feature/Checkout/CheckoutTest.php` | edit | `begin()` takes the agreement |
+| `tests/Feature/Checkout/BuyButtonTest.php` | edit | posts the terms |
+| `tests/Feature/Checkout/ConfirmingTest.php` | edit | posts the terms |
+| `tests/e2e/public-link.spec.ts` | edit | ticks the terms |
+| `tests/e2e/first-share.spec.ts` | edit | ticks the terms |
 
-> Every file, exactly, one row per file or several backticked paths in one
-> cell — the parser reads all of them, expands a glob against the repository,
-> and refuses a bare basename (`SeriesService.php` claims nothing the collision
-> check can compare). Two `doing` tasks listing the same path is a collision
-> the board will show — see PROCESS.md.
->
-> **Wiring.** A file that is new is not reached by anything until something
-> is edited to reach it. Go down this list and add the rows:
->
-> - a route, in `routes/*.php`, for a new controller action
-> - a nav or a link, for a new page; `qori:reachability` finds the ones you forget
-> - a lang file, for every sentence a person reads
-> - a flow doc, for a changed call chain: a `docs/flows/*.md` row here, or the
->   line below when nothing in `docs/flows/` describes the chain this touches
-> - a tinker recipe, when a `docs/tinker/*.md` recipe drives what changed
-> - `config/qori.php`, for a number that would otherwise be written twice
-> - a factory or the design-review seeder, for a new column
->
-> A task whose Files include anything under `app/Http`, `app/Services`,
-> `app/Listeners` or `routes/` must either list a `docs/flows/*.md` path or
-> carry the line below, and a test checks it.
+## Added during execution
 
-Flows: none — > why no flow file changes, in a few words; delete this line
-when a flow row is in the table.
+- `tests/Feature/Series/StatementDescriptorTest.php` — two of its tests call
+  `Connect::checkoutFor()` directly, and the Files table missed them; the first
+  full gate failed on both. They pass an agreement now.
 
 ## Database
 
-> Table, column, type, nullability, default, index or constraint, and the
-> migration's file name. **None** if the task touches no schema.
-
 | Table | Column | Type | Null | Default | Index / constraint |
-| ----- | ------ | ---- | ---- | ------- | ------------------ |
+| --- | --- | --- | --- | --- | --- |
+| `accesses` | `terms_version` | `varchar(255)` | yes | null | none |
+| `accesses` | `terms_accepted_at` | `timestamp` | yes | null | none |
 
-Migration: `database/migrations/YYYY_MM_DD_HHMMSS_<name>.php`
+Migration: `database/migrations/2026_09_22_000100_add_terms_to_accesses.php`
 
 ## Code
 
-> Literal names. Namespaces, class names, method signatures with types,
-> property and constant names. Enough that two developers would write the same
-> declarations.
-
 ```php
-namespace App\…;
-
-class Thing
-{
-    public const SOME_KEY = 'value';
-
-    public function doIt(Group $group, string $name): Result;
-}
+class AccessAgreement { public function __construct(public ?string $termsVersion, public ?CarbonImmutable $agreedAt, public bool $emailConsent) {} public static function agreedNow(bool $emailConsent): self; }
+class PeerTerms { public const VERSION = 'qori-2026-09-22'; public static function props(?Group $group): array; }
+// AccessService::selfGrant(Series, User, AccessAgreement); CheckoutService::begin(…, AccessAgreement)
+// SellsSeries::checkoutFor(…, AccessAgreement) → metadata terms_version, terms_agreed_at, email_consent
 ```
 
 ## Copy
 
-> Every user-facing string, as a lang key and its file. Never inline (§23).
-> **None** if the task adds no copy.
-
 | Key | File | English |
-| --- | ---- | ------- |
+| --- | --- | --- |
+| `peer.agree` | `lang/en/terms.php` | "I agree to the terms for this :series." |
+| `peer.read` | `lang/en/terms.php` | "Read the terms" |
+| `peer.required` | `lang/en/terms.php` | "Agree to the terms to carry on." |
+| `peer.title`, `peer.intro`, `peer.sections.*` | `lang/en/terms.php` | Qori's terms: what you get, paying, using what you get, ending your access, what the creator sees, Qori's part |
+| `consent.optional` | `lang/en/accesses.php` | "Optional — you get in either way." |
 
 ## Routes
 
-> Verb, path, route name, controller action. **None** if no routes change.
-
-| Verb | Path | Name | Action |
-| ---- | ---- | ---- | ------ |
+None.
 
 ## Tests
 
-> One line per case with its method name, and the total. A reviewer counts them
-> against the file. Say which existing tests are expected to change and why.
+**Changed: `tests/Feature/Access/ConsentTest.php`** — `test_refusing_consent_refuses_the_access`
+and `test_a_paying_peer_consents_through_the_purchase` replaced by:
 
-**New: `tests/Feature/…Test.php` — N cases**
+1. `test_leaving_the_email_box_still_grants_and_records_no_consent`
+2. `test_refusing_the_terms_refuses_the_access`
+3. `test_the_access_records_the_terms_agreed`
+4. `test_a_paying_peer_consents_only_when_they_ticked_the_box`
+5. `test_a_purchase_without_the_agreement_records_no_consent`
 
-1. `test_it_…` — …
+**Changed: `tests/Feature/Access/SeriesAccessContinueTest.php`** —
+`test_the_terms_are_required_on_the_first_form` (was consent),
+`test_leaving_the_email_box_still_gets_the_series` new.
 
-**Changed:**
+**New in `tests/Feature/Checkout/CheckoutTest.php`:**
+`test_the_agreement_travels_with_the_checkout` — the terms' version, the time
+and the email choice reach Stripe's metadata, which is all the webhook has.
 
-- `tests/…` — …
+Every other file above posts the terms, or passes an agreement to `begin()` or
+`checkoutFor()`.
 
 ## Acceptance
 
-> The product lines first, then the closing lines in this order — status and
-> the board check come before the gate, because the gate includes the board
-> check and a task that is `done` with `status: doing` fails it.
-
-- [ ] …
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
-
-## Before this can be ready
-
-> Drafts only: what has to be decided, read or measured before whoever builds
-> this can start. Whoever picks the draft up answers each bullet — from the
-> code, by deciding and recording it under **Decisions**, or by asking the
-> product owner when only they can answer (mark it _asked_ and keep going).
-> Release checklist items — policy, terms, pricing, production config — are
-> not bullets here; they are on `PLAN.md`'s release gate. Strike a bullet with
-> the date and the answer; delete the section when the task is `ready`.
-
-- …
+- [x] Every way a Peer lets themselves in requires the terms, shown on the page, and checks them on the server
+- [x] The email box is optional; leaving it gets the Series and no campaign
+- [x] The Access records which terms, and when; a purchase carries both choices to the webhook
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
-
-> Empty until something in the spec turns out to be wrong. Then: what was
-> expected, what was found, and what it means for the spec. Rewrite the
-> sections it changes and carry on — or, if you are handing the task back,
-> set `status: rescope` so the next person rewrites it.
 
 None.
 
 ## Notes
 
-> Anything learned that the next reader would want and that does not belong in
-> `decisions.md`.
-
-None.
+The terms' words are the product's draft; the release checklist carries the
+legal read, beside `T-155`'s terms and privacy policy.
