@@ -32,7 +32,26 @@ has, in the currency it already pays in.
 
 ## Decisions taken to make this specifiable
 
-None yet.
+- **The owner's answers (`D-052`): an upgrade follows Claude's billing.** It
+  takes effect at once, charges one full period of the new plan less the old
+  plan's unused part, prorated to the second, and restarts the cycle. A
+  downgrade takes effect at the end of the period already paid for, with no
+  refund or credit. The change stays in the subscription's own currency.
+- **Qori makes the change through Stripe's API, not the Customer Portal.** The
+  API controls each part of Claude's shape exactly: the proration, the cycle
+  restarting, and the change applying only once it is paid. It also keeps the
+  owner on Qori's billing page, where the amount is shown before they
+  confirm.
+  - An upgrade updates the subscription's item with
+    `proration_behavior=always_invoice`, `billing_cycle_anchor=now` and
+    `payment_behavior=pending_if_incomplete`, and moves `metadata[plan]` with
+    it, since `applySubscription()` reads the plan from there.
+  - A downgrade is a subscription schedule whose next phase, at the current
+    period's end, has the cheaper price and its `metadata[plan]`.
+- **The owner sees what an upgrade will charge before confirming**, from
+  Stripe's invoice preview for that change, so the figure is Stripe's own.
+- **Qori keeps the subscription's id**: the webhook writes it on the Group,
+  so a change never has to guess which subscription is the Group's.
 
 ## Preconditions
 
@@ -91,18 +110,21 @@ To be settled when ready.
 
 ## Before this can be ready
 
-- **How the change happens**: through Stripe's Customer Portal, which has to
-  be configured with the plans it may switch between, or through Qori calling
-  Stripe to update the subscription's item. The portal is less code; the call
-  keeps the owner on Qori's page. Anyone's, from the code and Stripe's docs.
-- **What the owner is charged at the moment of the change**: a prorated
-  difference now, the new price from the next renewal, or an immediate full
-  charge. What a person pays and sees, so the owner's call.
-- **Downgrades**, Pro to Start: at once or at the end of the period paid for.
-  The owner's call, beside the one above.
-- Whether the billing page should say, beside the currency menu, that a
-  subscribed Group stays in the currency it pays in. Anyone's, once the two
-  above are answered.
+- ~~**How the change happens**~~ — decided 22 September 2026: through
+  Stripe's API (Decisions).
+- ~~**What the owner is charged at the moment of the change**~~ — answered 22
+  September 2026 (`D-052`): Claude's shape, a full period of the new plan less
+  the old plan's unused part, at once.
+- ~~**Downgrades**~~ — answered 22 September 2026 (`D-052`): at the end of the
+  period paid for. Read from Claude's documented cancellation, since its help
+  pages do not cover a downgrade; the owner may correct it.
+- The copy: the upgrade's confirm line with the amount, and the downgrade's
+  "you keep Pro until …" line. Anyone's.
+- Whether the billing page says, beside the currency menu, that a subscribed
+  Group stays in the currency it pays in. Anyone's.
+- A spike: an upgrade and a downgrade on a sandbox subscription, including one
+  in a fixed currency. Keep the updated subscription and the schedule as
+  fixtures. Anyone's.
 
 ## Re-scope log
 
