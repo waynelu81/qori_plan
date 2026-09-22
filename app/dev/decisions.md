@@ -3002,3 +3002,40 @@ downgrade prorated at once, with a credit, this decision changes.
 **Consequences.** `T-180`'s owner questions are answered. It also needs the
 subscription's own id, which Qori does not keep today (a Group holds only
 `stripe_customer_id`), and the preview and confirm step on the billing page.
+
+#### D-053 — Invitations stand as built: ten a day on the free plan, the creator vouches, reminders are the creator's, an address matches whatever its case, and there is no test send (confirms `D-050`)
+
+**Decision.** The owner confirmed what `T-043` and `T-181` built on `D-050`:
+
+- The free plan sends **10 invitations a day**, and the paid plans send
+  without a cap. The number `D-050` left to the release checklist is settled.
+- The creator's box — they know these people, and the people expect to hear
+  from them — **vouches for the batch and records no marketing consent.** The
+  invited person gives or leaves that themselves when they accept (`D-049`).
+- **Send again stays manual.** Qori sends no reminders on its own.
+- **An address matches whatever its case**, everywhere Qori looks one up, the
+  Series page's code step included: "Sam@…" signs in as the account "sam@…"
+  already holds.
+- **An invitation left Waiting after its person got access another way stays
+  as it is.** What a Peer paid, and any refund between a full price and an
+  invited one, is the creator's after-sale, and Qori does not manage it.
+- **There is no test send.** The preview `T-183` asks about is how a creator
+  sees the email.
+
+The owner, 22 September 2026: "1 yes, 2 yes 3 yes 4 yes match email
+uncapitalise 5 acceptable, refund qori does not control, this is the
+creator's after sale didn't need to manage for creator", and "test send? i
+preferred not."
+
+**Why this shape.** The cap and the vouching are what keep an invitation
+transactional mail — one person asking Qori to write to people they know —
+rather than a campaign, which would need consent and a suppression list. A
+reminder Qori sent on its own would be Qori deciding to write to someone
+again. Payments are direct charges on the creator's own Stripe account, so a
+refund is theirs to give in any case.
+
+**Consequences.** Nothing in the code changes for these: each is what
+`T-043` and `T-181` already do. The owner's other questions the same day —
+whether Send again counts against the day, whether the creator sees the
+email before sending, and whether they may change its subject or words — are
+`T-183`'s.
