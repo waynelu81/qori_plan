@@ -2,8 +2,8 @@
 id: T-173
 title: Qori creates plan vouchers in Stripe
 stream: selling
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: S
 depends: T-172
 blocks: none

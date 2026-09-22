@@ -2,7 +2,7 @@
 id: T-172
 title: Qori publishes each plan's price to Stripe
 stream: selling
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-169
@@ -219,14 +219,21 @@ Total: 11.
 
 ## Acceptance
 
-- [ ] The spike ran, and each of its four steps is recorded: fixed USD for the US customer, yen for the Japanese one, the old subscription unmoved
-- [ ] Saving a price creates it in Stripe with AUD as its default and every other currency as an option, and stores the id
-- [ ] A refused publish saves nothing; a words-only edit publishes nothing
-- [ ] Staff can no longer type a `price_…` id
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] The spike ran, and each of its four steps is recorded: fixed USD for the US customer, yen for the Japanese one, the old subscription unmoved
+- [x] Saving a price creates it in Stripe with AUD as its default and every other currency as an option, and stores the id
+- [x] A refused publish saves nothing; a words-only edit publishes nothing
+- [x] Staff can no longer type a `price_…` id
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
+
+## Added during execution
+
+| Path | Change | Why |
+| ---- | ------ | --- |
+| `app/Services/PricingService.php` | edit | `T-169` put the save in a Service, so publishing before the save and archiving after it happen there, and the controller's `storePrice()` is unchanged. `retirePrice()` moved there too. |
+| `tests/Fixtures/stripe/price-start-published.json` | new | In place of `price-created-start.json`: the price read back with its currency options expanded, which the create response leaves out. |
 
 ## Re-scope log
 

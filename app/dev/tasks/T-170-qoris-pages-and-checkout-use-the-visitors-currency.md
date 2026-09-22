@@ -316,6 +316,14 @@ None.
 - `D-048`, the same evening, brought Adaptive Pricing back for currencies
   without a fixed price. Naming the currency became something the checkout
   does only for a fixed one.
+- **An Adaptive-priced renewal can charge a different amount** (`T-172`'s
+  sandbox check, 22 September 2026). Stripe's page for a Japanese buyer read
+  "1 AUD = 116.3961 JPY. Charges will vary based on exchange rates", and its
+  terms "charge you in JPY at the displayed exchange rate or the exchange rate
+  at the time of billing". The ECB's mid-rate that day was about 112.25, so
+  the rate carries Stripe's conversion fee, as `D-046` says. The converted line
+  should not suggest the yen figure is fixed: its wording is this task's to
+  settle when it is built.
 - Brought to ready the same evening with the owner's two answers, asked
   22 September 2026 and answered then:
   - the menu: "I would show 3 fixed currency + visitor's country if different
