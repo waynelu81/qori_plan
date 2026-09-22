@@ -86,6 +86,10 @@ To be settled when ready.
   locale, which differs between the server's render and the visitor's
   browser. Whether other pages differ for the same reason — dates are the
   likely next one — is the rest of this task.
+- Found on `/pricing`, 22 September 2026 (`T-155`): the same cause in
+  `Pricing.vue`'s own `amount()`, which formats with
+  `Intl.NumberFormat(undefined, …)` — "GBP 30" from the server, "£30" in the
+  browser. `/privacy` and `/terms` log no mismatch in a fresh tab.
 
 ## Re-scope log
 
