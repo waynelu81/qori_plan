@@ -2,8 +2,8 @@
 id: T-170
 title: Qori's pages and checkout use the visitor's currency
 stream: selling
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: M
 depends: T-168, T-169, T-172
 blocks: none
