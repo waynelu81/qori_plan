@@ -2,8 +2,8 @@
 id: T-181
 title: An invited person accepts on the Series page, free or at their price
 stream: selling
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: M
 depends: T-043
 blocks: none
