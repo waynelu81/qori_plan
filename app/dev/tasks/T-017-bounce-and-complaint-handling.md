@@ -41,4 +41,8 @@ None.
 
 ## Notes
 
-None.
+Found in `T-186`, 22 September 2026: only campaigns and the "you're in" email
+ask `EmailSuppression` before sending. Every other transactional email asks
+nothing, so a Postmark bounce recorded here would stop nothing Qori sends
+through Postmark — Postmark keeps its own inactive list — and the Out line
+above, "that already works", holds for campaigns only.

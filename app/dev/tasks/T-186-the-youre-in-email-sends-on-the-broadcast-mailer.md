@@ -2,7 +2,7 @@
 id: T-186
 title: The "you're in" email sends on the broadcast mailer
 stream: delivery
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -171,15 +171,15 @@ Five new, one changed. `MailContentTest` keeps its sender map unchanged, and
 
 ## Acceptance
 
-- [ ] With `QORI_MAIL_BROADCAST=ses`, the "you're in" email uses the broadcast mailer, sends from `QORI_MAIL_BROADCAST_FROM` under `MAIL_FROM_NAME`, and replies to `MAIL_FROM_ADDRESS`
-- [ ] With `QORI_MAIL_BROADCAST=log`, it stays on the default mailer and address, and `php artisan qori:e2e --only="invited-peer"` still follows it from Mailpit
-- [ ] A permanent bounce stops it; a complaint, an unsubscribe and no consent do not
-- [ ] Every other notification stays on the default mailer
-- [ ] `docs/flows/campaigns.md` and `docs/flows/accesses.md` say which mailer it takes and when
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] With `QORI_MAIL_BROADCAST=ses`, the "you're in" email uses the broadcast mailer, sends from `QORI_MAIL_BROADCAST_FROM` under `MAIL_FROM_NAME`, and replies to `MAIL_FROM_ADDRESS`
+- [x] With `QORI_MAIL_BROADCAST=log`, it stays on the default mailer and address, and `php artisan qori:e2e --only="invited-peer"` still follows it from Mailpit
+- [x] A permanent bounce stops it; a complaint, an unsubscribe and no consent do not
+- [x] Every other notification stays on the default mailer
+- [x] `docs/flows/campaigns.md` and `docs/flows/accesses.md` say which mailer it takes and when
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 
