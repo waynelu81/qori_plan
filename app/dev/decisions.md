@@ -164,10 +164,12 @@ answer is written into the task.
   the visitor's own currency when it is none of those; a visitor without a
   fixed price sees the USD price with a line saying checkout charges their
   own currency.
-- `T-180` — When a subscribed Group changes plan: whether the owner pays a
+- ~~`T-180` — When a subscribed Group changes plan: whether the owner pays a
   prorated difference at once or the new price from the next renewal, and
   whether a downgrade happens at once or at the end of the period paid for
-  (22 September 2026).
+  (22 September 2026).~~ **Answered the same day (`D-052`):** Claude's
+  billing. An upgrade is charged at once, prorated, and restarts the cycle; a
+  downgrade takes effect at the end of the period paid for.
 
 ### Open decision: promotional content in access confirmations (2026-09-13)
 
