@@ -258,8 +258,10 @@ model (one row per Access and container) and is written as a bullet for
 **Data this task verifies against:** nothing in Qori's database. Everything
 is in Dropbox: a folder `/Qori spike` in each creator account holding
 `episode-1.pdf` (about 1 MB) and `episode-2.mp4` (about 600 MB and longer than
-30 minutes, for step 20); one file outside it, `/episode-4.pdf`, for the move
-step; and to hand, `episode-3.pdf`, `episode-5.pdf` and a changed
+30 minutes, for step 20); two files outside it, `/episode-4.pdf` for the move
+step and step 16, and `/episode-file-route.pdf` for step 0's call (e), kept
+apart because a file inside the folder inherits the folder's viewers; and to
+hand, `episode-3.pdf`, `episode-5.pdf` and a changed
 `episode-1.pdf` for the currency and walkthrough steps.
 
 **Step 0 needs far less than that, and gathering the rest before it has
@@ -298,7 +300,7 @@ unless step 0 answers that Basic cannot grant at all.
   accounts at its fullest and step 0 links one, so neither number is
   approached. The report records what the console says about applying for
   production, since that lead time gates `T-096`'s launch
-  (`release-prerequisites.md:20`).
+  (`release-prerequisites.md:29`).
 - Accounts, each on its own mailbox the spiker can read. All are free, and
   what the first draft asked for is struck below with its answer (`D-042`,
   21 September 2026). **Only `creator-basic` is created before step 0 has
@@ -414,8 +416,8 @@ unless step 0 answers that Basic cannot grant at all.
 | `tests/Fixtures/dropbox/sharing/add_folder_member.success.200.json`, `tests/Fixtures/dropbox/sharing/add_folder_member.insufficient_plan.<status>.json`, `tests/Fixtures/dropbox/sharing/add_folder_member.cant_share_outside_team.<status>.json`, `tests/Fixtures/dropbox/sharing/add_folder_member.team_folder.<status>.json`, `tests/Fixtures/dropbox/sharing/add_folder_member.bad_member.unverified_dropbox_id.<status>.json`, `tests/Fixtures/dropbox/sharing/add_folder_member.already_member.<status>.json`, `tests/Fixtures/dropbox/sharing/add_folder_member.already_invitee.<status>.json`, `tests/Fixtures/dropbox/sharing/add_folder_member.invalid_access_token.<status>.json`, `tests/Fixtures/dropbox/sharing/add_folder_member.rate_limit.<status>.json`, `tests/Fixtures/dropbox/sharing/add_folder_member.too_many_pending_invites.<status>.json`, `tests/Fixtures/dropbox/sharing/add_folder_member.oversize_members_arg.<status>.json`, `tests/Fixtures/dropbox/sharing/add_folder_member.too_many_members.<status>.json`, `tests/Fixtures/dropbox/sharing/too_many_requests.429.json` | new    | Each error file exists only if that error was met; the README lists the gap                           |
 | `tests/Fixtures/dropbox/sharing/get_folder_metadata.creator.200.json`, `tests/Fixtures/dropbox/sharing/get_folder_metadata.peer_invited.<status>.json`, `tests/Fixtures/dropbox/sharing/get_folder_metadata.peer_joined.200.json`, `tests/Fixtures/dropbox/sharing/get_folder_metadata.renamed.200.json`, `tests/Fixtures/dropbox/sharing/get_folder_metadata.other_account.<status>.json`, `tests/Fixtures/dropbox/sharing/get_file_metadata.creator.200.json`, `tests/Fixtures/dropbox/sharing/get_file_metadata.peer_invited.<status>.json`, `tests/Fixtures/dropbox/sharing/get_file_metadata.peer_joined.200.json`, `tests/Fixtures/dropbox/sharing/list_folder_members.200.json`, `tests/Fixtures/dropbox/sharing/list_folder_members.after_revoke.200.json`, `tests/Fixtures/dropbox/sharing/list_mountable_folders.peer_invited.200.json`, `tests/Fixtures/dropbox/sharing/mount_folder.success.200.json`, `tests/Fixtures/dropbox/sharing/mount_folder.insufficient_quota.<status>.json`                                                                                                           | new    | What Open, Join, removal and the three reconciliation cases look like from each side                  |
 | `tests/Fixtures/dropbox/sharing/remove_folder_member.200.json`, `tests/Fixtures/dropbox/sharing/check_remove_member_job_status.complete.200.json`, `tests/Fixtures/dropbox/sharing/add_file_member.success.200.json`, `tests/Fixtures/dropbox/sharing/get_shared_link_metadata.200.json`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | new    | The last only if `preview_url` is a shared link                                                       |
-| `docs/planning/tasks/reports/T-095-YYYY-MM-DD-<owner>.md`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | new    | The answer table and the states table, per `reports/README.md`                                        |
-| `docs/planning/tasks/T-096-dropbox-episodes-from-a-shared-folder-each-peer-joins.md`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | edit   | Strike each answered bullet with the date; a Notes line naming the report while it is a bare template |
+| `app/dev/tasks/reports/T-095-YYYY-MM-DD-<owner>.md`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | new    | The answer table and the states table, per `reports/README.md`                                        |
+| `app/dev/tasks/T-096-dropbox-episodes-from-a-shared-folder-each-peer-joins.md`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | edit   | Strike each answered bullet with the date; a Notes line naming the report while it is a bare template |
 
 Flows: none — nothing under `app/` changes; `T-091` writes
 `docs/flows/vendor-access.md` and `T-096` edits it.
@@ -448,9 +450,10 @@ void() { curl -sS -i -w '\ntime_total=%{time_total}\n' -X POST "$API/$1" -H "Aut
 0. **The free-path gate, `creator-basic` alone, before anything else**
    (`D-042`). Four calls answer the question the rest of the spike hangs
    on, and no other account is created, no file uploaded and no other
-   fixture gathered until they have. The account is a free Basic one and
-   the folder is `/Qori spike` holding one small `episode-1.pdf`, both made
-   in the browser.
+   fixture gathered until they have. The account is a free Basic one, the
+   folder is `/Qori spike` holding one small `episode-1.pdf`, and
+   `/episode-file-route.pdf` sits outside it for (e); all three are made in
+   the browser.
     - (a) Step 1's authorize-and-exchange as `creator-basic`, with
       `scope=account_info.read+sharing.read+sharing.write` — step 1's list
       without the two `files.*` scopes, which none of these four calls needs
@@ -465,14 +468,23 @@ void() { curl -sS -i -w '\ntime_total=%{time_total}\n' -X POST "$API/$1" -H "Aut
     - (d) `dbx sharing/add_folder_member '{"shared_folder_id":"…","members":[{"member":{".tag":"email","email":"peer-roomy@example.test"},"access_level":"viewer"}],"quiet":true}'`
       — one viewer, one call. The address need not hold a Dropbox account
       for the answer to come back.
-    - (e) **Added 22 September 2026:** `dbx sharing/add_file_member '{"file":"/Qori spike/episode-1.pdf","members":[{".tag":"email","email":"peer-roomy@example.test"}],"access_level":"viewer","quiet":true}'`
+    - (e) **Added 22 September 2026:** `dbx sharing/add_file_member '{"file":"/episode-file-route.pdf","members":[{".tag":"email","email":"peer-roomy@example.test"}],"access_level":"viewer","quiet":true}'`
       — the same viewer, on one **file** rather than the folder. One more
       call, and the reason it earns its place is in Decisions: the Stone
       spec documents `insufficient_plan` on `add_folder_member` and **not on
       `add_file_member`**, whose `access_level` defaults to `viewer`, and a
       grant on a file is the model `T-160` has already built for Google
-      Drive. Fixture per the convention under Decisions,
-      `add-file-member-viewer-<status>.json`.
+      Drive. **The file sits outside `/Qori spike`**, and must: a file inside
+      the folder is one (d) has just given the same viewer, so if (d)
+      succeeds, (e) would be an invite to something the Peer can already
+      open and its answer could not be told from inherited access. Step 16
+      takes the same care for the Plus tier with `/episode-4.pdf`, which it
+      keeps for the move step, and (e) is step 16's twin on a Basic account.
+      → `add-file-member-basic-viewer.json`, or
+      `errors-add-file-member-basic-<status>-<reason>.json`; the `basic`
+      keeps it apart from step 16's fixture of the same call on Plus.
+      (Corrected the same day: (e) first named `/Qori spike/episode-1.pdf`,
+      inside the folder, and a second read caught it.)
 
     Step 0 has four outcomes, not two, because (d) and (e) answer
     independently:
@@ -976,7 +988,12 @@ folder". Otherwise every box is read as written.
   with `T-091`. **Answered 22 September 2026: step 0 now asks it directly**, with (d) on the
   folder and (e) on a file, before anything else is gathered. It matters more
   than it did when this bullet was written: `T-160` has since built the item
-  contract, so a Dropbox grant on a file needs nothing from `T-091`.
+  contract, so a Dropbox grant on a file needs none of `T-091`'s container
+  machinery. **It does not free `T-096` of `T-091`**, though, and this line
+  said it did until a second read the same day: `T-096` also depends on
+  `T-092` and `T-094`, and both of those depend on `T-091` as they are
+  drafted. The file route shortens that chain; cutting it would mean re-cutting
+  those two, which is theirs to decide.
 - **From the storage review, F11 and its evidence table (20 September 2026):**
   the Dropbox row it owns asks this spike for Basic viewer capability, Join
   with too little quota, `users` against `invitees`, the OIDC claims,
@@ -1015,7 +1032,7 @@ Both describe what the code does today; `D-016` rewrites them with `T-096`'s
 code, never before, and this spike touches neither.
 
 `insufficient_plan` is the question the stream file names as the one that
-can kill a tier (`docs/planning/streams/storage.md:136`), and step 0 is now
+can kill a tier (`app/dev/streams/storage.md:136`), and step 0 is now
 the whole of it. ~~If Basic returns it, `T-096` either drops Basic from the
 tier dropdown or takes the owner's fallback for it~~ **Corrected
 21 September 2026 (`D-042`, which restates `D-018`):** dropping the tier is
