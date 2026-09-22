@@ -27,3 +27,6 @@ stops them recurring, not this file.
   clicking Next does. `resources/js/pages/auth/Login.vue` (21 Sep)
 - A file Episode shows "No materials" under itself straight after upload (21 Sep)
 - CI reads a `.nvmrc` that was never committed (`T-081` listed it). `.github/workflows/tests.yml` (21 Sep)
+- `php artisan qori:reachability` exits 1 on two public methods nothing calls from
+  outside their own class: `AccessService::peerFor()` and
+  `SuppressionService::suppress()` — private, probably. `app/Services/` (22 Sep)
