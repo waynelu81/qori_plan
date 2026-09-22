@@ -6,7 +6,7 @@ status: done
 owner: claude
 estimate: S
 depends: none
-blocks: T-165
+blocks: T-165, T-176
 ---
 
 # T-163 — Disconnect lets go of an account Stripe will not deauthorize

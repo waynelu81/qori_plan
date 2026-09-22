@@ -19,7 +19,7 @@ cannot do what the step is for.
 | 1 | Lands on the home page and presses Start sharing | Works |
 | 2 | Picks "I want to share", gives name, email, password | Rough — "Set up a school"; four fields and no passwordless sign-up |
 | 3 | Confirms their address from the email | Works — the email is Laravel's stock text (`T-055`) |
-| 4 | Names their Group | Rough — the URL keeps the name Qori made up, forever |
+| 4 | Names their Group | Works — naming it in setup gives it the URL of its name (`T-177`) |
 | 5 | **Connects their Stripe account**: Stripe's sign-in, and back to setup | Works — the owner connected through Stripe's sign-in on 21 September 2026, once `STRIPE_CLIENT_ID` was set |
 | 6 | **Connects their Google Drive**: Google's consent, and back to setup | Built (`T-159`) — setup part 3 links to it; one page via Integrations, where the account kind is chosen |
 | 7 | Lands on their dashboard, told what to do next | Works — the name card offers a rename once named (`T-086`) |
@@ -45,7 +45,7 @@ cannot do what the step is for.
 | 9 | Picks Audio, or Dropbox | Built (`T-171`) — Dropbox is no longer offered for any kind, and Audio offers Google Drive |
 | 11 | Gives access by email to someone with no account | Not built (`T-043`) |
 | 12 | The creator's Stripe account cannot take payments | The Peer still reaches Stripe's Checkout — test mode creates it — and cannot pay there; the owner accepts that, and the creator is the one told (`T-164`, 22 September 2026) |
-| 11 | Doesn't want emails from the creator | **Breaks** — consent is required to get in, and the button just looks dead |
+| 11 | Doesn't want emails from the creator | Built (`T-178`, `D-049`) — the terms are required, the emails optional; a box left unticked answers with the reason |
 | 14 | The Peer's Google account is not their Qori email | Not built (`T-092`); the happy path grants the Qori email |
 | 14 | The grant is refused — no Google account for that email, the file moved | The vendor's reason is shown and Open again retries (`D-040`) |
 
@@ -77,7 +77,7 @@ cannot do what the step is for.
    refusal on a page without the app shell is seen). ~~Stop offering Dropbox, and
    Audio's Dropbox-only choice, on the Episode form while nothing can connect
    it~~ (`T-171`, done 22 September 2026).
-6. **Rough edges on the path (S each)**: the slug at step 4 (asked), the
+6. **Rough edges on the path (S each)**: the slug at step 4 (~~`T-177`~~), the
    step-7 dashboard (~~`T-086`~~), the share link after ready (~~`T-174`~~),
    the code email naming the Group and Series (~~`T-175`~~) — the last three
    done 22 September 2026.
@@ -93,7 +93,10 @@ cannot do what the step is for.
 - ~~May the e2e runner take the account id and the refresh token from your
   local `.env`?~~ 21 September 2026: yes — from `.env` or a designated
   gitignored file, skipped where it does not exist (`D-045`).
-- Naming the Group at setup also sets its slug?
-- Must a Peer agree to the creator's emails to get free access?
-- Local development uploads to R2 bucket `useqori-app-bucket` — is that the
-  production bucket?
+- ~~Naming the Group at setup also sets its slug?~~ Yes, 22 September 2026 (`T-177`).
+- ~~Must a Peer agree to the creator's emails to get free access?~~ No: they
+  agree to the terms, Qori's own until creators write theirs, and emails are
+  optional — 22 September 2026 (`D-049`, `T-178`, `T-179`).
+- ~~Local development uploads to R2 bucket `useqori-app-bucket` — is that the
+  production bucket?~~ Yes; local development uses `useqori-app-bucket-test`
+  from 22 September 2026.
