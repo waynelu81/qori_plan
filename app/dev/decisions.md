@@ -3158,3 +3158,29 @@ its stages; what it keeps is coming back to the Series after connecting
 Stripe or Google Drive from it. `ui-onboarding.md`'s creator path and the
 onboarding stream's goal follow.
 
+
+#### D-057 — How long a video plays is measured once before release, across every provider, not in each provider's spike
+
+**Decision.** The owner, 23 September 2026: whether a long video plays to its
+end through a creator's storage, and where a provider stops it, is tested
+once before release, with one test set run against every storage provider
+Qori offers, on a free tier where one exists. A provider's development spike
+does not measure it. `T-095` strikes its step 20 and answer row 19, and its
+`episode-2.mp4` becomes a short video of a few MB.
+
+**Why.** In the owner's words, one test video "for however long or file size
+that can test all providers" is better than a test per provider during
+development, and "a video does not stop Qori from functioning even if video
+in Dropbox, Google Drive is not working": granting, opening and revoking do
+not depend on it. One set run the same way also gives answers that compare.
+
+**What stands.** `D-018`: every tier is offered with its limits stated on
+screen. The pre-release test is where a stated playback limit comes from, so
+it runs before any tier copy that states one is final. Opening a short video
+inside a spike, to record what a Peer's link is, is not a playback limit and
+stays (`T-097`'s `episode.mp4`, `T-095`'s steps 7 and 9).
+
+**Consequences.** `T-095`'s step 20 and row 19 are struck with this date.
+`release-prerequisites.md` gains the test. The storage steps that also used
+`T-095`'s 600 MB file (8 and 11) stay, and fill a Peer's space by copying
+inside that account.
