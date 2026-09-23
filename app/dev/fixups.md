@@ -13,6 +13,8 @@ stops them recurring, not this file.
 
 ## Open
 
+- `errors.playback.missing_content` says "That episode doesn't have anything to
+  open yet" — the Episode noun hardcoded and lowercase. `lang/en/errors.php:518` (23 Sep)
 - Register: the share card reads "Set up a school and publish series." — a
   noun that is not the Group's, lowercase. `resources/js/pages/auth/Register.vue:14` (21 Sep)
 - New Series form: "What your peers will learn", "Shown on the certificate your

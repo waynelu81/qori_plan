@@ -1,15 +1,15 @@
 ---
 id: T-028
-title: Skippable storage, integrations and seller payment setup
+title: Connecting Stripe or Google Drive from a Series comes back to it
 stream: onboarding
 status: draft
 owner: unassigned
-estimate: L
-depends: T-026, T-044
+estimate: M
+depends: T-044
 blocks: none
 ---
 
-# T-028 — Skippable storage, integrations and seller payment setup
+# T-028 — Connecting Stripe or Google Drive from a Series comes back to it
 
 > **Draft.** Revised by owner direction on 2026-09-11; not to be started.
 > See [PROCESS.md](../PROCESS.md). Split capability work into bounded tasks
@@ -17,56 +17,43 @@ blocks: none
 
 ## Why
 
-The owner wants creators to encounter storage, integrations and seller payment
-setup before guided first-Series creation, with Skip available on all three.
-Seller setup should be prompted again before selling a paid Series. This
-supersedes the old draft's rule to show setup only after a Series has a price
-or an upload cap is reached.
+Since `D-056` a new creator is asked for nothing up front: Stripe is asked
+where a price is typed (`series.price_needs_payments` and its Connect Stripe),
+and Google Drive where a file is chosen (`series.*.not_connected` and Connect
+Google Drive). Both send the creator to the vendor and back — to
+Integrations, not to the Series they were in the middle of. The couple of
+clicks `D-056` promised becomes a hunt for the Series again.
+
+Afterwards a connection begun from the Series page lands back on that Series,
+at the control that asked for it, whether the creator connected or stopped
+partway.
 
 ## Scope
 
 **In:**
 
-- Three optional stages in the T-026 frame, ordered storage → integrations →
-  seller payments, each with explicit Skip, saved progress and a destination
-  to come back to.
-- An honest storage stage that distinguishes usable Qori uploads from external
-  storage connections, and an integration stage showing only working choices.
-- Inventory and separately specify the minimal supported external connection
-  flow(s). If none is ready, the stage still allows continuation and makes no
-  false connection claim; provider implementation remains recorded work.
-- Reuse the existing seller Payments/Connect flow, with onboarding-specific
-  finalise/resume and unstarted, pending, ready, cancelled and failed states.
-- Prompt for seller setup before enabling paid selling when skipped or not
-  ready; resume the intended Series action after authoritative readiness.
-- A persistent route back to supported setup actions after Skip. Skipped does
-  not mean connected, paid, complete at the provider or ready to sell.
+- The price field's Connect Stripe and the Episode form's Connect Google
+  Drive leaving a forwarding address to the Series and its control, through
+  `PaymentsDestination` and `ConnectionsDestination`, the mechanism setup's
+  part two and three used.
+- The landing spending it once, whatever happened at the vendor, as it does
+  today.
+- Seller readiness at the paid action read from Stripe's capabilities, not an
+  account id, as `T-164` already reads it.
 
 **Out:**
 
-- Requiring optional connection/setup before draft creation or free sharing.
-- Buyer checkout, which belongs to T-027, and Qori subscription billing.
-- Assuming Connection enum/model support supplies OAuth, or implementing every
-  named provider as one undifferentiated task.
-- A broad integrations-directory redesign beyond the setup/resume controls.
+- Setup stages of any kind (`D-056` removed them).
+- The connectors themselves (`storage` stream, `T-044`).
+- Buyer checkout (`T-027`).
 
 ## Before this can be ready
 
-- Choose the first supported provider(s), or explicitly defer each, and name
-  the begin/finalise/refresh/disconnect work as bounded implementation slices.
-  No routed external OAuth/account-connection flow was found in this review.
-- Define the contract with T-026's frame so the final order is correct without
-  a circular task dependency. Re-estimate/split this expanded L scope.
-- Specify readiness using seller capabilities, not merely an account ID or a
-  landing from the provider. The existing checkout guard is not the complete
-  new rule.
-- Name exactly where paid selling becomes enabled and the prompt's destination
-  in the Series. Draft preparation remains possible before seller setup.
-- Specify Skip, revisit, pending provider review, cancellation, failures and
-  permissions for each stage. Reuse current limits/configuration when describing
-  uploads; a dated storage-cap research number is not an implementation fact.
-- Name literal files, copy keys, completion records, APIs and tests. Separate
-  mocked handling, local UI verification and live provider verification.
+- Name the controls on the Series page that start a vendor round trip today,
+  and each finalise controller's current landing. (anyone's, from the code)
+- The fragment each lands on: `#price` for Stripe, `#new-episode` for Drive
+  with the form reopened on the kind it had. (anyone's)
+- Name literal files, copy keys and tests. (anyone's)
 
 ## Re-scope log
 
@@ -79,6 +66,12 @@ are superseded. No implementation was started.
 **2026-09-13 — the seller stage is cut out.** `T-075` places the Stripe doors and a storage explanation in the setup frame, each skippable. What remains here is the prompt for seller setup at the paid action and the storage connectors once `T-044` exists.
 
 **2026-09-16 — the connectors are the `storage` stream's.** `D-016` settled how every storage and live-session integration works and moved `T-044` into a stream of its own, with one task per provider after it. The "inventory the connection flows" bullet above is answered there. What this draft keeps is the storage stage itself: its copy, the link to the Integrations page's provider sections (where the creator picks a tier and reads its limitations), and the seller prompt at the paid action.
+
+**2026-09-23 — the stages are gone (`D-056`).** The owner replaced creator
+setup with one first-Series screen, and Stripe and Google Drive are asked
+where they are needed. Rewritten to the one piece that still matters: coming
+back to the Series afterwards. `T-026` no longer comes first, so the
+dependency on it is dropped.
 
 ## Notes
 

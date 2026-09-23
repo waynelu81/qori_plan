@@ -6,14 +6,15 @@ stream: onboarding
 
 **Goal.** Onboarding follows why the person arrived. A Series-link recipient
 confirms basic details, completes payment/access and opens that Series. A
-creator completes staged setup, with optional connections skippable, then
-receives guided first-Series creation.
+creator meets one screen, "What will you share first?", that makes their first
+Series in a couple of clicks; Stripe and Google Drive are asked where they are
+needed (`D-056`, 23 September 2026, superseding the staged setup).
 
 **Done when.** Those two paths work without crossing into the wrong setup;
 name, email and timezone are confirmed without needless re-entry; Series context
-survives authentication and checkout; creator setup resumes after skips or
-provider returns; seller readiness is prompted before paid selling; and the
-first-Series guide leads to real saved work. The required browser and server
+survives authentication and checkout; a new creator reaches the first
+Episode's form two clicks after typing a title; a vendor round trip begun from
+a Series comes back to it; seller readiness is prompted before paid selling. The required browser and server
 checks still apply.
 
 ## Current state and revised direction
@@ -87,21 +88,22 @@ has to honour the setup record.
    owner's Group-model review on 14 September 2026
 9. `T-086` — The dashboard's rename card still says "Name your Group" once the
    name is chosen: three browser walks in a row reported it
-10. `T-026` — Guided first-Series creation, and whatever setup remains after
-    `T-068` took the name; still needs bounded implementation slices
-11. `T-027` — Series-linked receiving signup, details, checkout/access
+10. `T-026` — A new creator's first screen makes their first Series: one
+    screen, three shapes, the Episode form opened for the shape (`D-056`)
+11. `T-195` — The three-part setup is retired: what `T-026` leaves with no way
+    in goes, and the dashboard's name card takes `T-177`'s URL rule
+12. `T-027` — Series-linked receiving signup, details, checkout/access
     continuation and direct receiving welcome: what remains after `T-073` and
     `T-074`
-12. `T-028` — Storage and integrations stages in `T-026`'s frame, and the
-    seller-readiness prompt at the paid action; waits on `T-044` for a
-    connector to offer
-13. `T-025` — Consume the saved timezone consistently across dates; separate
+13. `T-028` — Connecting Stripe or Google Drive from a Series comes back to
+    it: the one part of the old stages `D-056` kept
+14. `T-025` — Consume the saved timezone consistently across dates; separate
     from capturing it
-14. `T-174` — Making a Series ready lands on its share link: the first-share
+15. `T-174` — Making a Series ready lands on its share link: the first-share
     walk of 21 September 2026 found the link at the foot of a long page
-15. `T-175` — The code email names the Series and who shared it: the same walk
+16. `T-175` — The code email names the Series and who shared it: the same walk
     found a bare "Your Qori code" from a name the Peer did not know
-16. `T-191` — The first steps speak to the first ten people: the dashboard's
+17. `T-191` — The first steps speak to the first ten people: the dashboard's
     first three next actions, the price help and the invitation page's intro
     say start with the people who already ask, with no number restated
 

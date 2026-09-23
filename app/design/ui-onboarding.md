@@ -1,5 +1,12 @@
 # Onboarding by entry purpose
 
+> **23 September 2026 — the creator path below is superseded by `D-056`.** A
+> new creator no longer walks details, storage, integrations and payments
+> before a guided first Series: they meet one screen, "What will you share
+> first?", that creates the Series and opens its first Episode's form set up
+> for the shape they chose (`T-026`). Stripe and Google Drive are asked where
+> they are needed (`T-028`). The receiving path is unchanged.
+
 Updated 2026-09-11 following the owner's clarification after
 [R-003](design-review/passes/R-003-2026-09-11-registration-and-first-run.md).
 The review remains the record of what was observed; this document describes the
