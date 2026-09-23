@@ -1777,6 +1777,17 @@ allow-list and `ArchitectureTest` are untouched.
   journey is not held by this task's questions. What is below is now that
   step's branches: whoever picks this up builds on `T-160`'s grant record.
 
+- **Added 23 September 2026 (`D-058`):** Dropbox grants per file, as Google
+  Drive does under `D-036`, so this task's container model is now wanted by
+  OneDrive at most, and `T-097` decides that. Two things from `T-095`
+  (`reports/T-095-2026-09-23-claude.md`) bear on any container that stays.
+  Dropbox allows a shared folder inside a shared folder, and every member of
+  the outer one is an inherited member of the inner one, so a one-folder-per-
+  Series rule has to be Qori's to enforce rather than the vendor's refusal.
+  And a file granted directly stays granted when it is moved into a shared
+  folder, where the vendor lists the Peer only as inherited, and survives
+  that folder's revoke — the stream owner's.
+
 - ~~May one Series mix providers, one container each, or is it one provider
   per Series? The unique constraint allows mixing; the answer may tighten it
   — the owner's.~~ ~~A container dedicated to one Series, enforced by

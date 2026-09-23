@@ -3184,3 +3184,58 @@ stays (`T-097`'s `episode.mp4`, `T-095`'s steps 7 and 9).
 `release-prerequisites.md` gains the test. The storage steps that also used
 `T-095`'s 600 MB file (8 and 11) stay, and fill a Peer's space by copying
 inside that account.
+
+#### D-058 — Dropbox grants per file, and a Series has no Dropbox folder (as `D-036` does for Google Drive)
+
+**Decision.** On Dropbox, Qori gives each Peer view access to each Episode's
+file with `sharing/add_file_member`, one grant per Peer per file, and a Series
+has no Dropbox folder. Qori never shares a folder, never asks a Peer to join
+one, and never requires an Episode's file to sit in a particular place.
+`D-016`'s container grant and `D-025`'s one-container-per-provider rule no
+longer describe Dropbox, as `D-036` found for Google Drive. Whether they still
+describe OneDrive is `T-097`'s to find out, and this changes nothing there.
+
+**Why.** `T-095` ran on free accounts on 23 September 2026
+(`reports/T-095-2026-09-23-claude.md`), and the owner, after its findings:
+"write the report on the file route". The folder route works on a free Basic
+account, and costs every buyer in ways a file does not:
+
+- joining a folder counts its whole size against the Peer's own Dropbox, a
+  free 2 GB, and one click on Dropbox's Shared page joins it;
+- Dropbox tells a joining Peer "your name, email address and activity are
+  visible to other people with access", so buyers of a Series would see each
+  other;
+- the creator's member list shows a Peer with a Dropbox account as a member
+  before they join, so Qori cannot tell who has joined;
+- `add_folder_member` answers `null` for a grant and for a no-op alike;
+- a shared folder inside a shared folder is allowed, and inherits every
+  member of the outer one.
+
+The file route also works on Basic, answers each grant with the level given
+(`success: viewer`), costs the Peer nothing and needs no Join. The file's
+`preview_url` opened the Episode directly for the Peer and is the same for the
+creator, and a grant on an item is the contract `T-160` already built for
+Google Drive (`GrantsItemAccess`).
+
+**What stands.** `D-018`: every tier is offered with its limits stated.
+`D-040` and `D-041` unchanged. `D-038`: Qori removes only the permissions it
+created, and a file grant stays standing when the creator shares or moves the
+file into a folder of their own, where Dropbox lists the Peer only as
+inherited; removing the Peer from that folder left the file grant in place.
+
+**The rest of `T-095`.** The owner judged the remaining steps not applicable:
+the folder-only ones (7, the second half of 8, and 11), the unverified account
+(14), the team account, the invite cap (19) and production approval. A team
+admin's outside-sharing policy and the invite cap bear on file grants too, so
+`T-096` carries both as not observed.
+
+**Consequences.** `T-096` is re-drafted on per-file grants: an Episode is one
+picked Dropbox file, a grant is a file member, and the Join panel, the storage
+copy, the folder picker, the container states and `series.container.dropbox.*`
+go. Its 17 September answer that Qori would switch to neither a view-only link
+nor per-file grants (`D-018`) is superseded here for Dropbox. `T-091`'s
+container model is now wanted by OneDrive at most. Two things go with the
+folder: a file the creator adds in Dropbox no longer reaches Peers by itself,
+and a new Episode needs one grant per Peer, which `D-040` already makes at
+Open. What arrives: no storage cost to a Peer, no Join, no buyer shown to
+another, and a grant that confirms itself.
