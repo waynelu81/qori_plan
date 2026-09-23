@@ -44,3 +44,5 @@ None.
 ## Notes
 
 **18 September 2026 (`D-028`).** The Scope line above, "Per-Peer timezones. Still not wanted", is superseded: a session notice renders every date in the recipient's own zone. The stream owner rewrites that line before this task is `ready`, so the Scope and the answered question agree. `T-005` still owns the rest of the access email's vocabulary.
+
+**23 September 2026.** `T-024`'s report found `config('app.timezone')` read in three places beside its own, all correct only while everything is UTC; the inventory under **Before this can be ready** takes them in. `T-029` already consumes the Group's zone for live sessions; showing either zone anywhere else is this task's.
