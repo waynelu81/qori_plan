@@ -257,8 +257,9 @@ model (one row per Access and container) and is written as a bullet for
 
 **Data this task verifies against:** nothing in Qori's database. Everything
 is in Dropbox: a folder `/Qori spike` in each creator account holding
-`episode-1.pdf` (about 1 MB) and `episode-2.mp4` (about 600 MB and longer than
-30 minutes, for step 20); two files outside it, `/episode-4.pdf` for the move
+`episode-1.pdf` (about 1 MB) and `episode-2.mp4` (~~about 600 MB and longer
+than 30 minutes, for step 20~~ **a short video of a few MB since `D-057`,
+23 September 2026**); two files outside it, `/episode-4.pdf` for the move
 step and step 16, and `/episode-file-route.pdf` for step 0's call (e), kept
 apart because a file inside the folder inherits the folder's viewers; and to
 hand, `episode-3.pdf`, `episode-5.pdf` and a changed
@@ -495,7 +496,8 @@ void() { curl -sS -i -w '\ntime_total=%{time_total}\n' -X POST "$API/$1" -H "Aut
     20 then run as written, with three adjustments: steps 1, 2, 4 and 5 are
     already done for `creator-basic` and are not repeated, their fixtures
     being step 0's; step 3 adds `episode-2.mp4` to the folder step 0 already
-    shared, which step 20 needs; and every step that names `creator-plus` as
+    shared~~, which step 20 needs~~ (step 20 is struck under `D-057`); and
+    every step that names `creator-plus` as
     the working creator runs on `creator-basic`, per the first decision
     above. The stopwatch step 5 starts at the working creator's 200
     therefore starts at (d) here, and step 9 stops it. `T-096` then has a
@@ -628,8 +630,8 @@ void() { curl -sS -i -w '\ntime_total=%{time_total}\n' -X POST "$API/$1" -H "Aut
    `get_file_metadata.peer_joined.200.json`, and with the creator's two.
    Record which of the four opens the Episode directly for the Peer, and
    whether any is a shared link (then `dbx sharing/get_shared_link_metadata '{"url":"…"}'`
-   → `get_shared_link_metadata.200.json`). Start step 20's playback now and
-   leave it running.
+   → `get_shared_link_metadata.200.json`). ~~Start step 20's playback now and
+   leave it running.~~ (Struck 23 September 2026, `D-057`.)
 10. **Currency**, as `creator-plus`, one at a time, with `files/list_folder`
     before and `dbx files/list_folder/continue '{"cursor":"…"}'` after each:
     (a) upload `episode-3.pdf` on dropbox.com — a file no Episode will name,
@@ -761,12 +763,15 @@ void() { curl -sS -i -w '\ntime_total=%{time_total}\n' -X POST "$API/$1" -H "Aut
     pending, and a dated note is added when the cap is found or a day has
     passed without it.
 
-20. **Streaming, in the background from step 9.** As `peer-roomy` on
+20. ~~**Streaming, in the background from step 9.** As `peer-roomy` on
     `creator-basic`'s folder, play `episode-2.mp4` from the start and record
     where it stops
     ([video-audio-FAQ](https://help.dropbox.com/view-edit/video-audio-FAQ)).
     If `creator-basic` could add no member in step 5, that is row 1's answer
-    and this row says so; the Plus folder's limit is not measured in an `S`.
+    and this row says so; the Plus folder's limit is not measured in an `S`.~~
+    **Struck 23 September 2026 (`D-057`):** how long a video plays is
+    measured once before release, with one test set run against every
+    provider, and is on `release-prerequisites.md`'s checklist, not here.
 
 The report's **Outcome** is this table, one row per question, each cell
 "observed" with the fixture, or "not observed" with why. **Row 1 is step 0's
@@ -795,7 +800,7 @@ observed — the spike stopped at step 0".
 | 16  | OIDC `sub` equals `account_id`; `email_verified` present                                | `T-092`'s stored subject                                                            |
 | 17  | `account_type` per tier                                                                 | Whether the tier dropdown can be checked                                            |
 | 18  | Production approval: what the console asks, and any stated lead time                    | `release-prerequisites.md`'s Dropbox line                                           |
-| 19  | Streaming stops at 30 minutes on Basic                                                  | The tier's video line, and whether video is offered on Basic                        |
+| 19  | ~~Streaming stops at 30 minutes on Basic~~ moved before release, `D-057`                | ~~The tier's video line, and whether video is offered on Basic~~                    |
 | 20  | Seconds per call; `share_folder` asynchronous or not; the stopwatch to first open       | `REQUEST_TIMEOUT_SECONDS` against Dropbox; when to say `pending`                    |
 | 21  | `list_folder_members` before Join, after Join, after removal                            | When the grant is `granted`, and what `checkGrant()` reads                          |
 | 22  | Nesting refused: `inside_shared_folder`                                                 | The picker's nesting line beside `T-091`'s folder rule                              |
@@ -1125,6 +1130,15 @@ was asked for as written, `files.content.write` included, and neither
   `files.metadata.read` has no line of its own beside
   `files.content.write`. What a creator reads without the edit scope is step
   18's to observe.
+
+**2026-09-23 — step 20 and row 19 leave this spike (`D-057`).** The owner
+moved long-video playback to one pre-release test run against every
+provider. Step 20 and answer row 19 are struck with that date, and row 19's
+answer is "not observed — moved to the pre-release test". `episode-2.mp4`
+is now a short video of a few MB, still used where steps 7 and 9 open a
+video at all. The 600 MB also made the folder large for the storage steps; 8
+and 11 stay, and fill a Peer's space by copying one file inside that
+account with `files/copy_v2` rather than uploading gigabytes.
 
 ## Notes
 
