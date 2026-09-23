@@ -2,7 +2,7 @@
 id: T-026
 title: A new creator's first screen makes their first Series
 stream: onboarding
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-068, T-024
@@ -286,20 +286,26 @@ checks them.
 
 ## Acceptance
 
-- [ ] A fresh registration to share, verified, lands on "What will you share
+- [x] A fresh registration to share, verified, lands on "What will you share
       first?" at 390px and 1440px, and two clicks after typing a title reach
       the Episode form set up for the shape
-- [ ] Each shape opens the form on the right kind and title; weekly asks the
+- [x] Each shape opens the form on the right kind and title; weekly asks the
       timezone only when the Group has none
-- [ ] After the first Episode is saved, the form suggests the next title
-- [ ] "I'll look around first" lands on the dashboard and is not asked again;
+- [x] After the first Episode is saved, the form suggests the next title
+- [x] "I'll look around first" lands on the dashboard and is not asked again;
       an owner with a Series and an admin are never sent to the screen
-- [ ] `docs/flows/onboarding.md`, `docs/flows/auth.md` and both tinker recipes
+- [x] `docs/flows/onboarding.md`, `docs/flows/auth.md` and both tinker recipes
       describe the screen
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
+
+## Added during execution
+
+None beyond the Files table. `lang/en/onboarding.php` gained one key the Copy
+table missed, `onboarding.first.shape_label` ("Its shape"), the radio group's
+legend; noted in the report.
 
 ## Re-scope log
 

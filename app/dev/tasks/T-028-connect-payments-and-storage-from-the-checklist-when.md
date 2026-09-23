@@ -80,3 +80,10 @@ Qori uploads already work without an external account. Dropbox/Vimeo media
 resolvers are not connection flows. The
 [onboarding plan](../ui-onboarding.md) distinguishes existing capabilities from
 new stage presentation, context persistence and provider work.
+
+**23 September 2026, from `T-026`'s walk.** The files shape lands on the
+Episode form with "Where it lives" on Google Drive, the first provider the
+server offers for a file, so a brand-new creator's first view asks them to
+connect Drive although Qori storage needs nothing. Whether the form should
+start on Qori storage while Drive is not connected belongs with this task's
+round trip.
