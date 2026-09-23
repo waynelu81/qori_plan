@@ -95,3 +95,15 @@ implemented as a competing first-run page. Seller setup is prompted before
 paid selling if it was skipped or remains incomplete; T-028 owns that rule.
 
 **17 September 2026 — [R-004](../design-review/passes/R-004-2026-09-17-final-web-review.md) F-9.** Fresh zero/one-Series home captures still prioritise meter layouts over a Series-shaped beginning or the one real object. The first action itself held up live: Fern's Create Series opens and focuses Title, then saves a private draft with a clear missing-Episode explanation. Do not report first-Series creation as absent. Keep object composition/guidance together in this draft; no competing meter-removal task was created. Upload and the complete ready/share loop were not verified because browser file-chooser tooling failed.
+
+**23 September 2026 — the owner, reading the Kajabi note's blueprint
+proposal:** onboarding "is not quite there yet; it needs to be simple,
+streamlined, a no-brainer, a couple of clicks." Today a new creator meets
+about ten screens before a share link: register, verify, three setup parts,
+the first-Series action, the Series form, the Episode form, make ready, the
+link. A streamlined shape was put to the owner the same day — one screen
+asking what they will share first, with three shapes that create the Series
+and its draft Episodes, the Group name defaulted, Stripe and storage asked
+only when a price is set or a file chosen. If the owner takes it, this task is
+re-scoped to that and the 11 September order (setup first) is superseded by a
+decision record.

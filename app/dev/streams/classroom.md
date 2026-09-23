@@ -109,6 +109,13 @@ walk, is `workflow`'s on `T-120`'s pattern and is the beta-gate evidence.
 20. `T-144` — A creator publishes, rejects or picks the right recording, and
     Check now runs the search at once
 
+**From the Kajabi note**, 23 September 2026, at the owner's word.
+
+21. `T-192` — A private note on each Peer: the teacher's own word on each
+    person, on the Peers page, never on the shared side
+22. `T-194` — Remind the Peers who went quiet: the creator sends one email to
+    the quiet Peers who consented, from the progress section, once per spell
+
 **The cut** (`D-031`). The manual-replay checkpoint is `T-122` and tasks 1
 to 11. Tasks 12 to 18 follow in that order when the checkpoint lands or
 slips; the sprint after builds `T-141`, `T-142` and tasks 19 and 20 on
