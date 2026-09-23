@@ -1140,6 +1140,57 @@ video at all. The 600 MB also made the folder large for the storage steps; 8
 and 11 stay, and fill a Peer's space by copying one file inside that
 account with `files/copy_v2` rather than uploading gigabytes.
 
+**2026-09-23 — steps 3, 4, 6, 8, 9 and 12 ran on `creator-basic` and
+`peer-roomy`, and step 4 found that Dropbox allows a shared folder inside a
+shared folder.** The fixtures are in the code repository's
+`tests/Fixtures/dropbox/`, each with its seconds in the README. Step 5's
+grant was step 0's, so its stopwatch to first open could not run; step 7 is
+`peer-small`'s and waits for that account.
+
+- **Step 4, nesting.** `share_folder` on `/Qori spike/nested`, which did not
+  exist, answered 200 with an `async_job_id` rather than the Stone spec's
+  `inside_shared_folder`. `check_share_job_status` answered `complete`:
+  `nested` became a shared folder of its own, with `parent_shared_folder_id`
+  and `access_inheritance: inherit`, and its member list gives the owner and
+  `peer-roomy` as `is_inherited: true`. **For `T-096` and `T-091`**: a Series
+  folder inside another Series folder hands the inner Series to every Peer of
+  the outer one, uninvited, so the picker's nesting rule is not the vendor's
+  refusal this task expected but Qori's own to enforce. Whether
+  `sharing/set_access_inheritance` to `no_inherit` stops it was not tried.
+  The call also made the folder, as step 0's did.
+- **Step 8, storage.** The Peer left the folder its web click had joined
+  (`unmount_folder`), read it un-joined, then joined through
+  `mount_folder`. `used` went from 0 to 1,502,989 bytes, exactly the
+  folder's two files, within 1.2 seconds, and the folder listed in the Peer's
+  Dropbox 0.6 seconds after the join. The file granted directly on the file
+  route was held throughout and never counted. **A joined folder costs a
+  Peer its whole size against a free 2 GB; a file grant costs nothing.**
+- **Step 6, before Join.** `list_mountable_folders` lists the folder with its
+  `preview_url`, and `get_folder_metadata` and `get_file_metadata` both
+  answer for an un-joined Peer, without a path until the join.
+- **Step 9, URLs**, walked in the browser as `peer-roomy`. From Dropbox's
+  Shared page the folder opens at `/home/Qori%20spike` and the file at
+  `/home/Qori%20spike?quickview=id:…`, both in the Peer's own namespace and
+  so only after Join. The file's `preview_url`, `/scl/fi/<key>/episode-1.pdf`,
+  is the same for creator and Peer and opened the Episode directly. The
+  folder's, `/scl/fo/<key>/h`, redirected the joined Peer to
+  `/home/Qori%20spike`. Signed out, both asked for sign-in ("To keep … secure,
+  we need to confirm your identity") and showed the item's name.
+  `get_shared_link_metadata` was not called.
+- **Step 12, repeats.** Adding `peer-roomy` to the folder again, and inviting
+  `peer-none` twice, all answered 200 with `null`; granting `peer-roomy` the
+  file again answered `success: viewer`. None of the `already_member` or
+  `already_invitee` errors the Files table named was met: a repeat is safe to
+  send and says nothing about whether it changed anything. `peer-none` was
+  `wayne.lu81+none@gmail.com`, and it appears as its own invitee, so Dropbox
+  does not fold a Gmail `+` address into the account it forwards to.
+- **Refresh.** `oauth2/token` with `grant_type=refresh_token` answered 200 in
+  under half a second with only `access_token`, `token_type` and
+  `expires_in`, so `account_id` has to be kept from the first exchange.
+- The spike now also holds `/Qori spike/episode-1.pdf`, `episode-2.mp4`,
+  `nested`, `/episode-4.pdf` and an invite to `peer-none` in the owner's
+  Dropbox, all removed when it finishes.
+
 ## Notes
 
 The two research digests disagree on the grant unit: one recommends per-file
