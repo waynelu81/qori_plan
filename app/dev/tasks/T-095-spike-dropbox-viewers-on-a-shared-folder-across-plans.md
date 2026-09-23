@@ -2,7 +2,7 @@
 id: T-095
 title: Spike: Dropbox viewers on a shared folder across plans
 stream: storage
-status: ready
+status: doing
 owner: claude
 estimate: S
 depends: none
@@ -1014,7 +1014,42 @@ folder". Otherwise every box is read as written.
 
 ## Re-scope log
 
-None.
+**2026-09-23 — step 0 ran and met outcome A: a free Basic account granted a
+viewer on the folder and on the file.** The owner ran the probe on
+`creator-basic` with the app `Qori Share` (scoped, Full Dropbox, development
+status), and its nine fixtures and their README are in the code repository
+under `tests/Fixtures/dropbox/`. The folder grant is confirmed by
+`list-folder-members.json`, which lists `peer-none` as an invitee with
+`access_type: viewer`, and the file grant by the per-member `success: viewer`
+in `add-file-member-basic-viewer.json`. The steps after this one run on
+`creator-basic`, with outcome A's three adjustments. Nothing above the log is
+rewritten yet; the report makes the recommendation outcome A asks for.
+
+**2026-09-23 — step 0 did not run exactly as written, and the differences
+are recorded rather than repeated.**
+
+- (a) was not run. The token came from the App Console's generate button for
+  the app's owner, so there is no `oauth2/token.offline.200.json` yet; step 1
+  records the exchange. The token carried both `files.*` scopes as well.
+- (e)'s file was not made in the browser. The owner had not made it, so the
+  probe uploaded a 329-byte placeholder with `files/upload`, `mode: add`,
+  which is `files-upload-add.json`. That is one upload inside step 0, for
+  step 0's own file, before anything else was gathered, which keeps the
+  first Acceptance box's point if not its letter.
+- (d) was run twice. The first attempt named the owner's own address, got 200
+  with a `null` body and added nobody. The second named `peer-none`, got the
+  same 200 and `null`, and did add them. **So `add_folder_member`'s response
+  cannot tell a grant from a no-op; only the member list can**, which the
+  report carries to `T-096` as a cost of the folder route that the file
+  route does not have.
+- The probe did not time its calls, so step 0's README rows have no seconds
+  and the README lists that as a gap.
+- The Peer was `peer-none`, an address with no Dropbox account, not
+  `peer-roomy`. No email reached it from either grant.
+- Two paragraphs under Decisions disagree on redaction: the fixed map gives
+  `example.test` and a placeholder for `account_id`, and the dated
+  22 September paragraph gives `T-093`'s convention, `example.com` with ids
+  kept as observed. The dated one is later and was followed.
 
 ## Notes
 
