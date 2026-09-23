@@ -1051,6 +1051,81 @@ are recorded rather than repeated.**
   22 September paragraph gives `T-093`'s convention, `example.com` with ids
   kept as observed. The dated one is later and was followed.
 
+**2026-09-23 — `peer-none` became `peer-roomy`, which ran step 13 early.**
+The owner created the free Basic account for `peer-roomy` on the same address
+step 0 had invited as `peer-none`, declining Dropbox's trial offers, so the
+address was already a pending invitee on `/Qori spike` and
+`/episode-file-route.pdf` when its account appeared. Step 13's question
+("account created later") was answered then, in the browser; the API half,
+`list_mountable_folders`, waits for this account's token from step 1. Step 12
+and the rest of step 13 need a new address with no Dropbox account for
+`peer-none`.
+
+- **Before the address was verified**, the Shared page showed nothing shared,
+  only "Verify your email address — To see folders or files shared with you,
+  you need to verify your email."
+- **The verification email was the only mail that arrived.** Neither grant
+  sent anything, `quiet: true` holding through account creation.
+- **Once verified, both appeared with no new call:** `Qori spike` marked "You
+  haven't joined this folder", 0 bytes, with a Join folder button, and
+  `episode-file-route.pdf` with nothing to join. Both were dated at the
+  moment of verification (12:52 AEST), not the grant (12:07).
+- **The file opened at once** in Dropbox's viewer, at
+  `https://www.dropbox.com/scl/fi/<key>/episode-file-route.pdf?e=1&dl=0`,
+  with a download button.
+- **Clicking the folder's name joined it**, with no confirmation: the page
+  went to `/home/Qori spike` under All files, and the Shared page no longer
+  said "You haven't joined this folder". This spoils step 8's before-and-after
+  for this account only as far as the folder's contents go, and the folder
+  was empty from both sides of the join (0 bytes listed, nothing inside
+  once opened); step 8 unmounts and mounts through the API and measures then.
+  For `T-096`, it means a Peer who opens a folder from Dropbox's Shared page
+  has joined it, and whatever that costs their storage is paid on that click.
+- **Nobody made `/Qori spike` in the browser; `share_folder` made it.** The
+  owner made nothing in their Dropbox by hand that day, only ran the probes,
+  and the Stone spec gives `ShareFolderArgBase.path` as "The path to the folder to share.
+  If it does not exist, then a new one is created." So step 0's (c) created
+  an empty folder and shared it in one call, answering 200 `complete` just as
+  it would for a folder that existed. For `T-096`, sharing by a path that is
+  wrong or out of date writes a new, empty shared folder into the creator's
+  storage and reports success, so the path has to be checked before the
+  share, not after. The spike's own writes to the owner's real Dropbox —
+  `/Qori spike`, `/episode-file-route.pdf` and the grants on both — are
+  removed when it finishes.
+
+**2026-09-23 — step 1 ran for `creator-basic` and `peer-roomy`, and met two
+things the text did not expect.** Both exchanges returned 200 in about 0.7
+seconds with `expires_in` of four hours and a `refresh_token`; the fixtures
+are `oauth2-token-offline.json`, `oauth2-token-offline-peer.json` and
+`users-get-current-account-peer.json` beside step 0's. The step's scope list
+was asked for as written, `files.content.write` included, and neither
+`openid` nor `email`, which step 17 asks for separately.
+
+- **A development app links only its developer until more users are
+  switched on.** The creator's sign-in worked because `creator-basic` owns
+  the app. The Peer's stopped on Dropbox's page "Error connecting app: This
+  app has reached its user limit. Contact the app developer and ask them to
+  use the Dropbox API App Console to increase their app's user limit", with
+  `error_name=check_add_user_increase_limit` in its URL. The owner pressed
+  **Enable additional users** under Settings, Development users, and the
+  same link then worked. That is a setting on the app, not a limit of any
+  plan, and every environment that links a second account needs it.
+- **Before the consent screen, both accounts were shown a warning:** "Before
+  you connect this app... Make sure that you know and trust this developer.
+  Allowing apps from developers you don't know may put your data at risk. Why
+  am I seeing this warning? This app only has a small number of users and may
+  not be the app you were intending to link", with Cancel and Continue. It is
+  Dropbox's, it is shown to a Peer as well as a creator, and every early
+  creator and Peer of `T-096` will see it, so the report carries it there.
+- **The consent screen, with this step's scopes**, reads "Qori Share would
+  like to:" then "Edit content of your Dropbox files and folders", "View and
+  manage your Dropbox sharing settings and collaborators" and "View basic
+  information about your Dropbox account such as your username, email, and
+  country" (the Peer's, in `en-GB`, says "email address and country").
+  `files.metadata.read` has no line of its own beside
+  `files.content.write`. What a creator reads without the edit scope is step
+  18's to observe.
+
 ## Notes
 
 The two research digests disagree on the grant unit: one recommends per-file
