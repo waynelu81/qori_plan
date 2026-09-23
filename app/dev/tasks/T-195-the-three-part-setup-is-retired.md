@@ -2,8 +2,8 @@
 id: T-195
 title: The three-part setup is retired
 stream: onboarding
-status: draft
-owner: unassigned
+status: doing
+owner: claude
 estimate: M
 depends: T-026
 blocks: none
@@ -11,9 +11,9 @@ blocks: none
 
 # T-195 — The three-part setup is retired
 
-> **Draft.** Cut from `T-026` on 23 September 2026 when `D-056` replaced the
-> three-part setup with one first-Series screen. What has to be decided before
-> it can be marked `ready` is at the bottom.
+> Cut from `T-026` on 23 September 2026 when `D-056` replaced the three-part
+> setup with one first-Series screen; brought to ready and claimed the same
+> day.
 
 ## Why
 
@@ -41,6 +41,16 @@ saw part one keeps "alex-s-group" in every link they send.
 `ConnectionsDestination` are how a vendor sends someone back to where they
 started, and `T-028` reuses them to bring a creator back to the Series. Only
 their setup callers go.
+
+**After a rename that moved the URL, the card lands on the dashboard at the
+new one.** The card used to come `back()` to the page it was on, which is the
+old URL once the slug moves: a 404. A rename that keeps the slug still comes
+back.
+
+**The forwarding addresses' landings keep their code; only their comments
+change.** `PaymentsFinaliseController` and `ConnectionFinaliseController` take
+the address first and spend it whatever happens. Nothing there is setup's
+alone, and `T-028` is the caller now.
 
 **The name record stays; the other two keys go.** `Group::hasChosenName()`
 reads `onboarding_state.name`, and the dashboard's card depends on it.
@@ -72,6 +82,8 @@ Group with a published Series, for the slug rule.
 **Out:**
 
 - The forwarding addresses themselves (`T-028`).
+- `docs/flows/onboarding.md` keeps its first-Series section; only the parts and
+  their record go.
 - Dropping `users.onboarding_state`; the name record lives there.
 
 ## Files
@@ -92,6 +104,12 @@ Group with a published Series, for the slug rule.
 | `lang/en/groups.php` | edit | Unread `setup.*` lines go |
 | `docs/flows/onboarding.md` | edit | The parts go |
 | `tests/Feature/Share/SetupStepsTest.php` | delete | |
+| `resources/js/layouts/setup/Layout.vue` | delete | The frame; only the two parts used it |
+| `resources/js/app.ts` | edit | The `share/setup/` layout case |
+| `resources/js/components/share/GroupNameForm.vue` | edit | The `setup` prop and hidden field |
+| `app/Http/Controllers/Settings/ConnectionFinaliseController.php`, `app/Http/Controllers/Share/ConnectionsController.php` | edit | Comments that name setup |
+| `docs/tinker/groups.md`, `docs/flows/storage.md`, `docs/flows/billing.md` | edit | Setup's parts leave the docs |
+| `tests/Feature/Share/OnboardingHomeTest.php`, `tests/Feature/ShareDigestTest.php` | edit | Only if a rename there now moves a slug they read |
 | `tests/Feature/Share/SetupTest.php`, `tests/Feature/Share/ConnectionAccountChangeTest.php`, `tests/Feature/Share/ConnectionsConnectTest.php`, `tests/Feature/Share/PaymentsOauthTest.php` | edit | The cases that start from part three |
 
 ## Database
@@ -129,15 +147,6 @@ Series page instead, or from Integrations.
 - [ ] `bin/tasks --check` passes in `qori-plan`
 - [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
 - [ ] Report written in `reports/` (see [its README](reports/README.md))
-
-## Before this can be ready
-
-- ~~The card taking `T-177`'s slug rule.~~ Answered 23 September 2026 by the
-  owner: yes, until something is published.
-- Which of `PaymentsFinaliseController`'s and `ConnectionFinaliseController`'s
-  branches exist only for setup. (anyone's, from the code)
-- Name the cases in the three connection and payment test files that start
-  from part three. (anyone's)
 
 ## Re-scope log
 
