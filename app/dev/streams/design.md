@@ -82,6 +82,8 @@ is `T-011`'s in `recovery` and goes first of everything R-004 found; `F-2` is
 21. `T-190` — The home page says who Qori is for: a visitor at the start of
     the path sees themselves in one sentence, and the headline's missing space
     (R-004 F-9) goes with it
+22. `T-193` — The home page shows a Series: the object beside the claim, in a
+    composition a design pass proposes; after `T-190`, the same file
 
 `T-035` also came out of that reading, from
 [`../ui-components-and-sign-in.md`](../ui-components-and-sign-in.md) rather than

@@ -6,7 +6,7 @@ status: ready
 owner: unassigned
 estimate: S
 depends: none
-blocks: none
+blocks: T-193
 ---
 
 # T-190 — The home page says who Qori is for
