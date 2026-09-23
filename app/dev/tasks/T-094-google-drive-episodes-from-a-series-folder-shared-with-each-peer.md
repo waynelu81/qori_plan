@@ -1084,6 +1084,13 @@ unresolved-removals list says in Drive's terms.
 - **Replacement and deletion lose the work needed to revoke** (`F01`), and
   Open and refund run their vendor calls inline with no total deadline
   (`F08`). Both are `T-091`'s to fix; this task inherits whatever it decides.
+- **Added 23 September 2026: whether a Drive viewer can list the file's other
+  viewers.** On Dropbox, a Peer's own token lists the other Peers granted the
+  same file, with their addresses, though Dropbox's pages show them nowhere
+  (`reports/T-095-2026-09-23-claude-2.md`, `D-058`'s correction). Nobody has
+  asked the same of Drive, where `T-160` already grants per file. The answer
+  goes in the buyer copy, not the model. It can be observed with `T-093`'s
+  direct-file pass above — anyone's.
 
 ## Re-scope log
 

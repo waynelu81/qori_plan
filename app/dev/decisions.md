@@ -3239,3 +3239,18 @@ folder: a file the creator adds in Dropbox no longer reaches Peers by itself,
 and a new Episode needs one grant per Peer, which `D-040` already makes at
 Open. What arrives: no storage cost to a Peer, no Join, no buyer shown to
 another, and a grant that confirms itself.
+
+**Corrected later on 23 September 2026, after the file route's probe**
+(`reports/T-095-2026-09-23-claude-2.md`): "no buyer shown to another" holds
+for Dropbox's own pages and not for its API. Signed in as a Peer, dropbox.com
+showed the file's other Peers nowhere: Share was disabled, and Info named only
+the uploader. But `sharing/list_file_members`, called with the Peer's own
+token, listed the file's other Peers with their addresses. That was observed
+for two invitees; a second Peer with a Dropbox account was not available. So
+any app a Peer connects to Dropbox with `sharing.read` can read who else was
+granted the same Episode, and the Stone spec has no call that changes a shared
+file's policy. The folder route shows buyers to each other in Dropbox's own
+pages as well, where its Join notice says so, so the comparison that chose
+files stands. What changes is that `T-096`'s buyer copy cannot promise that
+buyers are hidden from each other. The owner decided the same day that buyers
+are not told either: the copy says nothing about it.

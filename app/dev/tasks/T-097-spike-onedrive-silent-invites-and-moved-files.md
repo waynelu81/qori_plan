@@ -1128,7 +1128,15 @@ which name them.
 
 ## Re-scope log
 
-None.
+- **23 September 2026, before the spike starts: one question added, on files
+  it already grants.** On Dropbox, a Peer's own token lists the other Peers
+  granted the same file, with their addresses, though Dropbox's pages show
+  them nowhere (`reports/T-095-2026-09-23-claude-2.md`, `D-058`'s
+  correction). Here, on the file steps 0 and 2 to 4 grant, with a second
+  Peer the step already uses invited to it too: does OneDrive's page for the
+  file show one Peer the other, and does `GET …/items/{id}/permissions`, where
+  the spike holds a Peer's own sign-in? It needs no new account. The answer
+  goes in `T-098`'s buyer copy and changes nothing in its model.
 
 ## Notes
 

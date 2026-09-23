@@ -1061,6 +1061,18 @@ Total: 46.
   file's viewers can see each other, a team admin's outside-sharing policy
   against a file grant, and the invite cap for file invites. The first three
   are one probe on the accounts `T-095` left — anyone's.
+  **Observed the same day** (`reports/T-095-2026-09-23-claude-2.md`, with
+  fixtures): `remove_file_member_2` answers `success` at once, with no job,
+  sometimes with a warning that reads like a refusal, so the answer's `.tag`
+  decides; a repeat answers 409 `no_explicit_access` with an empty
+  `access_details`, which means already removed. `list_file_members` pages
+  with a cursor, counting users and invitees together. And a Peer's own token
+  lists the file's other Peers with their addresses, though dropbox.com shows
+  them nowhere, which `D-058` now records. **The owner, the same day:** buyers
+  are not told, so the buyer copy neither mentions it nor promises that buyers
+  are hidden from each other; and whether a second Peer with a Dropbox account
+  is listed to the first is not pursued. Still open: the team policy and the
+  invite cap.
 - ~~`T-095` rows 1 and 2: whether a Basic creator, and a Plus creator, may add a
   read-only member at all — still the spike's to observe. **What its answer
   changes is settled (`D-018`, 17 September 2026):** no tier is dropped. A
