@@ -101,6 +101,9 @@ has to honour the setup record.
     walk of 21 September 2026 found the link at the foot of a long page
 15. `T-175` — The code email names the Series and who shared it: the same walk
     found a bare "Your Qori code" from a name the Peer did not know
+16. `T-191` — The first steps speak to the first ten people: the dashboard's
+    first three next actions, the price help and the invitation page's intro
+    say start with the people who already ask, with no number restated
 
 `T-008`, in the identity stream, fixed the confirmed verification-return defect
 and established context ownership before the onboarding continuations.

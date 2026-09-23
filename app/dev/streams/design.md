@@ -77,6 +77,12 @@ is `T-011`'s in `recovery` and goes first of everything R-004 found; `F-2` is
     error page: the harness overwrote a manifest and counted a 502 as a screen
     in this very pass
 
+**From the positioning note**, 23 September 2026.
+
+21. `T-190` — The home page says who Qori is for: a visitor at the start of
+    the path sees themselves in one sentence, and the headline's missing space
+    (R-004 F-9) goes with it
+
 `T-035` also came out of that reading, from
 [`../ui-components-and-sign-in.md`](../ui-components-and-sign-in.md) rather than
 from the pass: positive `tabindex` values on sign-in and register.
