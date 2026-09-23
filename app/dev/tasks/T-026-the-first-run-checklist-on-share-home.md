@@ -2,8 +2,8 @@
 id: T-026
 title: A new creator's first screen makes their first Series
 stream: onboarding
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: M
 depends: T-068, T-024
 blocks: T-195
