@@ -1,12 +1,22 @@
 # Journey: a creator's first share
 
 A stranger arrives, becomes a creator, **connects the Stripe account and the
-Google Drive they already have during setup**, sells one Series made from a
-file in their Drive, and somebody they send the link to pays, gets in and opens
-it in Drive. Those two connections are what Qori sells, so they are the path,
-not a branch (owner, 21 September 2026). Everything else is a branch off one of
+Google Drive they already have from the Series they are making** — Stripe at
+its price, Drive at its first file — sells one Series made from a file in
+their Drive, and somebody they send the link to pays, gets in and opens it in
+Drive. Those two connections are what Qori sells, so they are the path, not a
+branch (owner, 21 September 2026). Everything else is a branch off one of
 these steps. Walked on 21 September 2026 as far as it goes today — evidence in
 [`walkthroughs.md`](../walkthroughs.md).
+
+**23 September 2026 (`D-056`).** Steps 4 to 8 were rewritten and renumbered:
+the three-part setup walked on the 21st — name the Group, connect Stripe,
+connect Drive — is gone, and a new creator's first screen makes their first
+Series. `T-026` walked the new screen, `T-028` the Connect links, and the e2e
+run passes with both connections adopted by its seam (`T-195`); nobody has
+walked the new order by hand end to end. Struck items below, and reports
+written before that date, use the old numbers: Stripe was step 5, Drive 6, the
+dashboard 7 and the price 8.
 
 **Works** — walks clean. **Rough** — works, and a person would stumble.
 **Built** — the code exists and has not been walked. **Breaks** — a person
@@ -19,11 +29,11 @@ cannot do what the step is for.
 | 1 | Lands on the home page and presses Start sharing | Works |
 | 2 | Picks "I want to share", gives name, email, password | Rough — "Set up a school"; four fields and no passwordless sign-up |
 | 3 | Confirms their address from the email | Works — the email is Laravel's stock text (`T-055`) |
-| 4 | Names their Group | Works — naming it in setup gives it the URL of its name (`T-177`) |
-| 5 | **Connects their Stripe account**: Stripe's sign-in, and back to setup | Works — the owner connected through Stripe's sign-in on 21 September 2026, once `STRIPE_CLIENT_ID` was set |
-| 6 | **Connects their Google Drive**: Google's consent, and back to setup | Built (`T-159`) — setup part 3 links to it; one page via Integrations, where the account kind is chosen |
-| 7 | Lands on their dashboard, told what to do next | Works — the name card offers a rename once named (`T-086`) |
-| 8 | Names their first Series and gives it a price | Works |
+| 4 | Meets "What will you share first?": types a title, picks a course of files, presses Create | Works (`T-026`, `D-056`) — the Group keeps its generated name until it is renamed from the dashboard's card |
+| 5 | Lands on the Series page at the first Episode's form, set up for the shape | Works (`T-026`) — "Part 1", a file, on Qori storage until Drive is connected (`T-028`) |
+| 6 | Gives the Series a price | Works |
+| 7 | **Connects their Stripe account** from the price field: Stripe's sign-in, and back to the Series | Built (`T-028`) — Stripe's sign-in worked for the owner on 21 September 2026, from setup; coming back to the Series is proven by tests, not yet by a real round trip |
+| 8 | **Connects their Google Drive** from the Episode form: Google's consent, and back to the form | Built (`T-159`, `T-028`) — through Integrations, where the account kind is chosen; coming back to the form is proven by tests, not yet by a real round trip |
 | 9 | **Adds the first Episode by picking a file from their Drive** | Built (`T-159`) — the Picker has not yet run against a real account |
 | 10 | Makes it ready and copies the link | Works — making it ready lands on the share link with Copy focused (`T-174`) |
 | 11 | A Peer opens the link, gives name and email, types the code | Works — the code email names the Series and who shared it (`T-175`) |
@@ -37,10 +47,13 @@ cannot do what the step is for.
 | Step | Branch | Today |
 | --- | --- | --- |
 | 3 | Opens the verification link on another device, signed out | Rough — "Log in" with no context; an email link then verifies and continues |
-| 5 | Skips payments, later sets a price | Built (`T-085`) — the price field says nobody can pay until Stripe is connected, with a Connect link (`T-054`); the public page names the Group and says it isn't taking payments yet, in place of the forms |
-| 5 | Connects an account Stripe will not let charge yet — a document, a detail or the terms still due | Built (`T-164`) — Integrations lists each thing Stripe asked for with a link to its page in the creator's Stripe dashboard; connecting says where the list is; the dashboard and the price field say payments are held back |
-| 6 | Connects Dropbox | Not built — and `D-042`'s free-or-drop call is open (`T-095`) |
-| 8 | A free Series — no price, no checkout | Works — walked end to end on 21 September 2026 |
+| 4 | Presses "I'll look around first" | Works (`T-026`) — the dashboard, and the screen is not asked again; its first next actions speak to the first few people (`T-191`) |
+| 4 | Renames the Group from the dashboard's card | Works (`T-177`, `T-195`) — its URL follows the new name until anything is published, and never after |
+| 4 | Picks "A class, week by week" | Works (`T-026`) — the form opens on a live session, "Week 1", and the screen asks the Group's timezone only when it has none |
+| 6 | A free Series — no price, no checkout | Works — walked end to end on 21 September 2026 |
+| 7 | Sets a price and leaves Stripe for later | Built (`T-085`) — the price field says nobody can pay until Stripe is connected, with a Connect link (`T-054`); the public page names the Group and says it isn't taking payments yet, in place of the forms |
+| 7 | Connects an account Stripe will not let charge yet — a document, a detail or the terms still due | Built (`T-164`) — Integrations lists each thing Stripe asked for with a link to its page in the creator's Stripe dashboard; connecting says where the list is; the dashboard and the price field say payments are held back |
+| 8 | Connects Dropbox | Not built — `T-095` found it works on a free account, and `D-058` puts it on per-file grants for `T-096` (23 September 2026) |
 | 9 | Uploads a document to Qori instead | Works |
 | 9 | Picks Audio, or Dropbox | Built (`T-171`) — Dropbox is no longer offered for any kind, and Audio offers Google Drive |
 | 11 | Gives access by email to someone with no account | Built — invitations, bound to the address and the Series, each with its own price and expiry; the person gets in with a code, or pays their price (`T-043`, `T-181`, `D-050`) |
@@ -67,18 +80,19 @@ cannot do what the step is for.
 4. **`T-161` — the journey as one script (M).** Built 21 September 2026:
    `tests/e2e/first-share.spec.ts` walks every step above, hardcoded only where
    a person must be at a vendor, from the owner's gitignored `.env.e2e`
-   (`D-045`). Skipped until that file exists. Next: walk steps 5, 6 and 9 once
-   for real, run `php artisan qori:e2e:capture you@… --peer=…`, then
-   `php artisan qori:e2e --only=first-share --headed`; and walk it once by hand
-   with a test card.
-5. **Then the branches**, the step-5 one first: a price without payments says
+   (`D-045`). It passes end to end against the owner's `.env.e2e` (21
+   September 2026, and again on 23 September after `T-195`). Next, and last:
+   the owner walks it once by hand — Stripe's and Google's real sign-ins at
+   steps 7 and 8, the Picker at step 9 and a test card at step 12 — recorded
+   in `walkthroughs.md`.
+5. **Then the branches**, the step-7 one first: a price without payments says
    so and offers Connect, and the public page stops offering to buy
    (~~`T-085`~~, done 22 September 2026, with a Toaster on every layout so a
    refusal on a page without the app shell is seen). ~~Stop offering Dropbox, and
    Audio's Dropbox-only choice, on the Episode form while nothing can connect
    it~~ (`T-171`, done 22 September 2026).
-6. **Rough edges on the path (S each)**: the slug at step 4 (~~`T-177`~~), the
-   step-7 dashboard (~~`T-086`~~), the share link after ready (~~`T-174`~~),
+6. **Rough edges on the path (S each)**: the Group's slug (~~`T-177`~~), the
+   dashboard's name card (~~`T-086`~~), the share link after ready (~~`T-174`~~),
    the code email naming the Group and Series (~~`T-175`~~) — the last three
    done 22 September 2026.
 7. **Everything else is [`fixups.md`](../fixups.md).**
