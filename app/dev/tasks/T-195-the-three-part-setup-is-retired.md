@@ -30,7 +30,7 @@ Group is named, so it takes that rule.
 
 ## Decisions taken to make this specifiable
 
-**The dashboard's name card follows `T-177`'s rule** (proposed). Renaming
+**The dashboard's name card follows `T-177`'s rule** (the owner, 23 September 2026: "yes, rename should change the address until published"). Renaming
 moves the slug while no Series of the Group has ever been published, and never
 after. `T-177` kept the card from moving it because a link might be out there;
 nothing is out there before anything is published, which is the condition
@@ -132,8 +132,8 @@ Series page instead, or from Integrations.
 
 ## Before this can be ready
 
-- The card taking `T-177`'s slug rule. (the owner's, since it changes the
-  link a creator shares; proposed yes)
+- ~~The card taking `T-177`'s slug rule.~~ Answered 23 September 2026 by the
+  owner: yes, until something is published.
 - Which of `PaymentsFinaliseController`'s and `ConnectionFinaliseController`'s
   branches exist only for setup. (anyone's, from the code)
 - Name the cases in the three connection and payment test files that start
