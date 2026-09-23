@@ -1051,17 +1051,32 @@ Total: 46.
 
 ## Before this can be ready
 
-- `T-095` rows 1 and 2: whether a Basic creator, and a Plus creator, may add a
+- **`D-058`, 23 September 2026: Dropbox grants per file, and this draft is
+  re-drafted on per-file grants**, as `T-094` was after `D-036`. What below
+  rests on a shared folder each Peer joins — the Join panel, the storage copy,
+  the folder picker, the container states and `series.container.dropbox.*` —
+  is superseded. `T-095`'s report (`reports/T-095-2026-09-23-claude.md`) is
+  what the re-draft rests on, and names what it still has to observe before it
+  is ready: `remove_file_member_2`, `list_file_members` paged, whether a
+  file's viewers can see each other, a team admin's outside-sharing policy
+  against a file grant, and the invite cap for file invites. The first three
+  are one probe on the accounts `T-095` left — anyone's.
+- ~~`T-095` rows 1 and 2: whether a Basic creator, and a Plus creator, may add a
   read-only member at all — still the spike's to observe. **What its answer
   changes is settled (`D-018`, 17 September 2026):** no tier is dropped. A
   refusal is a vendor capability, so the tier entry says Dropbox needs a paid
   plan to share a folder this way and the creator upgrades or picks another
   provider. `insufficient_plan` on Plus as well would mean the folder grant is
   a team-plan feature, which is worth the stream owner knowing about the order,
-  but it removes no tier from the dropdown either.
-- `T-095` row 5: whether an invitee who has not joined can open the folder and
+  but it removes no tier from the dropdown either.~~ **Answered 23 September
+  2026 (`T-095` step 0):** a free Basic creator adds a viewer on a folder and
+  on a file, so no tier needs a refusal line. Plus was not observed; the owner
+  judged it not applicable once Basic could (`D-058`).
+- ~~`T-095` row 5: whether an invitee who has not joined can open the folder and
   a file through `preview_url`. If they can, `granted` moves to the 200 and the
-  Join and storage copy goes — the spike's.
+  Join and storage copy goes — the spike's.~~ **Answered 23 September 2026
+  (`T-095` step 18b):** yes, the whole list, with Download and Copy to
+  Dropbox, before joining. Moot under `D-058`: a file grant has no Join.
 - ~~What a Peer without enough free space gets: the supported case restricted
   and stated on the tier (this draft), a view-only folder link, per-file grants
   (a change to `T-091`'s grant model) or neither — the owner's.~~
@@ -1071,23 +1086,36 @@ Total: 46.
   `accesses.vendor.dropbox.join.space` tells that Peer to free space and press
   Join again. Qori neither switches to a view-only link nor to per-file grants;
   both are recorded under Notes as considered and not taken.
-- `T-095` row 21: what `list_folder_members` shows before Join, after Join and
+- ~~`T-095` row 21: what `list_folder_members` shows before Join, after Join and
   after removal, and whether a creator token can tell a joined member from an
   invited one at all. If it cannot, `granted` has no evidence behind it and
-  this task needs another rule — the spike's.
-- `T-095` row 15: the URL shape a member opens a file at, and whether
+  this task needs another rule — the spike's.~~ **Answered 23 September 2026
+  (`T-095` step 18a):** it cannot. A Peer with a Dropbox account is under
+  `users` from the grant, before joining. Under `D-058` the evidence is the
+  file grant's own `success: viewer`.
+- ~~`T-095` row 15: the URL shape a member opens a file at, and whether
   `sharing/get_file_metadata` gives a usable `preview_url` for a file inside a
-  shared folder — the spike's.
-- `sharing/share_folder` called again on a folder that is already shared: does
+  shared folder — the spike's.~~ **Answered 23 September 2026 (`T-095` steps
+  9 and 13):** `get_file_metadata`'s `preview_url`,
+  `https://www.dropbox.com/scl/fi/<key>/<name>?dl=0`, is the same for creator
+  and Peer and opened the file directly for the Peer, for a file granted on its
+  own and for one in a joined folder. Signed out it asks for sign-in and shows
+  the file's name.
+- ~~`sharing/share_folder` called again on a folder that is already shared: does
   it answer `complete` with the existing `shared_folder_id`, or an error?
   `T-095` step 4 shares each folder once and never repeats the call — the
-  spike's, one extra call.
+  spike's, one extra call.~~ **Answered 23 September 2026 (`T-095`):** 409
+  `bad_path/already_shared`, carrying the folder's whole metadata with its
+  `shared_folder_id`. Moot under `D-058`, which shares no folder.
 - Whether Dropbox's authorize endpoint accepts `code_challenge` and
   `code_challenge_method`. No digest records it and `T-095` step 1 builds the
   URL without them, so `supportsPkce()` is provisional. On the same first
   round trip: what a landing carries when the owner or a Peer declines, which
   the `Declined` arms read as `access_denied`, the OAuth 2.0 word, and whether
-  the id token echoes the nonce `DropboxSignIn` sends — anyone's.
+  the id token echoes the nonce `DropboxSignIn` sends — anyone's. **Partly
+  answered 23 September 2026 (`T-095` step 17):** the id token carries no
+  `nonce` claim, though one was sent. PKCE and a declined landing were not
+  observed.
 - Qori's own folder list against the Dropbox Chooser in folder mode, which this
   draft did not take and the brief named. The Chooser has no fixture and picks
   from whichever account the browser holds — the owner's, if they want it back.
@@ -1259,3 +1287,7 @@ for new ones two weeks after its 50th
 who signs in with Dropbox under `T-092` probably counts, so the cap is reached
 by Peers rather than by creators. That line is not edited here; the report
 names what `T-095` found on the console.
+
+**23 September 2026.** `T-095` finished: its report is
+`reports/T-095-2026-09-23-claude.md`, and `D-058` moves Dropbox to per-file
+grants, on which this draft is re-drafted.

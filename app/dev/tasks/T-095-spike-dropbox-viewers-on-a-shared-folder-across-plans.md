@@ -2,7 +2,7 @@
 id: T-095
 title: Spike: Dropbox viewers on a shared folder across plans
 stream: storage
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -851,39 +851,42 @@ outcome B the spike carries on, on files**, and a box about a folder-only step
 (Join, step 11, row 5) is met by "not applicable: the file route has no
 folder". Otherwise every box is read as written.
 
-- [ ] Step 0 ran first — before any account but `creator-basic` existed,
+- [x] Step 0 ran first — before any account but `creator-basic` existed,
       before any file was uploaded and before any other fixture was gathered
       — and row 1 of the answer table is "observed" with its fixtures, one
-      for the folder call (d) and one for the file call (e)
-- [ ] The report says which of outcomes A to D step 0 met, and recommends
+      for the folder call (d) and one for the file call (e) — with one upload
+      inside step 0, for (e)'s own file (the report's Departures)
+- [x] The report says which of outcomes A to D step 0 met, and recommends
       `T-096`'s model — folder or file — with the reason; on a file it names
       `T-160`'s `GrantsItemAccess` as the contract `T-096` would reuse
-- [ ] Nothing was bought to run the spike, and any step that could not be
+- [x] Nothing was bought to run the spike, and any step that could not be
       observed on a free account says so with that reason (`D-042`)
-- [ ] Every fixture in the Files table exists, or the README's gap list says
+- [x] Every fixture in the Files table exists, or the README's gap list says
       which error was not met and why; each body is verbatim under the
       redaction map, and the README states the date, the app, the account
       role, the status and the seconds for each file
-- [ ] Every row of the answer table is "observed" with its fixture or "not
+- [x] Every row of the answer table is "observed" with its fixture or "not
       observed" with the reason, in the report, and every row of the States
       table names its fixture beside the candidate state it confirms or
       corrects
-- [ ] The walkthrough (step 18) is in the report with its seconds, and any
+- [x] The walkthrough (step 18) is in the report with its seconds, and any
       step that only the diagnostic token got through is a finding
-- [ ] Every bullet in `T-096`'s "Before this can be ready" that this spike
+- [x] Every bullet in `T-096`'s "Before this can be ready" that this spike
       answers is struck with the date and a one-line answer — or, while
       `T-096` is a bare template, a Notes line there names the report; any
       choice the facts leave the owner is written there as a bullet for the
       owner, and a change to the grant model as a bullet for `T-091`'s
-- [ ] The report records the App Console's production-approval step and any
+- [x] The report records the App Console's production-approval step and any
       lead time it states, and the scopes `T-096` needs without
-      `files.content.write`
-- [ ] Every "Found, not fixed" bullet in the report ends in a disposition
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan` (the board moved there with
+      `files.content.write` — the scopes, yes; the production-approval step
+      does not apply, the owner judging it so (`D-058`), and
+      `release-prerequisites.md` records what was learnt of the app instead
+- [x] Every "Found, not fixed" bullet in the report ends in a disposition
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan` (the board moved there with
       planning on 21 September 2026; `php artisan qori:tasks` is gone)
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -1299,6 +1302,17 @@ scopes, and the member list cannot see Join.**
 - **(f)** is not applicable: it needs a second creator account.
 - A step that only the diagnostic token got through: none. Every call in
   steps 17 and 18 ran on the scopes `T-092` and `T-096` will ask for.
+
+**2026-09-23 — the owner took the file route (`D-058`) and closed the spike
+on the report.** After steps 0 to 18 the owner decided that Dropbox grants per
+file, as Google Drive does under `D-036`, and judged the steps still unrun not
+applicable: 7, the second half of 8, and 11, which only a folder has; 14, the
+unverified account; the team account; 19, the invite cap; and production
+approval. A team admin's outside-sharing policy and the invite cap bear on
+file grants too, so `T-096` carries them as not observed, beside the three
+things the file route itself still needs observed (`remove_file_member_2`,
+`list_file_members` paged, and whether a file's viewers see each other). The
+report is `reports/T-095-2026-09-23-claude.md`.
 
 ## Notes
 
