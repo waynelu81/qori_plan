@@ -2,7 +2,7 @@
 id: T-028
 title: Connecting Stripe or Google Drive from a Series comes back to it
 stream: onboarding
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-044
@@ -122,15 +122,20 @@ None. `share.settings.integrations` gains three optional query keys.
 
 ## Acceptance
 
-- [ ] From a Series' price, Connect Stripe goes to Integrations and Stripe's
+- [x] From a Series' price, Connect Stripe goes to Integrations and Stripe's
       landing returns to that Series' details
-- [ ] From the Episode form, Connect Google Drive goes to Integrations and the
+- [x] From the Episode form, Connect Google Drive goes to Integrations and the
       landing returns to the Episode form on the kind it was on, on Drive
-- [ ] A file Episode starts on Qori storage while Drive is not connected
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] A file Episode starts on Qori storage while Drive is not connected
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
+
+## Added during execution
+
+- `tests/Feature/Series/SeriesPriceTest.php` — pinned the bare Integrations
+  URL as `pricing.paymentsUrl`; updated to the link that names the Series.
 
 ## Re-scope log
 

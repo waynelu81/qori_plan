@@ -2,7 +2,7 @@
 id: T-191
 title: The first steps speak to the first ten people
 stream: onboarding
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -134,16 +134,16 @@ itself. A grep on 23 September 2026 found no test asserting `price_help` or
 
 ## Acceptance
 
-- [ ] A fresh owner's dashboard shows the three next actions in turn with the
+- [x] A fresh owner's dashboard shows the three next actions in turn with the
       new detail lines, and the messages and buttons unchanged
-- [ ] The Series form's price help and the invitation page's intro read as
+- [x] The Series form's price help and the invitation page's intro read as
       specified
-- [ ] No number is written in any of the five lines, and no article sits
+- [x] No number is written in any of the five lines, and no article sits
       immediately before a placeholder
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 

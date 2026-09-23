@@ -2,7 +2,7 @@
 id: T-190
 title: The home page says who Qori is for
 stream: design
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -145,15 +145,15 @@ marketing prose word for word would pin what the owner may still reword.
 
 ## Acceptance
 
-- [ ] A guest at `/` reads who Qori is for in the paragraph under the
+- [x] A guest at `/` reads who Qori is for in the paragraph under the
       headline, and the stance paragraph under the buttons, at 390px and 1440px
-- [ ] The headline reads as two lines with a space between them at 390px
-- [ ] Every noun comes from `useTerminology()`, no article sits before one, and
+- [x] The headline reads as two lines with a space between them at 390px
+- [x] Every noun comes from `useTerminology()`, no article sits before one, and
       no plan number is written on the page
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 
