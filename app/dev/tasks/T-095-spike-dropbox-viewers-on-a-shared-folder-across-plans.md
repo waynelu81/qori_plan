@@ -1191,6 +1191,66 @@ grant was step 0's, so its stopwatch to first open could not run; step 7 is
   `nested`, `/episode-4.pdf` and an invite to `peer-none` in the owner's
   Dropbox, all removed when it finishes.
 
+**2026-09-23 — steps 16 and 10 ran; a web replace keeps the `id`, and a
+joined Peer's folder keeps its own name.**
+
+- **Step 16.** `add_file_member` on `/episode-4.pdf`, then outside the folder,
+  answered `success: viewer`, and the owner found no email in the Peer's
+  inbox or spam. `quiet` holds for a file as for a folder.
+- **Step 10, (a), (b) and (f) on dropbox.com.** The owner made them before
+  the probe's cursor existed, so they have no seconds and no delta; what
+  each did was read afterwards. (a) `episode-3.pdf` arrived with a new
+  `id`. (b) Uploading a changed `episode-1.pdf` asked nothing: Dropbox
+  replaced it, kept its `id` and gave it a new `rev`, and the Peer's copy
+  followed. (f) After renaming `/Qori spike` to `/Qori Series`, the creator's
+  `get_folder_metadata` gave the new name and the Peer's still gave `Qori
+spike` at `/Qori spike`, under the same `shared_folder_id`: **Qori finds a
+  folder by its id, and cannot show the Peer the creator's name for it.**
+  The owner renamed it back.
+- **Step 10, (c) and (e) through the cursor.** An API overwrite kept the
+  `id` with a new `rev`, came through `list_folder/continue` as one `file`
+  entry, and was in the Peer's listing 0.7 seconds after the upload
+  answered. `move_v2` of `/episode-4.pdf` into the folder kept its `id`, came
+  through as one `file` entry and no `deleted` one, and reached the Peer in
+  0.6 seconds. (d) was not observed: the owner has no desktop client.
+- **After the move, `list_file_members` on `episode-4.pdf` lists every
+  member as `is_inherited: true`**: `peer-roomy` once, not twice, and
+  `peer-none`, invited to the folder in step 12, as an invitee of a file it
+  was never granted. Whether step 16's own grant comes back if the file
+  leaves the folder was not tried.
+- **A repeat is not a no-op.** The Peer's `time_invited` on the folder moved
+  from 02:52:16 to 04:17:07, the moment step 12 added them again, though
+  that call answered `null`.
+
+**2026-09-23 — step 15 ran: a revoke works and says it did not, and a direct
+file grant outlives the folder.** `episode-1.pdf` was open in the Peer's
+browser throughout.
+
+- **Pagination.** `list_folder_members` with `limit: 1` and two
+  `list_folder_members/continue` calls gave three pages, `peer-roomy` on the
+  second, users before invitees; the cursor went away on the last.
+- **Remove and retry.** `remove_folder_member` answered with an
+  `async_job_id`. The same call at once, without polling or keeping that id,
+  answered with a second `async_job_id` rather than an error, so the retry
+  `T-096` makes after losing a job converges. **Both jobs finished
+  `complete` with `warning: "You don’t have permission to perform this
+action."`** and empty `access_details`, and the Peer was removed all the
+  same: the member list afterwards had the owner and `peer-none` only. A
+  revoke's outcome is read from `list_folder_members`, not from the job.
+- **The Peer's side.** The folder left their Dropbox within 3.8 seconds of
+  the remove being sent, `get_folder_metadata` answered 409 `not_a_member`,
+  `nested` the same, and `used` went back to 0. The tab already open kept
+  showing the file; on reload the same URL gave Dropbox's "Request access"
+  page, naming the Peer's address and offering to ask the creator through
+  Dropbox, outside Qori.
+- **`episode-4.pdf` stayed `viewer`.** Step 16 granted it directly, then it
+  was moved into the folder, where its member list showed the Peer only as
+  inherited; removing the Peer from the folder left the direct grant
+  standing. **For `T-096` and `D-038`**: a revoke that removes only the
+  folder membership leaves every file Qori granted directly, and a file
+  grant is not visible as such while the file sits in a shared folder.
+  `episode-file-route.pdf` stayed `viewer`, as a file-route grant should.
+
 ## Notes
 
 The two research digests disagree on the grant unit: one recommends per-file
