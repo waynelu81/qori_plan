@@ -21,10 +21,6 @@ stops them recurring, not this file.
   peers can share" — lowercase and hardcoded. `resources/js/pages/share/series/Index.vue` (21 Sep)
 - Episode form: "Let anyone preview this episode" — lowercase and hardcoded.
   Series page, New Episode panel (21 Sep)
-- Setup part 1 says "Change it if that is not right, then save" beside a
-  button labelled Continue, and says "Your Peers see this…" twice. `resources/js/pages/share/setup/` (21 Sep)
-- Setup part 3: "Continue" and "Set this up later" do the same thing from the
-  creator's side (21 Sep)
 - Sign in: Enter in the email field does not advance to the next step; only
   clicking Next does. `resources/js/pages/auth/Login.vue` (21 Sep)
 - A file Episode shows "No materials" under itself straight after upload (21 Sep)
