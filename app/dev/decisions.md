@@ -3107,3 +3107,54 @@ billing cycle, not immediately", and "Currency: … yes that's correct."
 
 **Consequences.** `T-180` is ready and builds it. The sandbox run behind it
 is in `T-180`'s Preconditions.
+
+### 23 September 2026
+
+#### D-056 — A new creator's first screen makes their first Series (supersedes `D-001`'s creator order)
+
+**Decision.** After verification, a new creator meets one screen, "What will
+you share first?": a title, three shapes and one button. It creates the
+Series and opens its first Episode's form already set up for the shape:
+
+- **A course of files** — the form opens on a file, titled "Part 1".
+- **A class, week by week** — the form opens on a live session, titled
+  "Week 1"; the Group's timezone is asked on the same screen, only when the
+  Group has none.
+- **One thing** — the form opens titled after the Series.
+
+The Group keeps its generated name until the owner renames it from the
+dashboard's card. Stripe is asked where a price is typed and Google Drive
+where a file is chosen, as the Series page already does. "I'll look around
+first" goes to the dashboard and is not asked again. The three-part setup —
+name, get paid, where files live — leaves the front.
+
+**Why.** The owner, 23 September 2026, on the Kajabi note's blueprint
+proposal: onboarding "is not quite there yet, it need to be simple streamline
+no brainer, a couple of clicks", and then "yes re-scope T-026 to that shape".
+A new creator met about ten screens before a share link: register, verify,
+three setup parts, the first-Series action, the Series form, the Episode form,
+make ready, the link. Now it is register, verify, one screen, the Episode
+form, make ready, the link.
+
+**Why not empty Episodes laid out in advance**, which is what Kajabi's
+blueprints do and what was first put to the owner. Checked in the code the
+same day: an Episode's kind and where it lives are fixed when it is made
+(`UpdateEpisodeRequest` takes neither); a live session is refused without a
+start ahead of now (`StoreEpisodeRequest`) and without the Group's timezone
+(`EpisodeService::guardLiveSessionTime()`); and publishing counts Episodes,
+not what is in them (`SeriesService::publish()`), so a placeholder left empty
+would be shared as one. A form opened on the right kind and title gives the
+same head start with fewer clicks and no empty state a Peer can meet.
+
+**What stands from `D-001`.** Everything about a person arriving from a
+Series link: they never meet creator onboarding. Seller setup stays optional
+and is prompted before paid selling. What is superseded is the creator's
+order — details, then storage, integrations and payments, then a guided first
+Series — and the staged frame `T-075` built for it.
+
+**Consequences.** `T-026` is re-scoped to the screen and is ready. `T-195`
+retires the three-part setup once nothing sends anyone to it. `T-028` loses
+its stages; what it keeps is coming back to the Series after connecting
+Stripe or Google Drive from it. `ui-onboarding.md`'s creator path and the
+onboarding stream's goal follow.
+

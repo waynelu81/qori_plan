@@ -2,7 +2,7 @@
 id: T-191
 title: The first steps speak to the first ten people
 stream: onboarding
-status: draft
+status: ready
 owner: unassigned
 estimate: S
 depends: none
@@ -11,9 +11,9 @@ blocks: none
 
 # T-191 — The first steps speak to the first ten people
 
-> **Draft.** Written on 23 September 2026 from
+> Written on 23 September 2026 from
 > [the positioning note](../../design/positioning-solo-creators.md), at the
-> owner's word. One question at the bottom; everything else is specified.
+> owner's word, and made ready the same day on the owner's answer.
 
 ## Why
 
@@ -49,9 +49,14 @@ is written to fit the control it has.
 already says it through `invitations.form.daily` with `:limit`. The intro says
 "the first few people".
 
-**The price advice is one sentence, and it is the open question below.** It is
-the one line here that takes a stance on the creator's business rather than
-describing Qori's, so the owner says whether Qori gives it.
+**Qori gives the price advice.** It is the one line here that takes a stance
+on the creator's business rather than describing Qori's; the owner said yes
+to it on 23 September 2026.
+
+**The first-Episode line stops promising text and a link.** It says "Text, a
+file, a video, a link or a live session all count", and `EpisodeType` has
+four cases — file, video, audio, live — with a pasted link a provider of live
+sessions only. The new line names what exists.
 
 **The lines pass the article rule as written.** No "a" or "an" sits
 immediately before a placeholder; `TerminologyTest` walks every line.
@@ -107,7 +112,7 @@ None. The keys and their readers do not change.
 | Key                               | File                      | English                                                                                                                                                                             |
 | --------------------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `share.next.first_series.detail`  | `lang/en/share.php`       | The thing people keep asking you about is a good place to start. Nothing is shared until you say so, and the name can change later.                                                 |
-| `share.next.first_episode.detail` | `lang/en/share.php`       | One is enough to share it, and the rest can come as you go. Text, a file, a video, a link or a live session all count.                                                              |
+| `share.next.first_episode.detail` | `lang/en/share.php`       | One is enough to share it, and the rest can come as you go. A file, a video, audio or a live session all count.                                                                     |
 | `share.next.first_peer.detail`    | `lang/en/share.php`       | Start with the first few people you would tell about it. They need a Qori account with the address you give, and nobody else can see it.                                            |
 | `series.price_help`               | `lang/en/series.php`      | Leave it empty to share this :series for free. Start with a price that is easy to say yes to; you can raise it later, and :peer_plural who already paid keep what they paid.        |
 | `invitations.page.intro`          | `lang/en/invitations.php` | Start with the first few people you would tell about it. Each person gets an email with a link of their own. It works only for their address, so it is no use to anyone they forward it to. |
@@ -139,14 +144,6 @@ itself. A grep on 23 September 2026 found no test asserting `price_help` or
 - [ ] `bin/tasks --check` passes in `qori-plan`
 - [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
 - [ ] Report written in `reports/` (see [its README](reports/README.md))
-
-## Before this can be ready
-
-- Does Qori advise on price in the price field — "start with a price that is
-  easy to say yes to; you can raise it later"? It is the one line that takes a
-  stance on the creator's business rather than describing Qori's. (the owner's;
-  asked 23 September 2026 — the same day the owner ruled out the word
-  "charge", which the line does not use)
 
 ## Re-scope log
 
