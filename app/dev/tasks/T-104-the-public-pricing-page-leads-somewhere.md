@@ -69,7 +69,10 @@ rows, and a verified account for the signed-in check.
 - A header: the lockup linked home, then Sign in and Start sharing for a
   guest, or Go to Qori for a signed-in visitor.
 - One Start sharing after the plan cards, with one sentence naming the plan a
-  new Group starts on; the four lines in `lang/en/pricing.php`.
+  new Group starts on; the five lines in `lang/en/pricing.php`.
+- One sentence under the heading saying who the plans are for, in the same
+  words as `T-190` puts on the home page (added 23 September 2026 from
+  [the positioning note](../../design/positioning-solo-creators.md)).
 
 **Out:**
 
@@ -88,7 +91,7 @@ rows, and a verified account for the signed-in check.
 | `resources/js/components/PublicHeader.vue`   | new    | Lockup linked home; both doors, or Go to Qori     |
 | `resources/js/pages/Pricing.vue`             | edit   | Composes the header; closing Start sharing + note |
 | `app/Http/Controllers/PricingController.php` | edit   | Adds the `copy` prop                              |
-| `lang/en/pricing.php`                        | new    | Four lines                                        |
+| `lang/en/pricing.php`                        | new    | Five lines                                        |
 | `tests/Feature/PricingPageTest.php`          | new    | 5 cases                                           |
 
 Flows: none — only a prop; `docs/flows/billing.md`'s `/pricing` read stands.
@@ -113,6 +116,7 @@ keep the `@chisel-registration` markers `Welcome.vue` uses.
 | `pricing.nav.start_sharing` | `lang/en/pricing.php` | Start sharing                                                                   |
 | `pricing.nav.go_to`         | `lang/en/pricing.php` | Go to :name                                                                     |
 | `pricing.start.note`        | `lang/en/pricing.php` | Every new :group starts on the :plan plan. You choose a plan once it is set up. |
+| `pricing.intro.for`         | `lang/en/pricing.php` | Not for selling to strangers, not a feed and not a school: for the people you already know. |
 
 ## Routes
 
@@ -155,6 +159,8 @@ None.
 - Does a signed-in Group owner get Go to Qori, or their Plan and billing page?
   (the owner's)
 - The note's wording, and whether it names the starting plan (the owner's).
+- ~~The who-it's-for sentence's final words follow `T-190`'s answers.~~
+  Answered 23 September 2026: the sentence stands as written.
 - Does `Welcome.vue` adopt `PublicHeader` here, its labels moving to lang, or
   later? (the stream owner's)
 - Does `AppLogoLockup`'s sidebar-shaped `row` read at header scale? (anyone's)
@@ -170,3 +176,6 @@ None.
 ## Notes
 
 The only link to `/pricing` is owner-only `share/Billing.vue`; Welcome has none.
+
+`T-190` puts the same stance on the home page, so the two land in the same
+words; whichever is built second copies the first.
