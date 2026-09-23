@@ -1251,6 +1251,55 @@ action."`** and empty `access_details`, and the Peer was removed all the
   grant is not visible as such while the file sits in a shared folder.
   `episode-file-route.pdf` stayed `viewer`, as a file-route grant should.
 
+**2026-09-23 — steps 17 and 18 ran: the journey works on `T-096`'s own
+scopes, and the member list cannot see Join.**
+
+- **Step 17, the Peer's sign-in.** Asked with `scope=openid+email`, no
+  `token_access_type` and a `nonce`, the consent screen had one line, "View
+  your Dropbox account email", after the same "Before you connect this app"
+  warning, shown again to an account that had linked the app before. The
+  exchange answered 200 in 0.77 seconds with an `id_token` and no refresh
+  token. Its `sub` equals `account_id`, `email_verified` is present and
+  true, and the token lives an hour. **Dropbox returned no `nonce` claim**,
+  so `T-092` cannot rest replay protection on one; `state` and PKCE carry it.
+- **Step 18, the creator's consent under `T-096`'s scopes** read "View
+  information about your Dropbox files and folders", "View and manage your
+  Dropbox sharing settings and collaborators" and "View basic information
+  about your Dropbox account such as your username, email, and country". No
+  "Edit" line. The token was granted exactly the four scopes, and a
+  `files/upload` with it answered 401 `missing_scope` naming
+  `files.content.write`: the token `T-096` holds cannot write to a
+  creator's storage.
+- **(a) Grant by `dropbox_id`**, step 17's `sub`: `null` in 1.30 seconds,
+  and the Peer was under `users` at once, **before joining**. Step 12's text
+  calls the `users`/`invitees` split "the creator-token evidence of Join
+  that `T-096`'s `checkGrant()` reads", and it is not: a Peer with an
+  account is a user whether or not they have joined. Nothing the creator's
+  token reads has shown a join so far.
+- **(b) The Peer, in the browser.** The folder's `preview_url` showed the
+  whole file list before joining, with Join folder, Copy to Dropbox and
+  Download, and the notice "When you join a shared folder, your name, email
+  address and activity are visible to other people with access." Joined 40
+  seconds after the grant's 200; `episode-1.pdf` open at 62, with Download
+  and Share in its panel; the seconds are mostly clicking. **For `T-096`
+  and the owner: on the folder route, Peers who join are shown to each
+  other**, a buyer's name and address visible to every other buyer of the
+  Series. Whether a file member sees a file's other members was not looked
+  at.
+- **(c)** `episode-5.pdf`, uploaded on dropbox.com at 05:12:22, was open for
+  the Peer at 05:12:59 on a reload. **(d)** The repeated grant answered
+  `null`.
+- **(e) The recoverable failure.** `auth/token/revoke` answered `null`; a
+  grant with that token answered 401 `invalid_access_token`; signing in
+  again gave the same account and scopes, and the same grant on the stored
+  `shared_folder_id` answered `null`. Step 1's full token still refreshed
+  afterwards: revoking one authorization leaves the app's others for that
+  account standing, so a disconnect revokes the token Qori holds and no
+  other.
+- **(f)** is not applicable: it needs a second creator account.
+- A step that only the diagnostic token got through: none. Every call in
+  steps 17 and 18 ran on the scopes `T-092` and `T-096` will ask for.
+
 ## Notes
 
 The two research digests disagree on the grant unit: one recommends per-file
