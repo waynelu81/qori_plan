@@ -44,6 +44,12 @@ is `T-084`.
     too much after `T-077`
 11. `T-116` — Password managers can find where to create a passkey: the
     domain rename turned the well-known document's `enroll` into `grantl`
+12. `T-198` — An address typed in capitals is one account: the Series page's
+    code step keeps the capitals, and the magic link, a password reset and
+    registration then treat the same inbox as someone else
+13. `T-199` — An account made with a code can set a password and leave:
+    setting a password and deleting the account both ask for the one the code
+    step made up
 
 `T-052` before `T-053` only because it is the one the owner hits first. They
 share one provider file and nothing else; run them in sequence, either order.

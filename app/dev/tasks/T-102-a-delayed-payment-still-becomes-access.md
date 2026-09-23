@@ -5,7 +5,7 @@ stream: selling
 status: draft
 owner: unassigned
 estimate: M
-depends: none
+depends: T-027
 blocks: T-094
 ---
 
@@ -712,3 +712,14 @@ The `unplaceable` row keeps `group_id` and `user_id` null and is the reason
 the table is not group-scoped (`app/Models/PaymentFulfilment.php:11-18`);
 `latestFor()` can never find it, which is right — it belongs to nobody Qori
 can name.
+
+**23 September 2026 — `T-027` reads the marker in three more places.** While
+`CheckoutPending::since()` holds and there is no Access, the public Series
+page shows "Your payment is being confirmed" in place of the button, and
+`CheckoutController::store()` and the priced branch of
+`AcceptsInvitations::acceptInvitation()` send a second attempt to the
+Confirming page instead of calling `begin()`; `DELETE s/{seriesId}/checkout`
+(`series.checkout.abandon`) forgets the marker for a buyer who did not pay.
+When this task replaces the marker with the pending row, those reads move to
+the row and Start again abandons it. It depends on `T-027` for
+`PublicSeriesController.php`, `CheckoutController.php` and `ConfirmingTest.php`.

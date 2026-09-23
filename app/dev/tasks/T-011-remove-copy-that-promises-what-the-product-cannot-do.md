@@ -58,3 +58,10 @@ None.
 None.
 
 **17 September 2026 — [R-004](../design-review/passes/R-004-2026-09-17-final-web-review.md) F-1/F-7.** The fresh local pricing catalogue advertises “20 studio logins” and “Public listing”; post-visual inspection traces these to PricingSeeder/database benefits, not proof of deployed production data. Check the release catalogue as well as the fixture against deferred collaborators and invitation-led scope. The paid A$89.00 Series also says “Type it here and you're in” about its verification code although payment follows. These are audit evidence for this draft, not permission to build the promised capabilities or a change to its status.
+
+**23 September 2026.** The paid Series' "Type it here and you're in" is
+`T-027`'s: it adds `accesses.join.intro_paid`, which says the code confirms
+the address and payment follows. One more promise for this draft's audit,
+found while specifying `T-027`: the public page badges an Episode "Preview"
+(`resources/js/pages/public/Series.vue:516-520`) and nothing lets a guest open
+one.

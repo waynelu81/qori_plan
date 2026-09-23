@@ -60,7 +60,9 @@ not a creator dashboard.
 
 `T-073` and `T-074` put the account, the typed code, free access, checkout and
 the confirming state on the Series page itself, and `T-181` brings an
-invitation there. `T-027` is what remains. The
+invitation there. What remains is `T-027` on the Series page, `T-196` for a
+sign-up that leaves it for the register page, and `T-197` for somebody who
+signs up with no link at all. The
 [decision record](../decisions.md#onboarding-follows-the-entry-purpose-2026-09-11)
 and the receiving half of the
 [onboarding plan](../../design/ui-onboarding.md) are the target; R-003 and its
@@ -111,12 +113,16 @@ walkthrough remain historical evidence.
 18. `T-191` — The first steps speak to the first ten people: the dashboard's
     first three next actions, the price help and the invitation page's intro
     say start with the people who already ask, with no number restated
-19. `T-027` — What remains of the receiving path: a person from a Series link
-    confirms who they are without typing it again, and someone who signs up to
-    receive with no link is told how to open one
-20. `T-025` — Show and send every time in a timezone somebody chose: emails,
+19. `T-027` — The Series page confirms who is getting it, and never sells it
+    twice: the account named when signed in, the timezone asked once, the
+    paid sentence honest, and no second checkout while one is confirming
+20. `T-196` — Signing up from a Series page makes no Group: the sign-in link
+    on a Series page leads to a register page that made one by default
+21. `T-197` — Someone who signs up to receive is told how a Series reaches
+    them: the receiving home said only that Series "show up here"
+22. `T-025` — Show and send every time in a timezone somebody chose: emails,
     certificates and PDFs still render in UTC
-21. `T-179` — A creator supplies their own terms for Peers: `T-178` shows
+23. `T-179` — A creator supplies their own terms for Peers: `T-178` shows
     Qori's own until creators write theirs
 
 `T-008`, in the identity stream, fixed the confirmed verification-return defect
@@ -132,7 +138,9 @@ Name and email updates, confirmed email changes, the personal timezone field,
 free access, buyer checkout and its confirming state already exist, and
 `T-073` and `T-074` put them on the Series page. What `D-001` found missing was
 the continuation — each detour coming back to the Series it left — and that is
-what `T-027` finishes.
+built: the code step never leaves the page, and a password sign-in carries the
+Series through verification (`T-008`). What is left is the confirming itself,
+`T-027`.
 
 Buyer payment and seller onboarding stay separate. Skipping seller setup
 permits drafts and free sharing, not charging buyers: the price field and the
