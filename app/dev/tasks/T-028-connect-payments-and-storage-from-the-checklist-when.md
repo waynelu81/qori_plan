@@ -2,8 +2,8 @@
 id: T-028
 title: Connecting Stripe or Google Drive from a Series comes back to it
 stream: onboarding
-status: draft
-owner: unassigned
+status: doing
+owner: claude
 estimate: M
 depends: T-044
 blocks: none
@@ -11,49 +11,126 @@ blocks: none
 
 # T-028 — Connecting Stripe or Google Drive from a Series comes back to it
 
-> **Draft.** Revised by owner direction on 2026-09-11; not to be started.
-> See [PROCESS.md](../PROCESS.md). Split capability work into bounded tasks
-> after confirming what will actually be offered.
-
 ## Why
 
 Since `D-056` a new creator is asked for nothing up front: Stripe is asked
-where a price is typed (`series.price_needs_payments` and its Connect Stripe),
-and Google Drive where a file is chosen (`series.*.not_connected` and Connect
-Google Drive). Both send the creator to the vendor and back — to
-Integrations, not to the Series they were in the middle of. The couple of
-clicks `D-056` promised becomes a hunt for the Series again.
+where a price is typed and Google Drive where a file is chosen. Both links on
+the Series page go to Integrations, and the vendor's landing returns to
+Integrations too, so a creator in the middle of a Series has to find it again.
+The couple of clicks `D-056` promised becomes a hunt.
 
 Afterwards a connection begun from the Series page lands back on that Series,
 at the control that asked for it, whether the creator connected or stopped
-partway.
+partway. And a file Episode starts on Qori storage while Google Drive is not
+connected, so the first file needs nothing connected at all (the owner, 23
+September 2026: "yes start on Qori storage").
+
+## Decisions taken to make this specifiable
+
+**The links keep going to Integrations, and Integrations remembers where they
+came from.** Integrations is where Google's tiers and their limits are read
+and where Stripe's country is chosen; linking straight to a vendor would skip
+both. Each link carries `series` (the slug) and `control` (`series-details` or
+`new-episode`), and the Episode form's adds `kind`. `IntegrationsController::show()`
+resolves the slug inside the Group and remembers
+`share.series.show?kind=…#control` through the existing
+`PaymentsDestination` (price) or `ConnectionsDestination` (Drive), which the
+vendor landings already spend once, first, whatever happened.
+
+**Only a link that names a Series sets an address; nothing on Integrations
+clears one.** Setup's part three (until `T-195`) leaves a `ConnectionsDestination`
+and then links to Integrations, and clearing on every visit would break it. The
+cost is the one setup's parts already accepted: a creator who opens
+Integrations from a Series and connects later, from Integrations, returns to
+that Series.
+
+**A slug that is not this Group's, a control that is not one of the two, or a
+kind that is not an `EpisodeType` sets nothing.** The query never becomes a
+URL of its own, so it cannot redirect anywhere Qori did not build.
+
+**The query's kind decides the form when the page opens; the last Episode
+decides it after each save.** `T-026` applied the query only while a Series
+had no Episodes, and a return from Drive may land on a Series that has some.
+
+**The file default follows the connection, not a list.** `EpisodeType::File`
+offers Google Drive first. The form starts on Qori storage while Drive is not
+connected and on the server's first choice once it is, so a creator returning
+from connecting Drive lands on Drive.
+
+## Preconditions
+
+**Data this task verifies against:** a Group with one draft Series and no
+connections. `php artisan qori:reset basic`.
+
+**Equipment:** a browser. The vendor round trip itself was not walked: it
+needs a real Stripe or Google sign-in, which is the owner's.
 
 ## Scope
 
 **In:**
 
-- The price field's Connect Stripe and the Episode form's Connect Google
-  Drive leaving a forwarding address to the Series and its control, through
-  `PaymentsDestination` and `ConnectionsDestination`, the mechanism setup's
-  part two and three used.
-- The landing spending it once, whatever happened at the vendor, as it does
-  today.
-- Seller readiness at the paid action read from Stripe's capabilities, not an
-  account id, as `T-164` already reads it.
+- The two links naming the Series, the control and the kind.
+- `IntegrationsController::show()` remembering the address.
+- The Episode form's starting kind and provider.
 
 **Out:**
 
-- Setup stages of any kind (`D-056` removed them).
+- Setup stages (`D-056` removed them).
 - The connectors themselves (`storage` stream, `T-044`).
-- Buyer checkout (`T-027`).
+- Seller readiness at the paid action, which the price field and the
+  dashboard's blocking action already read from Stripe's account (`T-164`).
 
-## Before this can be ready
+## Files
 
-- Name the controls on the Series page that start a vendor round trip today,
-  and each finalise controller's current landing. (anyone's, from the code)
-- The fragment each lands on: `#price` for Stripe, `#new-episode` for Drive
-  with the form reopened on the kind it had. (anyone's)
-- Name literal files, copy keys and tests. (anyone's)
+| Path                                                   | Change | Notes                                        |
+| ------------------------------------------------------ | ------ | -------------------------------------------- |
+| `app/Http/Controllers/Share/IntegrationsController.php` | edit  | Remembers the Series address                 |
+| `app/Http/Controllers/Share/SeriesController.php`      | edit   | `paymentsUrl`, `driveProps()`'s link         |
+| `resources/js/pages/share/series/Show.vue`             | edit   | Drive link's kind; starting kind and provider |
+| `docs/flows/billing.md`, `docs/flows/storage.md`       | edit   | The Series as a forwarding address           |
+| `tests/Feature/Series/SeriesReturnTest.php`            | new    | 6 cases                                      |
+
+## Database
+
+None.
+
+## Code
+
+`IntegrationsController::show()` takes the `Request` and calls a private
+`rememberSeries(Request $request): void`. `SeriesController::driveProps()`
+takes the `Series` beside the Group.
+
+## Copy
+
+None.
+
+## Routes
+
+None. `share.settings.integrations` gains three optional query keys.
+
+## Tests
+
+**New: `tests/Feature/Series/SeriesReturnTest.php` — 6 cases**
+
+1. `test_the_series_page_links_name_the_series_and_the_control`
+2. `test_integrations_from_the_price_remembers_the_series_for_stripe`
+3. `test_integrations_from_the_episode_form_remembers_the_series_and_kind_for_drive`
+4. `test_a_series_of_another_group_sets_nothing`
+5. `test_an_unknown_control_or_kind_sets_nothing_of_its_own`
+6. `test_stripe_landing_returns_to_the_series` — the landing spends the
+   address, faked as `PaymentsOauthTest` fakes it
+
+## Acceptance
+
+- [ ] From a Series' price, Connect Stripe goes to Integrations and Stripe's
+      landing returns to that Series' details
+- [ ] From the Episode form, Connect Google Drive goes to Integrations and the
+      landing returns to the Episode form on the kind it was on, on Drive
+- [ ] A file Episode starts on Qori storage while Drive is not connected
+- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [ ] `bin/tasks --check` passes in `qori-plan`
+- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [ ] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 
@@ -72,6 +149,11 @@ setup with one first-Series screen, and Stripe and Google Drive are asked
 where they are needed. Rewritten to the one piece that still matters: coming
 back to the Series afterwards. `T-026` no longer comes first, so the
 dependency on it is dropped.
+
+**2026-09-23 — brought to ready and claimed.** The owner answered the file
+default ("start on Qori storage"). The draft's bullets were answered from the
+code: both links go to Integrations today, and the landings already spend a
+forwarding address.
 
 ## Notes
 
