@@ -2,7 +2,7 @@
 id: T-195
 title: The three-part setup is retired
 stream: onboarding
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-026
@@ -132,21 +132,49 @@ Removed: `share.setup.payments`, `share.setup.storage`, `share.setup.skip`,
 
 ## Tests
 
-To be written when ready: renaming from the card moves the slug before
-anything is published and keeps it after; the four removed URLs answer 404;
-the forwarding-address cases that started from part three start from the
-Series page instead, or from Integrations.
+**Changed: `tests/Feature/Share/SetupTest.php`** — the three `setup`-flag
+naming cases become the card's: `test_naming_the_group_from_the_card_moves_the_url_before_anything_is_published`,
+`test_naming_the_group_takes_the_next_free_url`,
+`test_a_group_that_has_published_keeps_its_url_when_renamed`; the two that
+skipped parts use `finish()`; new `test_the_retired_parts_of_setup_answer_404`.
+
+**New in `tests/Feature/Series/SeriesReturnTest.php`:**
+`test_integrations_reached_any_other_way_clears_both_addresses`.
+
+**Deleted:** `tests/Feature/Share/SetupStepsTest.php`.
+
+**Changed:** `ConnectionAccountChangeTest`, `ConnectionsConnectTest`,
+`PaymentsOauthTest` — the address they plant is a page that still exists.
 
 ## Acceptance
 
-- [ ] No setup URL but `share.setup` and its two writes answers
-- [ ] Renaming from the dashboard's card moves the URL until something is
+- [x] No setup URL but `share.setup` and its two writes answers
+- [x] Renaming from the dashboard's card moves the URL until something is
       published, and never after
-- [ ] `qori:reachability` names none of the removed pages
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] `qori:reachability` names none of the removed pages
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
+
+## Added during execution
+
+- `app/Http/Controllers/Share/IntegrationsController.php` — with setup's part
+  three gone, nothing leaves a forwarding address and then links to
+  Integrations, so a plain visit now clears both (D-017); `T-028`'s decision
+  to leave them was only for part three.
+- `tests/e2e/support/creator.ts`, `tests/e2e/core-loop.spec.ts`,
+  `tests/e2e/first-share.spec.ts`, `app/Console/Commands/EndToEndCommand.php`,
+  `docs/tinker/e2e.md` — the browser journeys walked the three parts (name,
+  skip payments, finish) and had been failing since `T-026`; they now land on
+  the first-Series screen, look around first, and name the Group from the
+  dashboard.
+- `tests/Feature/Share/GroupRenameTest.php` — pinned that a rename never
+  moves the slug; it now arranges a published Series first.
+- `docs/flows/README.md`, `docs/tinker/connections.md`,
+  `docs/tinker/design-review.md` — lines that named the parts.
+- `app/Support/PaymentsDestination.php`, `app/Support/ConnectionsDestination.php`
+  — docblocks that described setup as the caller.
 
 ## Re-scope log
 
