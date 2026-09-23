@@ -2,8 +2,8 @@
 id: T-191
 title: The first steps speak to the first ten people
 stream: onboarding
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: S
 depends: none
 blocks: none

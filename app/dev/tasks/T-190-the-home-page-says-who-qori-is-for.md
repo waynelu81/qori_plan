@@ -2,8 +2,8 @@
 id: T-190
 title: The home page says who Qori is for
 stream: design
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: S
 depends: none
 blocks: T-193
