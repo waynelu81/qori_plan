@@ -5,7 +5,7 @@ stream: design
 status: draft
 owner: unassigned
 estimate: S
-depends: none
+depends: T-196
 blocks: none
 ---
 
@@ -168,3 +168,9 @@ None.
 
 R-001 marked F-1 "Task needed", grouped with its F-5 and F-6, but no task file
 cites it, which is why R-004 found the hints unchanged. F-5 and F-6 stay out.
+
+**23 September 2026.** `T-196` changes the same page first: while a Series is
+waiting, `registerView` passes `receiving` and `Register.vue` shows one line
+in place of the choice, from `auth.register.for_series`. This task's two hints
+are for the ordinary page, where the choice is still asked; it depends on
+`T-196` for `Register.vue`, `FortifyServiceProvider.php` and `lang/en/auth.php`.

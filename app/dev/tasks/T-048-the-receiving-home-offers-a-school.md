@@ -6,7 +6,7 @@ status: ready
 owner: unassigned
 estimate: S
 depends: none
-blocks: none
+blocks: T-197
 ---
 
 # T-048 — The way into sharing offers a school, and lowercases a product noun

@@ -128,6 +128,9 @@ neither stream's goal describes any of this.
 28. `T-180` — A subscribed Group changes plan instead of buying a second one:
     "Switch to Pro" opens a second subscription today, and since `D-048`
     Stripe refuses one in another currency on the same customer
+29. `T-200` — A changed address keeps one Peer row per Group: a Peer who
+    changes their address gets a second row, counted twice against the Group's
+    Peer limit, the next time that Group gives them a Series
 
 `T-050` went first because it was small and entirely specified, `T-054` for the
 same reason. The four payouts tasks come before the rest because a price
