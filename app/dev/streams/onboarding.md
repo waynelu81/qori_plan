@@ -60,9 +60,11 @@ not a creator dashboard.
 
 `T-073` and `T-074` put the account, the typed code, free access, checkout and
 the confirming state on the Series page itself, and `T-181` brings an
-invitation there. What remains is `T-027` on the Series page, `T-196` for a
-sign-up that leaves it for the register page, and `T-197` for somebody who
-signs up with no link at all. The
+invitation there, and `T-027` (24 September 2026) makes the page confirm who
+is getting it: the account named above the button, the timezone asked once,
+and no second checkout while a payment is confirming. What remains is `T-196`
+for a sign-up that leaves the page for the register page, and `T-197` for
+somebody who signs up with no link at all. The
 [decision record](../decisions.md#onboarding-follows-the-entry-purpose-2026-09-11)
 and the receiving half of the
 [onboarding plan](../../design/ui-onboarding.md) are the target; R-003 and its
@@ -139,8 +141,8 @@ free access, buyer checkout and its confirming state already exist, and
 `T-073` and `T-074` put them on the Series page. What `D-001` found missing was
 the continuation — each detour coming back to the Series it left — and that is
 built: the code step never leaves the page, and a password sign-in carries the
-Series through verification (`T-008`). What is left is the confirming itself,
-`T-027`.
+Series through verification (`T-008`). The confirming itself is `T-027`'s,
+built on 24 September 2026.
 
 Buyer payment and seller onboarding stay separate. Skipping seller setup
 permits drafts and free sharing, not charging buyers: the price field and the

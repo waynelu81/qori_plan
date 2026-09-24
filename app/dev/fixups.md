@@ -13,15 +13,15 @@ stops them recurring, not this file.
 
 ## Open
 
-- Public Series page: the code's length is written as `6` three times instead
-  of coming from `LoginCodeService::LENGTH`. `resources/js/pages/public/Series.vue:346,354,370` (23 Sep)
+- Fifteen `<Link><Button>` pairs render a button inside an anchor: invalid
+  nesting and two tab stops for one control; `Button`'s `as-child` wraps the
+  link instead. `resources/js/pages/public/Series.vue` ("Open", "Check now") and
+  others, `grep -A1 '<Link'` (24 Sep)
 - The Peer's two homes have two names: "Shared with me" in the sidebar, "My
   shared" in the user menu, the access email and one error.
   `resources/js/components/UserMenuContent.vue:56`, `lang/en/accesses.php:28`, `lang/en/errors.php:590` (23 Sep)
 - Profile's timezone help tells a Peer about what time "your Peers" are told a
   session starts. `resources/js/pages/settings/Profile.vue:183` (23 Sep)
-- The comment says resend is limited per address and IP; resend posts no
-  address, so the limiter keys on the IP alone. `routes/web.php:113-116` (23 Sep)
 - `docs/flows/accesses.md` still writes the Group routes as `/w/{group}` (they
   are `/g/`) and names `CONSENT_STUDENT` (the case is `ConsentSource::Peer`). (23 Sep)
 - `errors.playback.missing_content` says "That episode doesn't have anything to
