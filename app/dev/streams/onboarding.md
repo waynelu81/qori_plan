@@ -65,8 +65,9 @@ is getting it: the account named above the button, the timezone asked once,
 and no second checkout while a payment is confirming. `T-196` (24 September
 2026) keeps a sign-up that leaves the page for the register page receiving:
 the page names the Series instead of asking, and no Group is made. What
-remains is `T-197` for somebody who signs up with no link at all, and `T-202`
-for a Series remembered on a host other than `APP_URL`'s. The
+remains is `T-197` for somebody who signs up with no link at all. `T-202`
+(24 September 2026) stores the Series page's destination as a path, so both
+hold on any host the site is reached on. The
 [decision record](../decisions.md#onboarding-follows-the-entry-purpose-2026-09-11)
 and the receiving half of the
 [onboarding plan](../../design/ui-onboarding.md) are the target; R-003 and its
