@@ -2,8 +2,8 @@
 id: T-048
 title: The way into sharing offers a school, and lowercases a product noun
 stream: language
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: S
 depends: none
 blocks: T-197
@@ -129,13 +129,44 @@ somebody has to silence.
 - [ ] No article sits immediately before either noun
 - [ ] The new test fails before the fix and passes after
 - [ ] Every file the test names is fixed, and nothing beyond them is touched
-- [ ] `composer ci:check` green from a clean tree
-- [ ] Board regenerated (`php artisan qori:tasks`)
-- [ ] Report written in `reports/`
+- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [ ] `bin/tasks --check` passes in `qori-plan`
+- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [ ] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 
-None.
+**2026-09-24 — claimed, and three things the 11 September spec could not
+know.**
+
+- **Acceptance used the old process.** "Board regenerated (`php artisan
+  qori:tasks`)" became `bin/tasks --check` in `qori-plan` when the plan moved
+  (21 September); the closing lines are now the current ones.
+- **"School" has two legitimate uses in `resources/js`, so test 2 carries an
+  allow-list, each entry a file, the phrase on the matching line, and a
+  reason.** `Welcome.vue` says Qori is "not a school" (`T-190`), which is the
+  north star, not a name for the Group. `Register.vue`'s share hint, "Set up a
+  school and publish series.", is `T-108`'s: it moves both hints to lang and
+  its copy waits on the owner, so fixing it inline here would pre-empt that
+  and be rewritten. The entry names `T-108`, which deletes it. This settles
+  `T-108`'s open bullet on the order: this task lands first. "Workspace", the
+  Group's code name until 9 September, is checked beside "school"; "Google
+  Workspace" is a vendor's product and is not.
+- **Test 1 walks every page but the staff console.** A first pass names 14
+  phrases in 8 files, 5 of them in `resources/js/pages/admin/`. The console
+  reads across Groups for Qori's own staff, so no Group's vocabulary applies
+  there (`docs/architecture/admin-console.md`); it is excluded with that
+  reason. The other four files it names are fixed, under **Added during
+  execution**.
+
+## Added during execution
+
+| Path | Change | Notes |
+| --- | --- | --- |
+| `resources/js/pages/public/Certificate.vue` | edit | "this series", "this peer", "their series" |
+| `resources/js/pages/share/series/Index.vue` | edit | "your peers", twice; a fixup line |
+| `resources/js/pages/share/series/Show.vue` | edit | "this episode"; a fixup line |
+| `resources/js/pages/share/settings/Integrations.vue` | edit | "your series", twice |
 
 ## Notes
 
