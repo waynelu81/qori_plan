@@ -17,7 +17,10 @@ documents — and a custom label has never granted anybody anything.
 the plan flag `custom_vocabulary`, currently **false on every plan**.
 
 What is missing is the way in — there is no form — and the surfaces that still
-speak inline English.
+speak inline English. Since `T-048` (24 September 2026), `ProductNounsTest`
+fails any lowercase product noun in a page's prose outside the staff console,
+and any page that calls the Group a school; the one allowed line left for
+another task is `Register.vue`'s share hint, `T-108`'s.
 
 ## Tasks, in order
 

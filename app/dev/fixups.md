@@ -13,6 +13,9 @@ stops them recurring, not this file.
 
 ## Open
 
+- Integrations says "Connect a Stripe account to charge for your Series"; the
+  owner asked on 23 September for no "charge" in Qori's copy ("so
+  aggressive"). `resources/js/pages/share/settings/Integrations.vue` (24 Sep)
 - Fifteen `<Link><Button>` pairs render a button inside an anchor: invalid
   nesting and two tab stops for one control; `Button`'s `as-child` wraps the
   link instead. `resources/js/pages/public/Series.vue` ("Open", "Check now") and
@@ -28,10 +31,6 @@ stops them recurring, not this file.
   open yet" — the Episode noun hardcoded and lowercase. `lang/en/errors.php:518` (23 Sep)
 - Register: the share card reads "Set up a school and publish series." — a
   noun that is not the Group's, lowercase. `resources/js/pages/auth/Register.vue:14` (21 Sep)
-- New Series form: "What your peers will learn", "Shown on the certificate your
-  peers can share" — lowercase and hardcoded. `resources/js/pages/share/series/Index.vue` (21 Sep)
-- Episode form: "Let anyone preview this episode" — lowercase and hardcoded.
-  Series page, New Episode panel (21 Sep)
 - Sign in: Enter in the email field does not advance to the next step; only
   clicking Next does. `resources/js/pages/auth/Login.vue` (21 Sep)
 - A file Episode shows "No materials" under itself straight after upload (21 Sep)

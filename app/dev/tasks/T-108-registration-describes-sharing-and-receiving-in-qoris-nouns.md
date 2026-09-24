@@ -155,10 +155,14 @@ reads and `T-048`'s `ProductNounsTest` is their home.
 - Decide whether "I want to share" and "I want to learn" move with the hints:
   "learn" is the course framing F-8 objects to, and an inline label over a lang
   hint is the half-conversion `T-048` declined. The owner's.
-- Settle the order with `T-048`: its planned
+- ~~Settle the order with `T-048`: its planned
   `test_no_vue_file_calls_the_group_a_school` walks `resources/js`, and its
   Scope fixes what the test names, so landing first it would likely fix line 14
-  inline. The design and language stream owners'.
+  inline. The design and language stream owners'.~~ **Answered 24 September
+  2026:** `T-048` landed first and did not touch the hints. Its test allows
+  the share hint by an entry in `ProductNounsTest::OTHER_NAMES_ALLOWED` naming
+  this task; when the hints move to lang, delete that entry, and the test then
+  holds the page to it.
 
 ## Re-scope log
 
