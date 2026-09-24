@@ -2,7 +2,7 @@
 id: T-048
 title: The way into sharing offers a school, and lowercases a product noun
 stream: language
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -124,15 +124,15 @@ somebody has to silence.
 
 ## Acceptance
 
-- [ ] The panel offers a Group, resolved through the vocabulary
-- [ ] The Series noun comes from `plural('series')`, with its casing intact
-- [ ] No article sits immediately before either noun
-- [ ] The new test fails before the fix and passes after
-- [ ] Every file the test names is fixed, and nothing beyond them is touched
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] The panel offers a Group, resolved through the vocabulary
+- [x] The Series noun comes from `plural('series')`, with its casing intact
+- [x] No article sits immediately before either noun
+- [x] The new test fails before the fix and passes after
+- [x] Every file the test names is fixed, and nothing beyond them is touched
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 
