@@ -62,9 +62,11 @@ not a creator dashboard.
 the confirming state on the Series page itself, and `T-181` brings an
 invitation there, and `T-027` (24 September 2026) makes the page confirm who
 is getting it: the account named above the button, the timezone asked once,
-and no second checkout while a payment is confirming. What remains is `T-196`
-for a sign-up that leaves the page for the register page, and `T-197` for
-somebody who signs up with no link at all. The
+and no second checkout while a payment is confirming. `T-196` (24 September
+2026) keeps a sign-up that leaves the page for the register page receiving:
+the page names the Series instead of asking, and no Group is made. What
+remains is `T-197` for somebody who signs up with no link at all, and `T-202`
+for a Series remembered on a host other than `APP_URL`'s. The
 [decision record](../decisions.md#onboarding-follows-the-entry-purpose-2026-09-11)
 and the receiving half of the
 [onboarding plan](../../design/ui-onboarding.md) are the target; R-003 and its
@@ -122,9 +124,12 @@ walkthrough remain historical evidence.
     on a Series page leads to a register page that made one by default
 21. `T-197` — Someone who signs up to receive is told how a Series reaches
     them: the receiving home said only that Series "show up here"
-22. `T-025` — Show and send every time in a timezone somebody chose: emails,
+22. `T-202` — A Series is remembered whichever host the site was reached on:
+    on a host other than `APP_URL`'s, the Series page's sign-in link stores
+    nothing, and `T-008` and `T-196` quietly do not apply
+23. `T-025` — Show and send every time in a timezone somebody chose: emails,
     certificates and PDFs still render in UTC
-23. `T-179` — A creator supplies their own terms for Peers: `T-178` shows
+24. `T-179` — A creator supplies their own terms for Peers: `T-178` shows
     Qori's own until creators write theirs
 
 `T-008`, in the identity stream, fixed the confirmed verification-return defect

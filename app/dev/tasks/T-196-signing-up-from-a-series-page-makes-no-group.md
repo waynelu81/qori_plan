@@ -2,7 +2,7 @@
 id: T-196
 title: Signing up from a Series page makes no Group
 stream: onboarding
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: T-027
@@ -142,12 +142,12 @@ destination the `series.sign-in` visit left.
 
 ## Acceptance
 
-- [ ] From a Series page's sign-in link, signing up names the Series, asks nothing about sharing, and makes no Group
-- [ ] Signed out and in again with nothing intended, that account lands on the receiving home, not the first-Series screen — walked in a browser
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] From a Series page's sign-in link, signing up names the Series, asks nothing about sharing, and makes no Group
+- [x] Signed out and in again with nothing intended, that account lands on the receiving home, not the first-Series screen — walked in a browser
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 
@@ -157,3 +157,9 @@ None.
 
 `T-027`'s specification on 23 September 2026 found the path; the receiving
 home's words for somebody with no Series went to `T-197` the same day.
+
+**24 September 2026 — built.** The walk only works on `APP_URL`'s host:
+reached as `127.0.0.1` with `APP_URL=http://localhost:8001`, the Series page's
+sign-in link stores no `SignInDestination`, so the register page asks as before
+and the listener makes a Group. That is `SignInDestination::remember()`
+refusing the absolute URL `signIn()` builds on another host → draft `T-202`.
