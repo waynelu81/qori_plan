@@ -2,8 +2,8 @@
 id: T-196
 title: Signing up from a Series page makes no Group
 stream: onboarding
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: S
 depends: T-027
 blocks: T-108
