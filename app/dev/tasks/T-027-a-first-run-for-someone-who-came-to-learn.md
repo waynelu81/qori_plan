@@ -2,7 +2,7 @@
 id: T-027
 title: The Series page confirms who is getting it, and never sells it twice
 stream: onboarding
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-008, T-024
@@ -411,17 +411,17 @@ current post still passes, and nothing asserts `email` outside `waiting` and
 
 ## Acceptance
 
-- [ ] Signed in, the Series page names the account that gets it, offers "Not you? Sign out", and shows the timezone or asks it
-- [ ] A guest's timezone, asked beside name and email, is saved when the code proves an account with none, and never over one
-- [ ] A priced Series' intro says the code confirms the address and payment follows
-- [ ] While a payment this session started is confirming, the page offers Check now and Start again instead of the button, and a second checkout goes to Confirming
-- [ ] Signed in as somebody else, an invitation's page data carries no full address
-- [ ] `php artisan qori:e2e` passes: the public-link, invitation and first-share journeys fill the guest form
-- [ ] A state-specific browser walk at 375px and desktop: a guest on a free and a priced Series, signed in with and without a timezone, and confirming then Start again
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Signed in, the Series page names the account that gets it, offers "Not you? Sign out", and shows the timezone or asks it
+- [x] A guest's timezone, asked beside name and email, is saved when the code proves an account with none, and never over one
+- [x] A priced Series' intro says the code confirms the address and payment follows
+- [x] While a payment this session started is confirming, the page offers Check now and Start again instead of the button, and a second checkout goes to Confirming
+- [x] Signed in as somebody else, an invitation's page data carries no full address
+- [x] `php artisan qori:e2e` passes: the public-link, invitation and first-share journeys fill the guest form
+- [x] A state-specific browser walk at 375px and desktop: a guest on a free and a priced Series, signed in with and without a timezone, and confirming then Start again
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 

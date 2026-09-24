@@ -723,3 +723,10 @@ Confirming page instead of calling `begin()`; `DELETE s/{seriesId}/checkout`
 When this task replaces the marker with the pending row, those reads move to
 the row and Start again abandons it. It depends on `T-027` for
 `PublicSeriesController.php`, `CheckoutController.php` and `ConfirmingTest.php`.
+
+**24 September 2026 — `T-027` built.** One gap it left for this task: the
+Confirming page offers no way back to the Series for somebody who did not pay.
+"Check now" on the Series page lands there, and only the Series page's "Didn't
+pay? Start again" forgets the marker, so a buyer who pressed Check now waits
+on "Confirming your payment" until they find the Series link again. When
+Confirming is chosen from the row, it can carry Start again itself.
