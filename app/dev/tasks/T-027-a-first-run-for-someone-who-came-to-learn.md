@@ -2,8 +2,8 @@
 id: T-027
 title: The Series page confirms who is getting it, and never sells it twice
 stream: onboarding
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: M
 depends: T-008, T-024
 blocks: T-102, T-196, T-198
