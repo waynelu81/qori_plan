@@ -2,7 +2,7 @@
 id: T-202
 title: A Series is remembered whichever host the site was reached on
 stream: onboarding
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -140,11 +140,11 @@ because `assertRedirect()` resolves both sides.
 
 ## Acceptance
 
-- [ ] The Series page's sign-in link remembers its Series on a host other than `APP_URL`'s, walked in a browser on `127.0.0.1`: sign-up there names the Series and makes no Group
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] The Series page's sign-in link remembers its Series on a host other than `APP_URL`'s, walked in a browser on `127.0.0.1`: sign-up there names the Series and makes no Group
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 
