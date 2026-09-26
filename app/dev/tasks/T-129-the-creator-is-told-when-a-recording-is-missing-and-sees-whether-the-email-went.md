@@ -2,7 +2,7 @@
 id: T-129
 title: The creator is told when a recording is missing, and sees whether the recording email went
 stream: classroom
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: T-128
@@ -737,35 +737,35 @@ Total: 13 new cases.
 
 ## Acceptance
 
-- [ ] A live Episode scheduled to end more than `qori.live.creator_nudge_hours`
+- [x] A live Episode scheduled to end more than `qori.live.creator_nudge_hours`
       ago with no published recording, whether or not anybody has been
       granted, gets the Group owner one email on the next
       `qori:sessions:notify` run and never a second, whether the run repeats
       or a later part is added
-- [ ] A cancelled session, one declared not recorded, one marked Live only,
+- [x] A cancelled session, one declared not recorded, one marked Live only,
       and a session older than `qori.live.notice_window_days` send nothing
       (owner acceptance 9: no recording shows truthful status and a creator
       recovery)
-- [ ] The email names the scheduled end in the owner's zone with the Group's
+- [x] The email names the scheduled end in the owner's zone with the Group's
       zone beside it when the two differ, speaks the Group's words, links to
       the creator's Series page and says it went to the owner alone
-- [ ] A suppressed owner address is skipped and the ledger says so; a failed
+- [x] A suppressed owner address is skipped and the ledger says so; a failed
       send follows `T-128`'s retry and is then left for `T-019`
-- [ ] A nudge whose session gets its recording, or is declared not recorded,
+- [x] A nudge whose session gets its recording, or is declared not recorded,
       before the email goes is skipped as `resolved`, and nothing is sent
-- [ ] The creator's Series page says, on each live Episode with any
+- [x] The creator's Series page says, on each live Episode with any
       `recording_ready` row, how many were sent, failed, are still to go and
       were skipped, in the Group's words, with what "sent" means beneath it;
       a failed row with a retry still due counts as still to go, an Episode
       with no rows shows nothing, and the Peer's card is unchanged
-- [ ] `--dry-run` names each candidate and writes and sends nothing
-- [ ] `qori:mail:check` sends the nudge through the service and reads it back
-- [ ] `docs/flows/live-sessions.md` describes the nudge and the tally, and
+- [x] `--dry-run` names each candidate and writes and sends nothing
+- [x] `qori:mail:check` sends the nudge through the service and reads it back
+- [x] `docs/flows/live-sessions.md` describes the nudge and the tally, and
       `docs/tinker/live-sessions.md` drives both
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -792,7 +792,29 @@ Total: 13 new cases.
   nudged regardless — since the build does not wait on a change the owner
   may never ask for, and the flip stays one `whereIn` and one case.
 
+## Added during execution
+
+- `app/Models/SessionNotice.php` — its docblock names `queueCreatorNudges()`
+  beside `queueRecordingReady()` as what writes the rows.
+- `docs/tinker/README.md` — the live-sessions row names the nudge.
+- An eleventh case in `RecordingNeededTest`,
+  `test_a_failed_nudge_is_tried_again_and_then_left`: the Acceptance line
+  about `T-128`'s retry had no case for this kind, and a nudge's retry asks
+  its premise again each time.
+
 ## Re-scope log
+
+**2026-09-27 — "skipped" counts suppressed addresses only.** The tally was to
+count every skipped `recording_ready` row as an address Qori no longer writes
+to, but `sendDue()` skips for five reasons and only `suppressed` is that:
+`recording_unavailable` is a recording the creator hid, `session_cancelled` a
+session they cancelled, `access_inactive` an Access they revoked or a person
+gone, and `stale` a row too old to send. Counted, a hidden recording would
+have read "12 addresses Qori no longer writes to" under it. `talliesFor()`
+counts a skipped row whose `error` is `suppressed` and no other, and
+`RecordingEmailStatusTest`'s first case adds a `recording_unavailable` row
+that must not count. The copy and the Acceptance line stand as written: this
+is what makes them true.
 
 **2026-09-27 — reconciled with `T-128` and the code as built.**
 
@@ -864,4 +886,5 @@ ignores the rest rather than inventing a fifth sentence.
 
 `docs/tinker/mail.md:27` already says "all seven" beside a listing of six;
 `T-128` and this task each move the count, and whichever lands second makes
-the sentence true.
+the sentence true. (27 September 2026: it says eleven, with the listing, and
+the line on the broadcast mailer says the check then counts ten.)
