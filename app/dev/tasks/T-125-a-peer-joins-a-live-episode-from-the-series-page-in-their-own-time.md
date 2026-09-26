@@ -2,7 +2,7 @@
 id: T-125
 title: A Peer joins a live Episode from the Series page, in their own time
 stream: classroom
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-089, T-123, T-124
@@ -1014,38 +1014,38 @@ Total: 31 new cases in two files, 2 added to existing files, 1 removed.
 
 ## Acceptance
 
-- [ ] A Peer with access sees each live Episode as a card with the start and
+- [x] A Peer with access sees each live Episode as a card with the start and
       end in the device's zone, the Group's zone beside it when different,
       and "Recorded" or "Live only" from the creator's switch
-- [ ] From 15 minutes before the start until 15 minutes after the scheduled
+- [x] From 15 minutes before the start until 15 minutes after the scheduled
       end, Join opens the creator's link in a new tab; for two hours after
       that a secondary "Still in the session? Join again" does the same, for
       a "Live only" session too; before and after, the card says what comes
       next in the schedule's
       words, and no line says "live now", "has ended", "on its way" or
       "processing"
-- [ ] A saved Join link followed outside the window returns to the card with
+- [x] A saved Join link followed outside the window returns to the card with
       one line, never to a page of its own
-- [ ] `GET /shared/{seriesId}/episodes/{episodeId}` lands on the card after
+- [x] `GET /shared/{seriesId}/episodes/{episodeId}` lands on the card after
       the access gate — the address every later email and calendar file
       is minted against
-- [ ] Owner scenario 2: a Brisbane creator's 1 and 8 November 2026 sessions
+- [x] Owner scenario 2: a Brisbane creator's 1 and 8 November 2026 sessions
       are the right instants for London and New York at prop level; the
       browser rendering is walked in `T-145`
-- [ ] Owner scenario 11: a revoked Peer and a wrong-tenant request are
+- [x] Owner scenario 11: a revoked Peer and a wrong-tenant request are
       refused on both routes; the public page never carries a join link,
       and neither does the Peer page as a prop
-- [ ] Every Join is one `access_opens` row with the Access's `group_id` and
+- [x] Every Join is one `access_opens` row with the Access's `group_id` and
       marks the Episode opened
-- [ ] A Peer with no timezone saved is offered their device's zone on the
+- [x] A Peer with no timezone saved is offered their device's zone on the
       page and comes back to the same page after saving
-- [ ] `docs/flows/live-sessions.md` and `docs/tinker/live-sessions.md`
+- [x] `docs/flows/live-sessions.md` and `docs/tinker/live-sessions.md`
       describe what runs, with their README rows, and `docs/flows/storage.md`
       no longer lists join links or progress as unbuilt
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `php artisan qori:tasks --check` passes
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `php artisan qori:tasks --check` passes
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -1079,15 +1079,57 @@ Total: 31 new cases in two files, 2 added to existing files, 1 removed.
   `classroom` stream's claim order lists it (`T-124`, then `T-125`,
   `T-127`, `T-134`, `T-143`).
 
+## Added during execution
+
+- `LiveSessionService::isScheduled(Episode): bool` — see the Re-scope log.
+  `SharedController::show()` sends `live: null` for a live row it refuses,
+  and `joinAllowed()` answers false for one. One case beyond the 20 in
+  `LiveSessionCardTest`, `test_a_live_episode_with_no_start_has_no_card_and_join_turns_back`.
+- `docs/flows/series.md` — its "Not built yet" said a Peer has no Join yet
+  (`T-125`); it now points at `live-sessions.md`.
+
 ## Re-scope log
 
-None.
+**2026-09-26 — a live row can have no start.** Decisions said `stateFor()`
+throws for an Episode with no `starts_at`/`ends_at`, "a programmer error,
+since `T-123` requires both on every live row". It does not: `T-123`'s
+migration gave an end only to live rows that had a start, and
+`EpisodeService::add()` still takes `startsAt` as optional (the form requires
+it; the service does not). Calling `stateFor()` for every live row would have
+made one such row a 500 on the Peer's page. `isScheduled()` says whether a row
+has both columns; `stateFor()` and `joinWindow()` still throw for one that
+does not, and every caller asks first. Such a row renders as `T-089` left it —
+no card, no control — and Open turns it back with `not_open` (or `no_link`).
+Nothing a person with a scheduled session sees changes.
 
 ## Notes
 
 Specified on 17 September 2026 from the merged decisions and the classroom
 brief; the two source proposals are folded into
 [`../course-classroom.md`](../course-classroom.md).
+
+Built 26 September 2026. Wording against the code, none of it a change to
+what is built:
+
+- `PlaybackTicketService`'s constructor has a fifth argument, not a fourth:
+  `T-160` added `VendorAccessService $vendorAccess` on 21 September and put
+  `ensureGrant()` in the slot this spec's Code reserved for `T-091`. The live
+  arm runs before `ensureGrant()`, which answers null for a pasted link anyway.
+- `OpenEpisodeController`'s default arm is `T-160`'s per-state notice
+  (`shared.vendor_notice.<state>` when the key exists, else `redirected`, with
+  `:creator` and `:email`), not a bare `redirected`; the two live arms sit in
+  front of it.
+- `SessionTime.vue`'s Group line is left out, rather than falling back to the
+  reader's own zone, when the browser lacks the Group's zone — the fallback
+  would print the same time twice.
+- `shared/Show.vue` reads the browser's zone in `onMounted()`, because pages
+  render on the server too and its zone is not the reader's.
+- Tests 16 and 17's `assertDontSee('zoom.us/j/91827405566')` cannot fail on
+  an Inertia page, whose props are embedded with `json_encode()` and so write
+  every `/` as `\/`. Both also assert the meeting number alone,
+  `91827405566`.
+- Acceptance's `php artisan qori:tasks --check` is `bin/tasks --check` in this
+  repository since 21 September.
 
 Edits to other drafts this spec implies:
 
