@@ -151,6 +151,12 @@ None: the page is JSON for a developer, and the console line is a diagnostic.
   migrations now — the owner's, to read off the dashboard. The probe needs
   neither to run; the answers are for reading its runs.
 
+## Added during execution
+
+- `.env.example` — `QORI_CLOUD_PROBE_CRON`, which `EnvExampleTest` requires of
+  every `QORI_` key the config reads; the probe's first commit left it out,
+  and `T-128`'s gate caught it (qori `51f9b38`).
+
 ## Re-scope log
 
 > Empty until something in the spec turns out to be wrong. Then: what was
