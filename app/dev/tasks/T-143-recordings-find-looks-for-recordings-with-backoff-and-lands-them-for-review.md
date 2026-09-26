@@ -1710,3 +1710,12 @@ concern: `FindsRecordings::find()` takes an `Episode` and a `Connection`
 is rewritten by `T-125` when `live-sessions.md` is created and kept true by
 `T-141` for connecting; this task adds the sweep to that file and touches
 the README's row only.
+
+`T-127`'s report (26 September 2026): a Peer's Watch label counts every row
+on the Episode, hidden ones too, so hiding Part 1 leaves "Watch part 2"
+(`SharedController::liveCardInGroup()`), and `RecordingService::paste()`
+numbers after the highest `position`. Both count a row this task holds for
+review (`published_at` null) as well, so once held rows exist a Peer could
+read "Watch part 2" with no Part 1 ever offered. Decide whether a held row
+takes a position before it is published, or the label counts published rows
+only.
