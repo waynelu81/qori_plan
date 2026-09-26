@@ -133,7 +133,7 @@ None: the page is JSON for a developer, and the console line is a diagnostic.
 
 ## Acceptance
 
-- [ ] The probe is deployed with the Scheduler toggle on, and
+- [x] The probe is deployed with the Scheduler toggle on, and
       `/up/scheduler` shows runs scheduled ten minutes apart
 - [ ] The report says, from the runs: the lag against the due minute; whether
       the environment slept between runs (the container's age); and whether
@@ -147,9 +147,15 @@ None: the page is JSON for a developer, and the console line is a diagnostic.
 
 ## Before this can be ready
 
-- The Cloud environment's sleep timeout, and whether its deploy command runs
-  migrations now — the owner's, to read off the dashboard. The probe needs
-  neither to run; the answers are for reading its runs.
+- The Cloud environment's sleep timeout — the owner's, to read off the App
+  cluster's Scale to Zero setting. _Asked_ 26 September 2026. The runs imply
+  it is under ten minutes (Notes).
+- Whether the database (Neon's compute) and the cache (Laravel Valkey) slept
+  between runs — the owner's, from the Neon Console and Cloud's cache
+  metrics. _Asked_ 26 September 2026.
+- ~~Whether the deploy command runs migrations now.~~ **Answered 26 September
+  2026:** it does, once `T-205` pointed migrations at Neon's direct
+  endpoint.
 
 ## Added during execution
 
@@ -167,6 +173,30 @@ None: the page is JSON for a developer, and the console line is a diagnostic.
 None.
 
 ## Notes
+
+**What the probe showed, 26 September 2026** (one read of `/up/scheduler` at
+12:47 UTC, after the deploy of 09:39):
+
+- **Every run happened.** 19 runs, one for each ten-minute mark from 09:40 to
+  12:40, 9.3 to 10.7 minutes apart; none missed, none doubled.
+- **The environment sleeps between runs.** 14 of the 19 found a container
+  1.3 to 1.6 seconds old: Cloud had started it for that run. Four found one
+  already up — 597, 141, 226 and 94 seconds — which is something else, most
+  likely an inbound request, waking it first; the first run found the
+  deploy's own container, 77 seconds old. So the sleep timeout is shorter than
+  the ten-minute interval, and a woken environment then waits out that
+  timeout before sleeping again.
+- **A run starts 10 to 52 seconds after its minute**, 30 on average: Cloud
+  wakes the environment somewhere in the due minute, and the command runs
+  about a second and a half after the container starts.
+- **The hashed host never changes** (`ff43e101`): containers share a
+  hostname, so the container's age, not the host, is what tells one start
+  from another.
+- **For `T-128`'s trigger:** a schedule on Cloud is reliable and punctual
+  enough for a recording email — nineteen of nineteen, under a minute late.
+  Its cost is the wake: each run keeps the environment up for the sleep
+  timeout, so the share of time awake is about the timeout over the
+  interval, and an interval at or under the timeout never sleeps at all.
 
 The probe's page is public: it holds times and a hashed host, nothing
 personal. Every read of it wakes a sleeping environment for the sleep
