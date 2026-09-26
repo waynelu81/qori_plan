@@ -2,7 +2,7 @@
 id: T-205
 title: Migrations and transactions survive neons pooler
 stream: operations
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -116,12 +116,12 @@ migrator resolves `pgsql::direct`. The full suite runs on the new framework.
 
 ## Acceptance
 
-- [ ] The next deploy runs its migrations, and the pending ones apply
-- [ ] The full suite passes on `laravel/framework` `v13.33.0`
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] The next deploy runs its migrations, and the pending ones apply
+- [x] The full suite passes on `laravel/framework` `v13.33.0`
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -129,14 +129,17 @@ None.
 
 ## Re-scope log
 
-> Empty until something in the spec turns out to be wrong. Then: what was
-> expected, what was found, and what it means for the spec. Rewrite the
-> sections it changes and carry on — or, if you are handing the task back,
-> set `status: rescope` so the next person rewrites it.
-
-None.
+**2026-09-26 — the pooled host is in `DB_URL`.** The first fix (qori
+`70d5f1c`) read the pooled host from `DB_HOST` alone, and the next deploy
+failed the same way: the trace showed `v13.33.0`, but the migration still ran
+as `pgsql` on the pooler, so no direct endpoint had been configured.
+Production gives the connection as a URL, which Laravel parses over the other
+keys when it connects, and `DB_HOST` then holds only its default. The pooled
+host is now `DB_URL`'s when it is set, else `DB_HOST`'s (qori `d443d79`);
+`DB_DIRECT_HOST` still overrides both, and is the lever if a deploy ever
+fails this way again.
 
 ## Notes
 
-`DB_URL` would bypass the derivation: the direct host is read from `DB_HOST`.
-Production sets `DB_HOST`, as the failed deploy's log shows.
+The direct host is derived from `DB_URL` when it is set, else from
+`DB_HOST`; see the Re-scope log.
