@@ -2,7 +2,7 @@
 id: T-206
 title: Session notices go out on a schedule
 stream: classroom
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -131,14 +131,15 @@ None.
 
 ## Acceptance
 
-- [ ] `php artisan schedule:list` names `qori:sessions:notify` every thirty
+- [x] `php artisan schedule:list` names `qori:sessions:notify` every thirty
       minutes
-- [ ] After the deploy, Cloud's logs show the command's heartbeat once an
-      interval (the owner's to read)
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Pushed to `main`, which deploys the schedule to Cloud; that Cloud's logs
+      show the heartbeat once every thirty minutes is the owner's to read,
+      _asked_ 27 September 2026
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -161,9 +162,22 @@ None.
   without the two readings, which were asked as the cost to weigh and are not
   needed to build or test this.
 
+## Added during execution
+
+- `config/qori.php`: the comment on `creator_nudge_hours` still said
+  "Provisional", and `T-129` decided twelve.
+
 ## Re-scope log
 
-None.
+- **27 September 2026, Acceptance.** The second box read "After the deploy,
+  Cloud's logs show the command's heartbeat once an interval (the owner's to
+  read)", which no builder could tick. It now says what the build did, the
+  push that deploys the schedule. The reading is asked of the owner and listed
+  under Could not verify in the report.
+- **27 September 2026, Scope.** Out said alerting on a heartbeat that stops is
+  `T-019`'s. `T-019` lists five failure modes, and that is not one of them. A
+  line asking whether it joins them is added under `T-019`'s "Before this can
+  be ready".
 
 ## Notes
 

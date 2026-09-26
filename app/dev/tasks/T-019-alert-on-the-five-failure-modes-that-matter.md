@@ -55,6 +55,14 @@ Two things to know before writing them:
   as an error at all, or needs a scheduled check over `payment_fulfilments`.
   The first is free and the second needs the scheduler, which needs `T-018`.
 - `T-018` first: 'queue age' has no meaning until there is a queue that can age.
+- Whether two more join the five: a scheduled command that stops, and a
+  session notice left `failed` after its last try. The code already names
+  this task as what finds both. `qori:sessions:notify` writes one heartbeat
+  line a run, `{due, nudges_queued, sent, dry_run}`, and has run every thirty
+  minutes since `T-206`, so a missing hour of heartbeats means no email is
+  leaving. A row past `qori.live.notice_attempts` is left `failed` for
+  alerting to find (`T-128`, `docs/flows/live-sessions.md`). Found by
+  `T-206`, 27 September 2026 — anyone's.
 
 ## Re-scope log
 
