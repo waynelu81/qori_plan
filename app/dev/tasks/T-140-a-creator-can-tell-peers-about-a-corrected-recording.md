@@ -744,3 +744,12 @@ The brief sized this at four tests; thirteen are listed because the
 wrong-tenant, revoked, vocabulary, slug and over-cap cases are house rules for
 every creator action, and each refusal is one case. The estimate stays `S`: one route, one method, one flag,
 one line in a mail, one button.
+
+`T-128`'s report (26 September 2026): the recipient cut-off is the Episode's
+earliest *visible* recording, so hiding a wrong link and pasting its
+replacement moves it — a Peer granted between the two is mailed about the
+replacement, though the class was told of the first link and `D-028` says
+later joiners see it on the page. That follows `T-128`'s Decisions, which
+left the cut-off for a correction to this task: whether a correction mails
+Peers who joined after the first publication is decided here, at the one
+call site, `SessionNoticeService::queueRecordingReady()`.

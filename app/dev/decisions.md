@@ -3254,3 +3254,13 @@ pages as well, where its Join notice says so, so the comparison that chose
 files stands. What changes is that `T-096`'s buyer copy cannot promise that
 buyers are hidden from each other. The owner decided the same day that buyers
 are not told either: the copy says nothing about it.
+
+### 26 September 2026
+
+**`D-028`, one word made exact (`T-128`).** "Granted before that recording's
+`published_at`" means granted not after it, to the second. Eloquent writes
+timestamps to the second, so a grant and a paste inside one second compare
+equal, and a strict "before" would mail nobody in that case — every test,
+and `qori:mail:check`. `SessionNoticeService::recipientsFor()` is the one place
+the rule is coded, with `<=`; `T-140`'s re-send and `T-144`'s publish call
+`queueRecordingReady()` and never restate it.
