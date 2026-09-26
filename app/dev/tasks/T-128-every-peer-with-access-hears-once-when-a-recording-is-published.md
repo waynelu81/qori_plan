@@ -2,7 +2,7 @@
 id: T-128
 title: Every Peer with access hears once when a recording is published
 stream: classroom
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-127, T-130
@@ -980,33 +980,34 @@ Total: 26 new cases.
 
 ## Acceptance
 
-- [ ] A creator pastes a recording link on a live Episode; every Peer who
+- [x] A creator pastes a recording link on a live Episode; every Peer who
       had access when it was pasted receives one email, the session time in
       their own zone with the Group's zone beside it when they differ, and
       its button lands on the Episode's card where Watch is (owner acceptance 4)
-- [ ] Nothing is queued or sent when the scheduled end passes without a
+- [x] Nothing is queued or sent when the scheduled end passes without a
       recording; no email goes before a recording is published, and the
       email never carries the recording URL or a passcode (owner acceptance 5)
-- [ ] A second part, a hidden recording, a cancelled session, a revoked
+- [x] A second part, a hidden recording, a cancelled session, a revoked
       Access, a suppressed address and a stale row each leave a `skipped` row
       or no row, and never a message
-- [ ] A send that fails is retried after 15, 60 and 240 minutes and then left
+- [x] A send that fails is retried after 15, 60 and 240 minutes and then left
       `failed` with a null `next_attempt_at`, and the exception is reported
-- [ ] `qori:sessions:notify` sends at most `qori.live.sends_per_run` a run
+- [x] `qori:sessions:notify` sends at most `qori.live.sends_per_run` a run
       across every Group, logs one heartbeat, and `--dry-run` sends nothing;
       nothing schedules it yet, by the owner's decision (Re-scope log)
-- [ ] A Group with its own vocabulary gets its own words in the email, with
+- [x] A Group with its own vocabulary gets its own words in the email, with
       the Group passed to `Terminology::line()` explicitly
-- [ ] `php artisan qori:mail:check` sends and reads eight messages, and the
-      eighth shows both zones
-- [ ] `routes/console.php` no longer says the cron entry does not exist;
+- [x] `php artisan qori:mail:check` sends and reads ten messages (nine
+      before this task; Re-scope log), and the recording email shows both
+      zones
+- [x] `routes/console.php` no longer says the cron entry does not exist;
       `docs/flows/live-sessions.md` describes the chain; the recipes in
       `docs/tinker/live-sessions.md` and `docs/tinker/mail.md` run as written
-- [ ] No `acrossAllGroups()` caller is added and no `ShouldQueue`
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `php artisan qori:tasks --check` passes
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] No `acrossAllGroups()` caller is added and no `ShouldQueue`
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `php artisan qori:tasks --check` passes
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -1023,7 +1024,30 @@ Total: 26 new cases.
   (qori `e40e651`, `99f2915`); the signature, the columns and `hidden_at` are
   as this spec cites them, with what the Re-scope log says.
 
+## Added during execution
+
+- `SessionNoticeService` takes `LiveSessionService` for the Join window and
+  `isScheduled()`; `sendDue()`, `countDue()` and `scopeDue()` read their
+  clock in UTC, because a datetime is written and compared as its own wall
+  clock (found by the flow-doc writer).
+- `RecordingService::unhide()` queues too — see the Re-scope log.
+- `config/qori.php` — `shared.episodes.show` leaves `qori.reachability.allowed`:
+  the email's button now links it.
+- `docs/tinker/README.md` — the live-sessions row names the email.
+- `app/dev/decisions.md` — the note under 26 September on `D-028`'s "before".
+- Six cases beyond the 18 in `RecordingReadyTest`: the wait for the card, a
+  session moved later, a live row with no start, and the three re-arm cases.
+
 ## Re-scope log
+
+**2026-09-26 — test 12's instrument.** "`MailChannel::send()` asks the
+manager for a mailer per message" is not the whole of it: `ChannelManager`
+caches the `MailChannel`, which keeps the mail factory it was built with, so a
+`Mail::shouldReceive('mailer')` installed after any real send in the test is
+never reached. The case swaps in a fresh `ChannelManager` first
+(`Notification::swap(new ChannelManager($this->app))`), then installs the
+mock, and counts one report per failed try with `Exceptions::fake()`.
+`T-129` and `T-138` copy that, not the sentence above.
 
 **2026-09-26 — the owner: build the job, leave the trigger out.** Asked
 about the interval, the owner answered that they will test Laravel Cloud's
