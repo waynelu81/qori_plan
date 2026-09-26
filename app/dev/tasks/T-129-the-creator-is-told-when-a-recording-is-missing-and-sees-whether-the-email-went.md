@@ -2,8 +2,8 @@
 id: T-129
 title: The creator is told when a recording is missing, and sees whether the recording email went
 stream: classroom
-status: draft
-owner: unassigned
+status: doing
+owner: claude
 estimate: S
 depends: T-128
 blocks: T-134, T-143
@@ -11,9 +11,9 @@ blocks: T-134, T-143
 
 # T-129 — The creator is told when a recording is missing, and sees whether the recording email went
 
-> **Draft.** Not to be started — see [`../PROCESS.md`](../PROCESS.md). What
-> has to be settled before it can be marked `ready` is listed at the bottom.
-> Written on 17 September 2026 from `D-028`, on the ledger `T-128` builds.
+> Written on 17 September 2026 from `D-028`, on the ledger `T-128` builds;
+> reconciled with `T-128` as built and made ready on 27 September 2026 (the
+> Re-scope log says what changed).
 
 ## Why
 
@@ -87,8 +87,9 @@ nothing else; the classroom brief names no Access condition either. The
 query therefore carries no `accesses` clause, and the email's sentence about
 Peers stays true as written, because it is conditional ("every :peer with
 access gets one email"). Whether a class nobody has been granted should skip
-the nudge is a product choice the owner can still make — see the bottom — and
-adding it later is one `whereIn` and one test case, not a rewrite.
+the nudge is a product choice the owner can still make — asked 26 September
+2026 — and adding it later is one `whereIn` and one test case, not a
+rewrite.
 
 **The window closes at `qori.live.notice_window_days`.** `T-123` backfills
 `ends_at` on every existing live Episode, so without a floor the first run
@@ -145,18 +146,31 @@ counted `failed` row is exhausted, the sentence speaks in the past — Qori
 tried again that many times — and says that the recording stays on the Series
 page whatever the email does, which is the recovery a creator has.
 
-**The page is not edited, and the tally rides inside the `live` prop.** The
-stream's claim order gives `share/series/Show.vue` to `T-123`, `T-130`,
-`T-132` and `T-137` and says every other creator-side change edits a
-component. `T-123` mounts `LiveSessionPanel.vue` on each live row with
-`:episode="episode"`, typed by the panel's own `LiveEpisode` interface, and
-`T-126` and `T-127` put a live Episode's facts under the row's `live` key
-(`'live' => $episode->isLive() ? [...] : null` in `SeriesController::show()`)
-with the creator's copy in `livePanel`. So `SeriesController::show()` adds
-one key, `recordingEmail`, inside that `live` array, and the panel's live type
-gains one optional field. A separate prop could only reach the panel through
-a page line, which is the edit this task avoids, and a key beside `live`
-would be a third shape for the same row.
+**The page is not edited, and the tally rides on the row.** The stream's
+claim order gives `share/series/Show.vue` to `T-123`, `T-130`, `T-132` and
+`T-137` and says every other creator-side change edits a component. `T-123`
+mounts `LiveSessionPanel.vue` on each live row with `:episode="episode"`,
+typed by the panel's own `LiveEpisode` interface, and `T-123`, `T-126` and
+`T-127` put a live Episode's facts on the row itself — `records`, `joinUrl`,
+`state`, `notRecordedAt`, `recordings` — each null or empty off a live
+Episode. So `SeriesController::show()` adds one more, `recordingEmail`, null
+off a live Episode, and `LiveEpisode` gains one optional field. A separate
+prop could only reach the panel through a page line, which is the edit this
+task avoids.
+
+**The status line is spans.** The row renders inside the page's paragraph,
+which is why `T-127`'s actions are buttons and never forms: the HTML parser
+tears a block element out of a `<p>`. The summary and the help are two
+`<span class="mt-1 block">` lines, as the panel's other lines are, and when
+anything failed the summary carries `InlineNotice`'s warning icon and colour
+(`AlertTriangle`, `text-warning`), so colour is never the only signal.
+
+**A nudge is checked again before it goes.** The email says no recording has
+been added yet. Queueing and sending happen in one run, but a failed send is
+tried again 15, 60 and 240 minutes later, and in between the creator may add
+the link or say there is none. So `sendDue()` skips a nudge row whose Episode
+is no longer `waiting` or `overdue`, as `resolved`, through the same
+`isScheduled()` and `stateFor()` the candidates are chosen by.
 
 **Detection changes nothing here.** `T-143` edits
 `creatorNudgeCandidates()` to hold an Episode Qori is still looking for until
@@ -213,8 +227,8 @@ start (`app/Services/EpisodeService.php:107-111`, `errors.series.starts_in_past`
 
 **Out:**
 
-- The ledger, `sendDue()`'s retry and cap, `RecordingReadyNotification`, the
-  command and its schedule line (`T-128`).
+- The ledger, `sendDue()`'s retry and cap, `RecordingReadyNotification` and
+  the command (`T-128`), and what runs the command (`T-206`).
 - The `+48 h` rule for an Episode Qori is looking for, `recording_checked_at`,
   and any read of a Connection (`T-143`).
 - Cancel, Undo and "Add the next session" (`T-134`); the card already skips a
@@ -229,26 +243,27 @@ start (`app/Services/EpisodeService.php:107-111`, `errors.series.starts_in_past`
 
 ## Files
 
-| Path                                                  | Change | Notes                                                                                                                                                                |
-| ----------------------------------------------------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `app/Services/SessionNoticeService.php`               | edit   | `creatorNudgeCandidates()`, `queueCreatorNudges()`, the `CreatorRecordingNeeded` arm in `notificationFor()`, the per-kind skip branch in `sendDue()`, `talliesFor()` |
-| `app/Notifications/RecordingNeededNotification.php`   | new    | mail only, not queued; copy through `Terminology::line()` with the Group; the time through `ZonedTime`                                                               |
-| `app/Data/NoticeTally.php`                            | new    | sent, failed (exhausted), pending (a retry still due included), skipped                                                                                              |
-| `app/Console/Commands/NotifySessionsCommand.php`      | edit   | `queueCreatorNudges()` between `countDue()` and `sendDue()`; candidates listed under `--dry-run`; `nudges_queued` in the heartbeat                                   |
-| `app/Http/Controllers/Share/SeriesController.php`     | edit   | `recordingEmail` inside each live Episode's `live` array from `talliesFor()`; `recordingEmail()`                                                                     |
-| `resources/js/components/series/LiveSessionPanel.vue` | edit   | `recordingEmail` on the live type; the status line; `InlineNotice` when anything failed                                                                              |
-| `lang/en/live.php`                                    | edit   | `mail.recording_needed.*`, `notices.recording_ready.*`                                                                                                               |
-| `app/Console/Commands/MailCheckCommand.php`           | edit   | a second live Episode moved into the past; the nudge queued and sent through the service; `EXPECTED` 9                                                               |
-| `docs/tinker/mail.md`                                 | edit   | the message count and the nudge in the list                                                                                                                          |
-| `docs/flows/live-sessions.md`                         | edit   | "Telling the creator" and "The tally on the creator's page"                                                                                                          |
-| `docs/tinker/live-sessions.md`                        | edit   | driving the nudge by hand                                                                                                                                            |
-| `tests/Feature/Mail/RecordingNeededTest.php`          | new    | 9 cases                                                                                                                                                              |
-| `tests/Feature/Series/RecordingEmailStatusTest.php`   | new    | 3 cases                                                                                                                                                              |
-| `tests/Feature/Mail/MailContentTest.php`              | edit   | `$senders` gains the nudge (`:162-168`)                                                                                                                              |
+| Path                                                  | Change | Notes                                                                                                                                                                               |
+| ----------------------------------------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `app/Services/SessionNoticeService.php`               | edit   | `creatorNudgeCandidates()`, `queueCreatorNudges()`, the `CreatorRecordingNeeded` arm in `notificationFor()`, the per-kind checks in `sendDue()`, `SKIPPED_RESOLVED`, `talliesFor()` |
+| `app/Notifications/RecordingNeededNotification.php`   | new    | mail only, not queued; copy through `Terminology::line()` with the Group; the time through `ZonedTime`                                                                              |
+| `app/Data/NoticeTally.php`                            | new    | sent, failed (exhausted), pending (a retry still due included), skipped                                                                                                             |
+| `app/Console/Commands/NotifySessionsCommand.php`      | edit   | `queueCreatorNudges()` between `countDue()` and `sendDue()`; candidates listed under `--dry-run`; `nudges_queued` in the heartbeat                                                  |
+| `app/Http/Controllers/Share/SeriesController.php`     | edit   | `recordingEmail` on each live row from `talliesFor()`, beside `state`; `recordingEmail()`                                                                                           |
+| `resources/js/components/series/LiveSessionPanel.vue` | edit   | `recordingEmail` on `LiveEpisode`; the status line as spans, with the warning icon when anything failed                                                                             |
+| `lang/en/live.php`                                    | edit   | `mail.recording_needed.*`, `notices.recording_ready.*`                                                                                                                              |
+| `app/Console/Commands/MailCheckCommand.php`           | edit   | a second live Episode moved into the past; the nudge queued and sent through the service; `EXPECTED` 11                                                                             |
+| `docs/tinker/mail.md`                                 | edit   | the message count and the nudge in the list                                                                                                                                         |
+| `docs/flows/live-sessions.md`                         | edit   | "Telling the creator" and "The tally on the creator's page"                                                                                                                         |
+| `docs/tinker/live-sessions.md`                        | edit   | driving the nudge by hand                                                                                                                                                           |
+| `tests/Feature/Mail/RecordingNeededTest.php`          | new    | 10 cases                                                                                                                                                                            |
+| `tests/Feature/Series/RecordingEmailStatusTest.php`   | new    | 3 cases                                                                                                                                                                             |
+| `tests/Feature/Mail/MailContentTest.php`              | edit   | `$senders` gains the nudge (`:162-168`)                                                                                                                                             |
+| `tests/Feature/Console/NotifySessionsCommandTest.php` | edit   | the heartbeat case gains `nudges_queued`                                                                                                                                            |
 
 `resources/js/pages/share/series/Show.vue` is deliberately not listed — see
-"The page is not edited" above. `routes/console.php` is `T-128`'s: the
-schedule line already runs this command, and this task adds no second one.
+"The page is not edited" above. `routes/console.php` is `T-206`'s: nothing
+schedules the command yet, and this task adds no line of its own.
 `config/qori.php` is `T-123`'s: `creator_nudge_hours`, `notice_window_days`
 and `notice_attempts` are read, never declared here.
 
@@ -260,9 +275,17 @@ None. `session_notices` and `SessionNoticeKind::CreatorRecordingNeeded` are
 ## Code
 
 ```php
-// App\Services\SessionNoticeService — the additions below to T-128's class; the
-// constructor gains LiveSessionService by promotion, beside what T-128 gave it
-// (CurrentGroup as $current, SuppressionService as $suppressions).
+// App\Services\SessionNoticeService — the additions below to T-128's class. The
+// constructor is T-128's and unchanged: CurrentGroup as $current,
+// SuppressionService as $suppressions, LiveSessionService as $sessions.
+//
+// private const NUDGE_STATES = [LiveState::Waiting, LiveState::Overdue];
+// public const SKIPPED_RESOLVED = 'resolved';   // a nudge whose Episode no longer needs one
+//
+// /** The nudge's premise: a scheduled live Episode that is waiting or overdue. */
+// private function needsRecording(Episode $episode, CarbonImmutable $now): bool;
+// // return $this->sessions->isScheduled($episode)
+// //     && in_array($this->sessions->stateFor($episode, $now), self::NUDGE_STATES, true);
 
 /**
  * Live Episodes in the current Group that are waiting on their creator (D-028):
@@ -289,11 +312,7 @@ public function creatorNudgeCandidates(CarbonImmutable $now): Collection;
 //     ->with('recordings')                                                          // T-126's relation; stateFor() reads it
 //     ->orderBy('ends_at')
 //     ->get()
-//     ->filter(fn (Episode $episode): bool => in_array(
-//         $this->live->stateFor($episode, $now),
-//         [LiveState::Waiting, LiveState::Overdue],
-//         true,
-//     ))
+//     ->filter(fn (Episode $episode): bool => $this->needsRecording($episode, $now))
 //     ->values();
 
 /**
@@ -323,29 +342,38 @@ public function queueCreatorNudges(CarbonImmutable $now): int;
 
 // In notificationFor() — T-128's private method, whose return type widens from
 // RecordingReadyNotification to Illuminate\Notifications\Notification — one more arm.
-// $series is the one T-128's subjectsFor() resolved for the row; nothing is re-queried:
+// $series is the one T-128's subjectsFor() resolved for the row, and $group the
+// one sendDue() read from CurrentGroup; nothing is re-queried. T-128's materials
+// read moves inside its own arm, the only one that uses it:
 //
-//     private function notificationFor(SessionNotice $notice, Episode $episode, Series $series): Notification;
+//     private function notificationFor(SessionNotice $notice, Episode $episode, Series $series, Group $group): Notification;
 //     // return match ($notice->kind) {
-//     //     SessionNoticeKind::RecordingReady => /* T-128's arm */,
-//     //     SessionNoticeKind::CreatorRecordingNeeded => new RecordingNeededNotification($episode, $series, $this->current->get()),
-//     // };   // the Group is set: the sweep runs inside CurrentGroup::runFor()
+//     //     SessionNoticeKind::RecordingReady => new RecordingReadyNotification($episode, $series, $group, ...$this->materialsFor($episode)),
+//     //     SessionNoticeKind::CreatorRecordingNeeded => new RecordingNeededNotification($episode, $series, $group),
+//     //     default => throw new LogicException(...),   // T-138's kinds
+//     // };
 //
 // The recipient is $notice->user (the owner), filtered through
 // SuppressionService::blockedForTransactional() exactly as a Peer is.
 
-// In sendDue(), the per-row checks branch by kind. T-128's order stands; two of
-// its checks are gated, because the owner holds no Access to their own Series:
+// In sendDue(), the per-row checks branch by kind. T-128's order stands; its
+// Access check is gated, because the owner holds no Access to their own Series,
+// and the nudge gains one check of its own:
 //
 //     stale                            → SKIPPED_STALE                  every kind
+//     no such user                     → SKIPPED_ACCESS_INACTIVE        every kind
 //     suppressed                       → SKIPPED_SUPPRESSED             every kind
+//     the Episode or Series is gone    → SKIPPED_ACCESS_INACTIVE        every kind
 //     no active Access to the Series   → SKIPPED_ACCESS_INACTIVE        every kind but CreatorRecordingNeeded
 //     content['cancelled_at'] set      → SKIPPED_SESSION_CANCELLED      every kind
 //     no published, unhidden recording → SKIPPED_RECORDING_UNAVAILABLE  RecordingReady only
+//     before Join's window closes      → postponed to the close         RecordingReady only
+//     no longer waiting or overdue     → SKIPPED_RESOLVED               CreatorRecordingNeeded only
 //     notify() inside try/catch        → sent, or failed with backoff
 //
-// A nudge row therefore reaches notify() unless it is stale, suppressed or the
-// session was cancelled after it was queued. T-138 adds its own gated checks.
+// A nudge row therefore reaches notify() unless it is stale, suppressed, the
+// session was cancelled, or the creator added a recording or said there is
+// none after it was queued. T-138 adds its own gated checks.
 
 /**
  * How the ledger stands for one kind across a Series, one grouped query:
@@ -448,13 +476,16 @@ class RecordingNeededNotification extends Notification
 // in every mode, the remaining run budget passed to sendDue(), the run stopped
 // when the budget is spent. `due` is counted before the nudges are queued, so
 // under --dry-run the count and the candidate lines add up rather than overlap.
+// The candidates are listed under --dry-run only, as Scope says: listing them
+// on a real run too would read them twice, once to print and once to queue.
 //
 // CurrentGroup::runFor($group, function () use ($now, $dryRun, $budget, $notices, &$due, &$queued, &$sent): void {
 //     $due += $notices->countDue($now);
-//     foreach ($notices->creatorNudgeCandidates($now) as $episode) {
-//         $this->line(sprintf('%s nudge: %s (%s)', $dryRun ? 'Would queue' : 'Queuing', $episode->title, $episode->getKey()));
-//     }                                                        // diagnostics, not copy (§23)
 //     if ($dryRun) {
+//         foreach ($notices->creatorNudgeCandidates($now) as $episode) {
+//             $this->line(sprintf('Would queue a nudge: %s (%s)', $episode->title, $episode->getKey()));
+//         }                                                    // diagnostics, not copy (§23)
+//
 //         return;                                              // counted and listed; nothing written or sent
 //     }
 //     $queued += $notices->queueCreatorNudges($now);
@@ -469,17 +500,16 @@ class RecordingNeededNotification extends Notification
 
 ```php
 // App\Http\Controllers\Share\SeriesController::show() — SessionNoticeService by
-// method injection beside ProgressService; one read before the map, one key
-// inside the `live` array T-123, T-126 and T-127 shaped for a live Episode.
-// The Group is $series->group, not $scope: $scope is $current->get(), typed
-// ?Group (SeriesController.php:148), and the helper takes a Group.
+// method injection beside LiveSessionService; one read before the map, and one
+// key on each row beside T-127's `state` and `notRecordedAt`, null off a live
+// Episode as theirs are. $scope is the Group, as `materialsSummary` reads it:
+// Terminology::choice() takes a ?Group.
 //
 // $tallies = $notices->talliesFor($series, SessionNoticeKind::RecordingReady);
 // ...
-// 'live' => $episode->isLive() ? [
-//     // ...T-123's, T-126's and T-127's keys...
-//     'recordingEmail' => $this->recordingEmail($tallies[(string) $episode->getKey()] ?? NoticeTally::empty(), $series->group, $terminology),
-// ] : null,
+// 'recordingEmail' => $episode->isLive()
+//     ? $this->recordingEmail($tallies[(string) $episode->getKey()] ?? NoticeTally::empty(), $scope, $terminology)
+//     : null,
 
 /**
  * The counts and the sentences the panel shows for the recording email. Whole
@@ -487,7 +517,7 @@ class RecordingNeededNotification extends Notification
  *
  * @return array{sent: int, failed: int, pending: int, skipped: int, summary: ?string, help: string}
  */
-private function recordingEmail(NoticeTally $tally, Group $group, Terminology $terminology): array;
+private function recordingEmail(NoticeTally $tally, ?Group $group, Terminology $terminology): array;
 // $sentences = [$terminology->choice('live.notices.recording_ready.sent', $tally->sent, [], $group)];
 // if ($tally->failed > 0)  $sentences[] = $terminology->choice('live.notices.recording_ready.failed', $tally->failed, ['attempts' => (int) config('qori.live.notice_attempts')], $group);
 // if ($tally->pending > 0) $sentences[] = $terminology->choice('live.notices.recording_ready.pending', $tally->pending, [], $group);
@@ -498,7 +528,7 @@ private function recordingEmail(NoticeTally $tally, Group $group, Terminology $t
 
 ```ts
 // resources/js/components/series/LiveSessionPanel.vue — one optional field on
-// the live type the panel already reads `state` from (T-123's `LiveEpisode`,
+// the row type the panel already reads `state` from (T-123's `LiveEpisode`,
 // as T-126 and T-127 extend it), so the page and its types need no change and
 // no new prop is declared.
 interface RecordingEmailStatus {
@@ -518,12 +548,13 @@ export interface LiveEpisode {
 }
 ```
 
-The panel renders the status under the recording list whenever the live
-type's `recordingEmail?.summary` is set: an `InlineNotice` with
-`tone="warning"`, `:title="summary"` and `:description="help"` when
-`failed > 0` (`resources/js/components/shell/InlineNotice.vue:17-23`),
-otherwise two muted `<p>` lines, the summary and the help. No new inline
-English: every word arrives in the prop.
+The panel renders the status under the recording list whenever the row's
+`recordingEmail?.summary` is set: two `<span class="mt-1 block">` lines, the
+summary and then the help, muted as the rest of the row is; when
+`failed > 0` the summary line starts with `InlineNotice`'s warning icon
+(`AlertTriangle`, `text-warning`, `aria-hidden`) and takes `text-warning`.
+Spans, because the row sits inside the page's paragraph (Decisions). No new
+inline English: every word arrives in the prop.
 
 `app/Console/Commands/MailCheckCommand.php`: `T-128` already gives the
 scratch Group a zone, adds a live Episode (`Live clinic`, a day ahead) and
@@ -547,9 +578,12 @@ app(EpisodeService::class)->update($series, $nudged->getKey(), [
 `scratch()` returns it beside `T-128`'s (`[$user, $series, $peer, $episode, $nudged]`).
 In `send()`, after the grant and `T-128`'s paste, inside the same `runFor()`,
 `queueCreatorNudges(CarbonImmutable::now())` goes before `T-128`'s
-`sendDue(CarbonImmutable::now())`, which then sends both. `EXPECTED` becomes
-9, and the subject `live.mail.recording_needed.subject` joins the list
-`docs/tinker/mail.md:33-38` prints.
+`sendDue(CarbonImmutable::now()->addDays(2))` — two days on, because the
+Peer's notice waits for Join's window to close — which then sends both; the
+nudged session is overdue by then, and still needs its recording. `EXPECTED`
+becomes 11 (`T-128` made it 10), the class docblock says eleven, and the
+subject `live.mail.recording_needed.subject` joins the list
+`docs/tinker/mail.md` prints.
 
 `docs/flows/live-sessions.md`: a "Telling the creator" section — the chain
 `qori:sessions:notify → CurrentGroup::runFor() → SessionNoticeService::creatorNudgeCandidates() → queueCreatorNudges() → sendDue() → RecordingNeededNotification`,
@@ -612,7 +646,7 @@ existing `share.series.show` page.
 
 ## Tests
 
-**New: `tests/Feature/Mail/RecordingNeededTest.php` — 9 cases**
+**New: `tests/Feature/Mail/RecordingNeededTest.php` — 10 cases**
 (`Notification::fake()` in `setUp`; a `scene()` helper as
 `tests/Feature/Series/LiveSessionTest.php:41-60` with the owner's own
 `timezone` as a parameter; `liveEpisode(Series $series, CarbonImmutable $endsAt, array $content = [])`
@@ -665,6 +699,11 @@ inside `CurrentGroup::runFor($group, …)`)
    `$this->artisan('qori:sessions:notify --dry-run')->expectsOutputToContain($episode->title)->assertSuccessful()`;
    no `session_notices` row, `assertNothingSent()`; the plain run then
    writes one row and sends once.
+10. `test_a_nudge_is_skipped_when_the_creator_answers_before_it_goes` — two
+    candidates queued and not yet sent; one gets a recording through
+    `RecordingService::paste()`, the other is declared not recorded through
+    `LiveSessionService::declareNotRecorded()` (`T-127`); `sendDue($now)`
+    sends nothing and leaves both rows `skipped` with `error` `resolved`.
 
 **New: `tests/Feature/Series/RecordingEmailStatusTest.php` — 3 cases**
 (the creator signed in; rows written with
@@ -675,13 +714,13 @@ props read as `LiveSessionTest.php:256-266` does)
    Episode, `recording_ready` rows: two `sent`, one `failed` with
    `next_attempt_at` null, one `failed` with `next_attempt_at` an hour ahead,
    one `pending`, one `skipped`, and one `creator_recording_needed` row that
-   must not count; `series.episodes[0].live.recordingEmail` is
+   must not count; `series.episodes.0.recordingEmail` is
    `sent 2, failed 1, pending 2, skipped 1`, `summary` contains
    `sent to 2 Peers`, `One couldn't be sent after Qori tried again 3 times`
    and `2 are still to go`, `help` is `live.notices.recording_ready.help`.
 2. `test_it_says_nothing_for_an_episode_without_rows_and_nothing_at_all_for_a_file`
    — a live Episode with no rows: counts 0 and `summary` null; a File Episode:
-   `live` null, so no `recordingEmail` at all.
+   `recordingEmail` null, as its `state` is.
 3. `test_it_counts_in_the_groups_words` — the `pro` Group and labels of case 8
    above, two `sent` rows: `summary` contains `Ruffies` and not `Peers`.
 
@@ -690,8 +729,11 @@ props read as `LiveSessionTest.php:256-266` does)
 - `tests/Feature/Mail/MailContentTest.php` — the `$senders` map (`:162-168`)
   gains `'RecordingNeededNotification' => 'SessionNoticeService'`; no method
   changes.
+- `tests/Feature/Console/NotifySessionsCommandTest.php` —
+  `test_it_logs_a_heartbeat_each_run` pins the heartbeat's whole context, so
+  both of its expectations gain `'nudges_queued' => 0`.
 
-Total: 12 new cases.
+Total: 13 new cases.
 
 ## Acceptance
 
@@ -709,6 +751,8 @@ Total: 12 new cases.
       the creator's Series page and says it went to the owner alone
 - [ ] A suppressed owner address is skipped and the ledger says so; a failed
       send follows `T-128`'s retry and is then left for `T-019`
+- [ ] A nudge whose session gets its recording, or is declared not recorded,
+      before the email goes is skipped as `resolved`, and nothing is sent
 - [ ] The creator's Series page says, on each live Episode with any
       `recording_ready` row, how many were sent, failed, are still to go and
       were skipped, in the Group's words, with what "sent" means beneath it;
@@ -719,28 +763,77 @@ Total: 12 new cases.
 - [ ] `docs/flows/live-sessions.md` describes the nudge and the tally, and
       `docs/tinker/live-sessions.md` drives both
 - [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `php artisan qori:tasks --check` passes
+- [ ] `bin/tasks --check` passes in `qori-plan`
 - [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
 - [ ] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
-- `qori.live.creator_nudge_hours` is 12, provisional (`D-028`): confirm, or
-  change the number in `T-123`'s config block — anyone's.
-- `T-128` `ready`, so `SessionNoticeService`'s constructor,
+- ~~`qori.live.creator_nudge_hours` is 12, provisional (`D-028`): confirm, or
+  change the number in `T-123`'s config block — anyone's.~~ **Decided
+  27 September 2026: 12.** Sooner would land while an ordinary upload is
+  still being processed or shared; later leaves the class waiting longer
+  before anyone reminds the creator. The Peer's card waits 48 hours
+  (`recording_wait_hours`) before it says overdue, so at twelve the creator
+  hears well before their class sees that.
+- ~~`T-128` `ready`, so `SessionNoticeService`'s constructor,
   `notificationFor()`, the skips inside `sendDue()`, `SessionNotice`'s
   attributes, `NotifySessionsCommand`'s per-Group closure and
   `App\Support\ZonedTime` are frozen as this draft cites them — anyone's;
-  keep draft until it is.
-- Whether a Series with no active Access should skip the nudge. `D-028` and
+  keep draft until it is.~~ **Answered 27 September 2026:** `T-128` is `done`
+  (qori `ad23982`), and this spec is reconciled with it — see the Re-scope
+  log.
+- ~~Whether a Series with no active Access should skip the nudge. `D-028` and
   this draft nudge regardless; if the owner wants silence for a class nobody
   has been granted, `creatorNudgeCandidates()` gains
   `->whereIn('series_id', Access::query()->active()->select('series_id'))`
-  and one case, and the fourth case's last clause flips — the owner's.
+  and one case, and the fourth case's last clause flips — the owner's.~~
+  _Asked_ 26 September 2026 and unanswered. Built as `D-028` has it —
+  nudged regardless — since the build does not wait on a change the owner
+  may never ask for, and the flip stays one `whereIn` and one case.
 
 ## Re-scope log
 
-None.
+**2026-09-27 — reconciled with `T-128` and the code as built.**
+
+- **A live row's facts are keys on the row, not a `live` array.** `T-123`,
+  `T-126` and `T-127` put `records`, `joinUrl`, `state`, `notRecordedAt` and
+  `recordings` on each row of `series.episodes`, each null or empty off a
+  live Episode. `recordingEmail` joins them. The status test reads
+  `series.episodes.0.recordingEmail`, and a File Episode's is null.
+- **The status line is spans.** The row renders inside the page's paragraph
+  (`resources/js/pages/share/series/Show.vue`, the `<p>` around
+  `LiveSessionPanel`), and both `InlineNotice`'s `<div>` and the draft's
+  `<p>` lines are torn out of a paragraph by the HTML parser, which is why
+  `T-127`'s actions are buttons. So the lines are spans, and the failed case
+  carries `InlineNotice`'s warning icon and colour (Decisions).
+- **`SessionNoticeService` is as `T-128` built it.** The constructor already
+  holds `LiveSessionService` as `$sessions`, not `$live`: `T-128` needed the
+  Join window. `notificationFor()` already takes the Group as its fourth
+  parameter. Its return type widens, and its materials read moves into the
+  `recording_ready` arm, the only one that uses it.
+- **`sendDue()`'s checks as built** are stale, no such user, suppressed, the
+  Episode or Series gone, no active Access, cancelled, then
+  `recording_ready`'s own: nothing visible, and postponed until Join closes.
+  Only the Access check is gated by kind. A row whose Episode or Series is
+  gone is skipped for every kind, as it is today.
+- **A nudge is checked again before it goes** (Decisions), which the draft
+  did not do: a retry 15, 60 or 240 minutes later could otherwise tell a
+  creator no recording has been added when one had been. It adds
+  `SKIPPED_RESOLVED`, an Acceptance line and `RecordingNeededTest`'s tenth
+  case.
+- **`qori:mail:check` sends ten since `T-128`**, so this makes eleven, not
+  nine. Its send clock is two days on, `T-128`'s, and the nudged session is
+  still waiting on its recording then.
+- **Candidates are listed under `--dry-run` only**, as Scope says. The
+  Code's sketch printed them on every run, which would read them twice. The
+  heartbeat gains `nudges_queued`, and `NotifySessionsCommandTest` pins the
+  heartbeat's whole context, so its file joins the table.
+- **Nothing schedules `qori:sessions:notify`** — the owner's hold of
+  26 September 2026, now `T-206`'s. The nudge is queued and sent whenever
+  the command runs, by hand until `T-206` lands, as `T-128`'s notices are.
+- **`bin/tasks --check` in `qori-plan`** replaces `php artisan qori:tasks
+  --check`: the planning moved on 21 September 2026.
 
 ## Notes
 
