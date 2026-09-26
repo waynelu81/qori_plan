@@ -48,3 +48,8 @@ None.
 - `resources/js/components/auth/LinkSent.vue` still says "Use a different
   email" inline. The sign-in composition's second step says the same words
   from `auth.sign_in.change_email` (`T-087`), so that key is the one to use.
+- `resources/js/components/TimezoneField.vue` says "Filled in from your
+  device. Change it if that is not right, then save." inline whenever it is
+  given no `suggestedNote`. Since `T-125` (26 September 2026) that includes
+  the timezone prompt on a Peer's Series page, beside `live.timezone.why`
+  and `live.timezone.save`, which are lang keys.
