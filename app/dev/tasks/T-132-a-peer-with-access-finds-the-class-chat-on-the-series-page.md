@@ -2,19 +2,18 @@
 id: T-132
 title: A Peer with access finds the class chat on the Series page
 stream: classroom
-status: draft
-owner: unassigned
+status: doing
+owner: claude
 estimate: M
 depends: T-130, T-131
-blocks: T-136, T-137
+blocks: T-136, T-137, T-207
 ---
 
 # T-132 — A Peer with access finds the class chat on the Series page
 
-> **Draft.** Specified from `D-029` on 18 September 2026 and not to be started —
-> see [`../PROCESS.md`](../PROCESS.md). `T-130` is `ready`; it waits on `T-131`
-> being `ready`, because it calls names that task mints; the list at the bottom
-> says what else has to be settled before it can be marked `ready`.
+> Specified from `D-029` on 18 September 2026. Reconciled with `T-130` and
+> `T-131` as built on 27 September 2026 — the Re-scope log says what changed,
+> and it overrides the sketches below where they differ.
 
 ## Why
 
@@ -1032,22 +1031,29 @@ Total: 26 new cases.
 - [ ] `docs/flows/chats.md` describes the chain and `docs/flows/README.md`
       lists it; the upload recipe attaches a code and cleans it up
 - [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `php artisan qori:tasks --check` passes
+- [ ] `bin/tasks --check` passes in `qori-plan`
 - [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
 - [ ] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
-- `T-131` `ready`, so the names this task calls are frozen:
+- ~~`T-131` `ready`, so the names this task calls are frozen:
   `SignsStoredFiles`, `MediaLifetime::minutesForExtension()`, and through it
   `T-125`'s `AccessOpen::record()` and `OpenTarget::Chat` — the stream
   owner's. `T-130` is `ready`, so `MediaAssetPurpose::Material` beside
   `ChatCode` and `FileUpload.vue`'s `stored` emit are settled and this task
-  reads them as written there.
-- Whether the creator's Peer list showing who opened the chat card belongs
+  reads them as written there.~~ **Answered 27 September 2026:** `T-130` and
+  `T-131` are `done`, and every name above exists as cited; `OpenTarget::Chat`
+  and the three `qori.chats` / `chat_code` config keys were declared ahead.
+  The Re-scope log lists where the code as built differs from the sketches.
+- ~~Whether the creator's Peer list showing who opened the chat card belongs
   here or in a task of its own: `D-029` says the list shows it and the brief
   keeps it out of this task; the `access_opens` rows are written here and
-  nothing in the sprint reads them — the owner's.
+  nothing in the sprint reads them — the owner's.~~ **Decided 27 September
+  2026: a task of its own, `T-207`.** `D-029` already settles that the list
+  shows it, so what was left was only which task builds it, and a split is not
+  a product call. This task writes the rows, as Scope says, and `T-207` reads
+  them.
 - ~~Exactly one way in, as this draft reads `D-029`'s "one of `url` or
   `media_asset_id` required", against a row that may carry both — the
   owner's.~~ Settled in the 18 September 2026 reconciliation: exactly one, as
@@ -1061,7 +1067,33 @@ Total: 26 new cases.
 
 ## Re-scope log
 
-None.
+**2026-09-27 — reconciled with `T-130`, `T-131` and the code as built.**
+
+- **`open()` reads the Series through `$access->grantedSeries()`**, not
+  `Series::findForPeer()`, as `MaterialService::open()` does (`T-131`): the
+  Access row already names the Series, and one read fewer.
+- **A failed object delete is `Log::warning()` with the ids and the key**, not
+  `report()`, as `MaterialService::deleteObject()` and `SeriesService::purge()`
+  log theirs.
+- **`OpenChatController` flashes `__('chats.peer.expired_toast')`**, and takes
+  `SeriesChatService` by constructor as `OpenMaterialController` takes its
+  service. The line carries no noun, so the controller needs no Group and no
+  second read of the Series.
+- **A code over the size cap is told what fits.** `SignUploadRequest` answers
+  `size.max` for `chat_code` with `errors.chats.code_invalid.resolution`, the
+  line naming the types and the megabytes, as `extension.in` does.
+  `lib/uploads.ts` shows the response's `message`, which is the first failing
+  rule's, and `code_invalid.message` alone says nothing about why.
+- **The Peer's card sits between the progress block and the timezone prompt**,
+  which `T-125` put above the Episodes after this spec was written. The chat is
+  the page's content and the prompt a one-time question, so the card comes
+  first.
+- **`SeriesService`'s constructor is `(MaterialService $materials,
+  SeriesChatService $chats)`**, and `purge()` calls `purgeFor()` straight after
+  `removeAllOf()`, before the Episodes go.
+- **The line numbers the spec cites are the 18 September files'.** The names
+  are what binds; every one was found.
+- **Acceptance's board check is `bin/tasks --check` in `qori-plan`.**
 
 ## Notes
 
