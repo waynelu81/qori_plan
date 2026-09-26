@@ -2,8 +2,8 @@
 id: T-134
 title: A creator can cancel a live Episode, undo it, and add the next session
 stream: classroom
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: M
 depends: T-129
 blocks: T-135, T-138
@@ -11,11 +11,10 @@ blocks: T-135, T-138
 
 # T-134 — A creator can cancel a live Episode, undo it, and add the next session
 
-> **Draft.** Specified on 18 September 2026 from `D-026` and `D-028`, and not
-> to be started — see [`../PROCESS.md`](../PROCESS.md). It is first on the slip
-> list after the manual-replay checkpoint (`D-031`) and waits on `T-129`
-> becoming `ready`, because it asserts through names that chain holds; what
-> has to happen before it can be marked `ready` is listed at the bottom.
+> Specified on 18 September 2026 from `D-026` and `D-028`; first on the slip
+> list after the manual-replay checkpoint (`D-031`). Reconciled with `T-124`
+> to `T-129` as built on 27 September 2026 — the Re-scope log says what
+> changed, and it overrides the sketches below where they differ.
 
 ## Why
 
@@ -817,22 +816,64 @@ Total: 19 new cases.
       the two chains; `docs/flows/series.md` names the second caller of
       `add()`; the `docs/tinker/live-sessions.md` recipe runs
 - [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `php artisan qori:tasks --check` passes
+- [ ] `bin/tasks --check` passes in `qori-plan`
 - [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
 - [ ] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
-- `T-129` `ready`, and with it the chain: `T-126`'s `Episode::recordings()`,
+- ~~`T-129` `ready`, and with it the chain: `T-126`'s `Episode::recordings()`,
   `RecordingService::paste()`; `T-127`'s `LiveSessionController`,
   `LiveSessionService::liveEpisodeOf()`, `EpisodeRecording::scopeVisible()`,
   the `livePanel` prop shape and `errors.live.has_recording`; `T-129`'s
   `SessionNoticeService::creatorNudgeCandidates()` — frozen names this spec
-  builds on. Anyone's, once each is `ready`.
+  builds on. Anyone's, once each is `ready`.~~ **Answered 27 September
+  2026:** all of them are `done` (`T-129` qori `a03f90d`); where the names
+  or shapes differ from this spec, the Re-scope log says how.
 
 ## Re-scope log
 
-None.
+**2026-09-27 — reconciled with `T-124` to `T-129` and the code as built.**
+
+- **`withLockedContent()`'s callback is `(array $content, Episode $locked):
+  array`**, as `T-127` built it and its docblock says: the re-read content in,
+  the content to save out, and a column set on `$locked` inside. The
+  `Closure(Episode): void` shape this spec and its Notes defend never
+  shipped, and the code is the authority. `cancel()` returns the content
+  with `cancelled_at` added, or as it was when already cancelled;
+  `restore()` returns it with the key unset.
+- **`declareNotRecorded()` already checks for a visible recording inside the
+  lock**, on the locked row, so the `paste()` race the Decisions describe is
+  closed there; `cancel()` checks the same way, with the same
+  `errors.live.has_recording` and the Group's replacements.
+- **`LiveSessionController` takes `LiveSessionService` by constructor**
+  (`T-127`: the primary service), and `Terminology` by method. The three
+  actions follow `notRecorded()` and `recorded()`.
+- **The creator's row carries its facts as keys, and the panel's lines are
+  `live.copy.panel`.** There is no per-row `live` array and no `livePanel`
+  prop (`T-129` met the same): `cancelledAt` joins `state`, `notRecordedAt`
+  and `recordingEmail` on the row, null off a live Episode, and `cancelled`,
+  `copyHelp` and `actions.{cancel, undoCancel, copy}` join `T-127`'s lines
+  under `live.copy.panel`.
+- **The Peer's card keys its lines by state**: the line is
+  `copy.states.cancelled.message`, where `T-125` left room for it, not
+  `copy.cancelled`. The card's `phase` already passes `cancelled` through
+  and `line` already reads it; Join, Join again and Watch already stay off in
+  that phase, so the template's one change is the Recorded badge, which
+  `cancelled` hides.
+- **The panel's controls are buttons through `router.visit()`**, `T-127`'s
+  `act()`, not `<Form>`s: the row sits inside the page's `<p>`, where the
+  HTML parser tears a form out. In `cancelled` the recording-email lines
+  (`T-129`) go with the recording list.
+- **Add the next session is offered only on a row with a start.** The New
+  Episode form requires one for a live Episode, so only a row from before
+  `T-123` or from tinker lacks it, and `copy()` refuses that as a programmer
+  error; hiding the button keeps a click from reaching the refusal.
+- **Test paths:** the creator's page reads `series.episodes.0.state`,
+  `.cancelledAt` and `live.copy.panel.*`; the Peer's reads
+  `series.episodes.0.live.state` and `.live.copy.states.cancelled.message`.
+- **`bin/tasks --check` in `qori-plan`** replaces `php artisan qori:tasks
+  --check` in Acceptance: the planning moved on 21 September 2026.
 
 ## Notes
 
