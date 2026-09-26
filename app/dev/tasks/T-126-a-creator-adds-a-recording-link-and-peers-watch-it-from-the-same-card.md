@@ -2,8 +2,8 @@
 id: T-126
 title: A creator adds a recording link to a live Episode, and Peers watch it from the same card
 stream: classroom
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: M
 depends: T-124, T-125
 blocks: T-127
@@ -997,19 +997,26 @@ Total: 22 new cases.
 
 ## Before this can be ready
 
-- `T-089` `ready`, with its three open questions answered, so
+- ~~`T-089` `ready`, with its three open questions answered, so
   `shared.episodes.open`, `OpenEpisodeController`, `PlaybackTicketService::open()`
   and `admit()`, `VendorLink` and `lang/en/shared.php` are frozen names —
-  the owner's (the same bullet `T-125` carries).
-- Whether Watch is `?recording={id}` on `T-089`'s route, as this draft
+  the owner's (the same bullet `T-125` carries).~~ **Answered 26 September
+  2026:** `T-089` is `done`, and `T-125` read each name back from the code
+  on 21 September and built on them.
+- ~~Whether Watch is `?recording={id}` on `T-089`'s route, as this draft
   assumes, or a sibling `GET /shared/{seriesId}/episodes/{episodeId}/recordings/{recordingId}/open`
   named `shared.recordings.open` — anyone's, decided with `T-089`'s owner.
   The difference is one route line, `OpenEpisodeController`'s query read
   becoming a path parameter, and the card's `href`; nothing in the service
-  changes.
-- `T-125` `ready`, so the `live` prop's key names, `live.copy`, `LiveState`,
+  changes.~~ **Decided 26 September 2026:** `?recording={id}`, as drafted.
+  Join and Watch pass one gate and `T-125`'s controller already turns every
+  answer of `open()` into a redirect, so a second route would repeat it.
+- ~~`T-125` `ready`, so the `live` prop's key names, `live.copy`, `LiveState`,
   the arm order in `stateFor()` and `AccessOpen::record()` are frozen, and
-  this draft's additions to them are literal — anyone's.
+  this draft's additions to them are literal — anyone's.~~ **Answered 26
+  September 2026:** `T-125` is `done` (qori `94dd6c9`); the names are as this
+  draft cites them, plus `LiveSessionService::isScheduled()`, which
+  `liveCard()` is only called behind.
 
 ## Re-scope log
 
