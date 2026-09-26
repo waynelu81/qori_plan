@@ -2,8 +2,8 @@
 id: T-125
 title: A Peer joins a live Episode from the Series page, in their own time
 stream: classroom
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: M
 depends: T-089, T-123, T-124
 blocks: T-126, T-131
