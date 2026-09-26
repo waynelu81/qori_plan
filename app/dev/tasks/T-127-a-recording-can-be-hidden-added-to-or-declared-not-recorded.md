@@ -2,7 +2,7 @@
 id: T-127
 title: A recording can be hidden, added to, or declared not recorded, and an overdue session says so
 stream: classroom
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-126
@@ -698,36 +698,36 @@ Total: 16 new cases.
 
 ## Acceptance
 
-- [ ] A creator with a pasted recording hides it, the card leaves `ready` on
+- [x] A creator with a pasted recording hides it, the card leaves `ready` on
       both pages within the same minute, the Peer's Watch link is gone and a
       saved one answers the not-available page; Show again brings it back
-- [ ] A second link becomes Part 2 on the same card, and hiding Part 1 leaves
+- [x] A second link becomes Part 2 on the same card, and hiding Part 1 leaves
       "Part 2" on the Peer's card, not "Part 1"
-- [ ] "There's no recording for this session" on a class already held makes
+- [x] "There's no recording for this session" on a class already held makes
       the Peer's card final — no Join, no Watch, no resolution — and Undo
       returns it to `waiting`; the same declaration on a session still ahead
       leaves Join in place until Join closes
-- [ ] A session created with "Live only" reads `not_recorded` once Join
+- [x] A session created with "Live only" reads `not_recorded` once Join
       closes, without the creator doing anything
-- [ ] 48 hours after the scheduled end with nothing visible, the Peer reads
+- [x] 48 hours after the scheduled end with nothing visible, the Peer reads
       that no recording has been added and that an email will come if one is;
       the creator reads the same fact with the hours interpolated, and has
       Add the recording link and There's no recording for this session, and
       no control that does nothing (owner acceptance 9: no recording and a
       local-only recording each show a truthful status and a way out)
-- [ ] Neither hiding nor declaring changes an Episode count, a Peer's
+- [x] Neither hiding nor declaring changes an Episode count, a Peer's
       progress or a certificate (owner acceptance 12); a wrong-tenant creator
       and a slug on an action each meet a 404, and the over-cap lock refuses
       all four
-- [ ] No line under `live.*` says "live now", "has ended", "on its way" or
+- [x] No line under `live.*` says "live now", "has ended", "on its way" or
       "processing"; every number on the panel comes from `config('qori.live')`
-- [ ] `docs/flows/live-sessions.md` carries the four actions and names the
+- [x] `docs/flows/live-sessions.md` carries the four actions and names the
       two writers, with its state table unchanged; the tinker recipe reaches
       `overdue` with the clock moved
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `php artisan qori:tasks --check` passes
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `php artisan qori:tasks --check` passes
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -776,6 +776,17 @@ Total: 16 new cases.
   `T-126`'s writer.~~ **Answered 18 September 2026:** `T-126`'s
   `RecordingService::guardLive()` throws it and its Files row creates the key;
   the row is dropped here and `liveEpisodeOf()` reuses it.
+
+## Added during execution
+
+- `RecordingService::paste()` and `unhide()` withdraw the declaration when a
+  recording becomes visible, through a private `withdrawNotRecorded()` in
+  `paste()` and `withLockedContent()` in `unhide()` — see the Re-scope log.
+- `LiveSessionCard.vue`'s one edit is "Join again" in `ready`, not
+  `copy.overdueResolution`, which the card never needed.
+- Six cases beyond the 16 in `RecordingStateTest`: the badge on both pages,
+  a second declaration, the paste route on a File Episode, a recording id of
+  another session, and the two withdrawals.
 
 ## Re-scope log
 
@@ -854,6 +865,20 @@ Three things the spec did not decide, decided here because a person sees them:
   declaration to undo: the panel offers no Undo there (it would clear nothing)
   and keeps `T-126`'s paste toggle, because a recording pasted anyway is
   `ready`.
+
+**2026-09-26 — a recording made visible withdraws the declaration.** The
+Decisions say the declaration and a visible recording "can coexist only
+through a stale page". Built as specified they could not: Hide, then There's
+no recording for this session, then Show again left `ready` with
+`not_recorded_at` still set — the Peer's badge "Live only" above "The
+recording is here.", the creator's "Recorded", no Undo on the panel, and the
+old declaration back in force the moment that recording was hidden again
+(found by the flow-doc writer). `unhide()` now clears the key when the row
+becomes visible, and `paste()` when it writes one, each under the Episode's
+row lock, so the two never stand together and a fact always outranks a
+claim. The badge follows the same order on both pages: "Recorded" while a
+Peer can see a recording, whatever the switch said, and otherwise "Live only"
+for the switch or the declaration.
 
 ## Notes
 
