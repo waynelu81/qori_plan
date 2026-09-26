@@ -13,6 +13,9 @@ stops them recurring, not this file.
 
 ## Open
 
+- `docs/tinker/uploads.md` "Watch the guards fire": the 30 MB confirm example
+  expects `errors.upload.too_large`, but its `x` bytes behind a `.pdf` trip the
+  type check first, and 30 MB is under Start's 200 MB anyway. (27 Sep)
 - Integrations says "Connect a Stripe account to charge for your Series"; the
   owner asked on 23 September for no "charge" in Qori's copy ("so
   aggressive"). `resources/js/pages/share/settings/Integrations.vue` (24 Sep)

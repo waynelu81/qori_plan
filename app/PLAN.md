@@ -48,7 +48,7 @@ The immediate goal: that one loop, safe, reachable, understandable and measurabl
   an address with no account, at its own price (`T-043`, `T-181`, `D-050`).
 - **Built, with no way in**: connections and campaigns (`T-044`, `T-045`).
 - **A live Episode's recording is pasted by hand** and Peers watch it from the
-  card (`T-125`–`T-127`); both emails go out every thirty minutes (`T-128`, `T-129`, `T-206`, `D-028`).
+  card (`T-125`–`T-127`); both emails go out every thirty minutes (`T-128`, `T-129`, `T-206`, `D-028`); the class chat is on the Series page (`T-132`).
 - **Not production-ready for real customers.** The beta gate below says why.
 
 Completed work: [`status-history.md`](dev/status-history.md). Browser evidence: [`walkthroughs.md`](dev/walkthroughs.md).

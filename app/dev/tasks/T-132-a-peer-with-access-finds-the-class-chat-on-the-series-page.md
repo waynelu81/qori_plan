@@ -2,7 +2,7 @@
 id: T-132
 title: A Peer with access finds the class chat on the Series page
 stream: classroom
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-130, T-131
@@ -1006,34 +1006,34 @@ Total: 26 new cases.
 
 ## Acceptance
 
-- [ ] A creator on the Series page adds a WhatsApp invite link, or a WeChat
+- [x] A creator on the Series page adds a WhatsApp invite link, or a WeChat
       code image with the date printed under it, sees it listed with its
       platform name, and is not offered a second one
-- [ ] A Peer with access finds the card at `#chat` above the Episodes, follows
+- [x] A Peer with access finds the card at `#chat` above the Episodes, follows
       "Join the chat" to the invite or "Show the code" to the image in a new
       tab, and "I've joined" collapses the card on that browser only
-- [ ] After the date under the code the Peer's card hides the code and says
+- [x] After the date under the code the Peer's card hides the code and says
       so, the creator's page asks for a new one, and a stale "Show the code"
       link lands on `#chat` with the toast — never a blank tab
-- [ ] The invite link and the image URL appear in no page prop and nowhere on
+- [x] The invite link and the image URL appear in no page prop and nowhere on
       the public page; no access, a revoked Access and another creator's chat
       id meet 403, 403 and 404 (owner acceptance 11)
-- [ ] Every open is one `access_opens` row with target `chat` and the
+- [x] Every open is one `access_opens` row with target `chat` and the
       Access's `group_id`, and an expired code writes none
-- [ ] Removing a chat, replacing its code and purging the Series each delete
+- [x] Removing a chat, replacing its code and purging the Series each delete
       the image and its `media_assets` row, with the chat row gone first
-- [ ] A photo over `qori.chats.code_max_mb` or a PDF is refused when the
+- [x] A photo over `qori.chats.code_max_mb` or a PDF is refused when the
       upload is signed, and a note over `NOTE_MAX` is refused with the same
       number the textarea shows
-- [ ] The platform names reach the picker and the card from
+- [x] The platform names reach the picker and the card from
       `lang/en/chats.php`, and a Group with its own vocabulary reads its own
       nouns on both cards
-- [ ] `docs/flows/chats.md` describes the chain and `docs/flows/README.md`
+- [x] `docs/flows/chats.md` describes the chain and `docs/flows/README.md`
       lists it; the upload recipe attaches a code and cleans it up
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -1094,6 +1094,18 @@ Total: 26 new cases.
 - **The line numbers the spec cites are the 18 September files'.** The names
   are what binds; every one was found.
 - **Acceptance's board check is `bin/tasks --check` in `qori-plan`.**
+
+**2026-09-27 — found while building.**
+
+- **One image backs one chat.** Nothing in the spec stopped a code already
+  behind one chat being posted for another, and removing either would delete
+  the image the other still shows. `series_chats.media_asset_id` is unique,
+  as `materials.media_asset_id` is, and `StoreChatRequest` and `guardCode()`
+  both refuse an image in use, the edited chat's own excepted.
+- **The creator's row carries `mediaAssetId`.** The edit form posts the whole
+  row, so it posts the current image's id to keep an unchanged code.
+- **`errors.chats.code_invalid.resolution` says "of up to :mb MB"**, not
+  "under": the rule takes exactly the cap, and the form's help says "up to".
 
 ## Notes
 
