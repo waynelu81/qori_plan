@@ -314,7 +314,6 @@ recipe; nothing for the suite, which runs on the `array` mailer.
 | `app/Notifications/RecordingReadyNotification.php`                 | new    | Mail only, not queued; `Terminology::line()` with the Group                                                                                           |
 | `app/Support/ZonedTime.php`                                        | new    | `zoneFor()`, `describe()`, `FORMAT` — the mail zone rule                                                                                              |
 | `app/Console/Commands/NotifySessionsCommand.php`                   | new    | `qori:sessions:notify {--dry-run}`; the Group loop; the heartbeat                                                                                     |
-| `routes/console.php`                                               | edit   | The schedule line; the stale comment replaced                                                                                                         |
 | `lang/en/live.php`                                                 | edit   | `mail.*` — `T-125` creates the file                                                                                                                   |
 | `app/Console/Commands/MailCheckCommand.php`                        | edit   | `EXPECTED` 8; a zoned Group, a live Episode, a paste, `sendDue()`; the class and `inspect()` docblocks say eight where they say seven (`:35`, `:118`) |
 | `docs/flows/live-sessions.md`                                      | edit   | "When a recording is published": queue, sweep, skips, retry — `T-125` creates the file                                                                |
@@ -327,7 +326,9 @@ recipe; nothing for the suite, which runs on the `array` mailer.
 | `tests/Feature/Mail/MailContentTest.php`                           | edit   | The senders map gains the new notification                                                                                                            |
 
 No route file changes: the notice leaves by mail and its button is
-`shared.episodes.show`, `T-125`'s route. No factory or seeder row: see the
+`shared.episodes.show`, `T-125`'s route. `routes/console.php` is not edited
+either: nothing schedules the command, by the owner's decision (Re-scope
+log). No factory or seeder row: see the
 last decision. `config/qori.php` is not touched: `T-123` declares
 `qori.live.notice_window_days`, `notice_attempts`, `sends_per_run` and the
 rest, and this task only reads them.
@@ -992,8 +993,8 @@ Total: 26 new cases.
 - [ ] A send that fails is retried after 15, 60 and 240 minutes and then left
       `failed` with a null `next_attempt_at`, and the exception is reported
 - [ ] `qori:sessions:notify` sends at most `qori.live.sends_per_run` a run
-      across every Group, logs one heartbeat, is scheduled every five minutes
-      without overlap on one server, and `--dry-run` sends nothing
+      across every Group, logs one heartbeat, and `--dry-run` sends nothing;
+      nothing schedules it yet, by the owner's decision (Re-scope log)
 - [ ] A Group with its own vocabulary gets its own words in the email, with
       the Group passed to `Terminology::line()` explicitly
 - [ ] `php artisan qori:mail:check` sends and reads eight messages, and the
@@ -1009,14 +1010,13 @@ Total: 26 new cases.
 
 ## Before this can be ready
 
-- The schedule interval: five minutes is provisional, and `D-028` gives the
+- ~~The schedule interval: five minutes is provisional, and `D-028` gives the
   choice to the owner, made together with `T-091`'s interval against Laravel
-  Cloud's sleep timeout (`release-prerequisites.md:27`) — the owner's.
-  _Asked_ 26 September 2026, with 15 or 30 minutes suggested against the
-  sleep timeout; built at five minutes, as provisional, meanwhile. `T-091`'s
-  half is moot (its sweep was removed under `D-040`), so this interval is
-  the only one to choose. The answer changes one line in
-  `routes/console.php` and case 5 of `NotifySessionsCommandTest`.
+  Cloud's sleep timeout (`release-prerequisites.md:27`) — the owner's.~~
+  **Answered by the owner on 26 September 2026: no trigger yet.** They will
+  test Laravel Cloud's delayed queue before choosing between that and a
+  schedule, so the command is built and nothing runs it; see the Re-scope
+  log.
 - ~~`T-126` and `T-127` `ready`, so `RecordingService::paste()`'s signature,
   `EpisodeRecording`'s columns and `hidden_at` are frozen — anyone's; keep
   draft until they are.~~ **Answered 26 September 2026:** both are `done`
@@ -1024,6 +1024,17 @@ Total: 26 new cases.
   as this spec cites them, with what the Re-scope log says.
 
 ## Re-scope log
+
+**2026-09-26 — the owner: build the job, leave the trigger out.** Asked
+about the interval, the owner answered that they will test Laravel Cloud's
+delayed queue first. `qori:sessions:notify` is built as specified, with
+`--dry-run` and the heartbeat, and `routes/console.php` gets no line for it:
+queued rows wait in the ledger until something runs the command, by hand
+today. The command's docblock says so, and says whatever triggers it later
+keeps one run at a time. `NotifySessionsCommandTest`'s case 5 asserts the
+command is not scheduled, instead of its five-minute expression, so adding a
+trigger means changing that case on purpose. The acceptance line about the
+schedule reads the same way.
 
 **2026-09-26 — reconciled with `T-126`, `T-127` and the code as built.**
 
