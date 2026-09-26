@@ -285,9 +285,9 @@ it survived the change.
 
 **Qori sets no grace period.** `applySubscription()` is called from the Stripe
 webhook and nowhere else, `subscription_ends_at` is written but never read, and
-there is no scheduled job. So the plan is held for exactly as long as Stripe
-leaves the subscription in `past_due`, and the length lives in Stripe's dunning
-configuration rather than in this codebase.
+no scheduled command looks at billing. So the plan is held for exactly as long
+as Stripe leaves the subscription in `past_due`, and the length lives in
+Stripe's dunning configuration rather than in this codebase.
 
 Stripe's retry window is roughly **three weeks over about four attempts** by
 default, configurable under _Settings → Billing → Subscriptions and emails →
@@ -369,10 +369,12 @@ locks over-cap courses while students keep access; suspension is §21.8's
 hibernate, which is heavier and stops more. Picking both is how a mechanic
 becomes two mechanics that disagree.
 
-**It needs the scheduler**, which is now the second thing waiting on one —
-reminders being the other. Campaign sending is user-triggered and needs nothing;
-activity-log pruning was designed around a Mongo TTL index so it needed nothing
-either. Two features, one dependency, still deferred.
+**It runs on the scheduler, which exists.** Laravel Cloud has run Qori's
+schedule since 11 September 2026: `qori:series:purge` and
+`qori:connections:refresh` daily, and since 27 September `qori:sessions:notify`
+every thirty minutes (`T-206`), which sends the session emails. Campaign sending
+is user-triggered and needs none of it. This sequence is still deferred, and
+waits on being built, not on a scheduler.
 
 ### On refund and re-send not existing yet
 

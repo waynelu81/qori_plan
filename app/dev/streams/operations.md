@@ -17,18 +17,21 @@ driver, which runs work after the response and only when it succeeded — fine f
 now, and not a worker. Nothing alerts. No restore has been attempted.
 
 **The scheduler runs in production**, switched on by the owner on 11 September
-2026, the same day `T-010` registered Qori's first scheduled command. Nothing
-runs `schedule:run` locally, so the purge sweep still has to be driven by hand
-here. One trap survives the switch and is worth re-reading before adding a
-second command: Cloud captures `php artisan schedule:list` **at deploy time** to
+2026, the same day `T-010` registered Qori's first scheduled command. It runs
+three: `qori:series:purge` and `qori:connections:refresh` (`T-151`) daily, and
+`qori:sessions:notify` every thirty minutes (`T-206`), which sends the session
+emails. Nothing runs `schedule:run` locally, so each is driven by hand here.
+One trap survives the switch and is worth re-reading before adding another
+command: Cloud captures `php artisan schedule:list` **at deploy time** to
 decide when to wake the environment, so a change to a task's frequency does
 nothing until the next deployment. See
 [`../release-prerequisites.md`](../release-prerequisites.md).
 
 **One question that becomes a bug the day compute is scaled.** Cloud runs the
 scheduler on every replica of the cluster it is enabled on, and a task only
-runs once across them if it says `onOneServer()`. `qori:series:purge` does not
-say it. Two replicas would sweep the same Series twice at the same instant:
+runs once across them if it says `onOneServer()`. `qori:sessions:notify` says
+it (`T-206`); `qori:series:purge` and `qori:connections:refresh` do not. Two
+replicas would sweep the same Series twice at the same instant:
 harmless in the ordinary case, because the second run finds the Episodes
 already gone, and a race on the file deletion and the `purged_at` write in the
 case that is not. Cheap to fix and currently costing nothing, which is exactly

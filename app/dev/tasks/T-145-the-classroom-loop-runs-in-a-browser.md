@@ -141,8 +141,9 @@ command sends inline (`D-028`). A new `tests/e2e/support/artisan.ts` spawns
 so the child artisan reads `DB_DATABASE`, `APP_URL`, `MAIL_MAILER=smtp` and
 the rest from its environment, which wins over `.env` — the mechanism the
 command's docblock already relies on (`:28-31`). The scheduler is not
-involved: a run must not wait for a five-minute tick, and `withoutOverlapping()`
-and `onOneServer()` sit on the schedule entry, not on the command.
+involved: a run must not wait for the thirty-minute tick (`T-206`), and
+`withoutOverlapping()` and `onOneServer()` sit on the schedule entry, not on
+the command.
 
 **The time on the card is asserted by instant and by zone name, not by its
 formatted text.** `SessionTime.vue` renders `<time :datetime="startsAt">`

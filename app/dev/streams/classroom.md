@@ -207,5 +207,6 @@ to 19 is promised for the sprint.
 **Owner's day-one items** (`D-031`): a month of Zoom Workplace Pro and the
 development app for `T-122`; answers to `T-089`'s three open questions so the
 Peer lane can start (answered 19 September 2026: none is left, and since
-`D-043` nothing waits on an approval); the schedule interval for `qori:sessions:notify` against
-Laravel Cloud's sleep timeout, chosen with `T-091`'s.
+`D-043` nothing waits on an approval); and the interval for
+`qori:sessions:notify` against Laravel Cloud's sleep timeout, which the owner
+chose on 27 September 2026: every thirty minutes (`T-206`).

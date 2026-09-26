@@ -79,10 +79,13 @@ Open questions this raises, none answered yet:
    marketing, and metering them would meter something a student is owed. Leaning
    no — and if so, they need their own guard so a reminder schedule cannot become
    an unmetered send channel.
-4. **This needs a scheduler**, and it is the strongest reason yet to add one:
-   unlike campaign sending, a reminder has no user action to hang off. It fires
-   because a date arrived. Queue is still `sync` and no environment runs
-   `schedule:work`.
+4. **This needs a scheduler, and one runs.** Unlike campaign sending, a
+   reminder has no user action to hang off: it fires because a date arrived.
+   Laravel Cloud has run Qori's schedule since 11 September 2026, and since 27
+   September `qori:sessions:notify` sends the session emails every thirty
+   minutes (`T-206`). The day-before reminder is `T-138`, queued into the same
+   ledger. The queue is `deferred`, with no worker, and nothing is
+   `ShouldQueue`.
 
 ## Pro can upsell in the confirmation email
 

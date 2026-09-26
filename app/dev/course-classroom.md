@@ -34,6 +34,14 @@ On 7 November the same class is 04:00 for Lucía, because US daylight saving end
 
 Verified at `0ab1915`. The owner's gap table is folded into the last column.
 
+> **27 September 2026.** The table is the code at that commit. The stream has
+> built on it since (`T-123` to `T-131`, `T-134`, `T-206`), so most of its rows
+> no longer hold. On the schedule in particular: `routes/console.php` schedules
+> three commands, `qori:series:purge` and `qori:connections:refresh` daily and
+> `qori:sessions:notify` every thirty minutes (`T-206`), and the last sends the
+> session emails from the `session_notices` ledger (`T-128`). What the code
+> does now is in the code repository's `docs/flows/live-sessions.md`.
+
 | Capability             | Built today                                                                                                                                                                                                                                                                                                                                                                                       | Drafted                                                                             | The gap for this course                                                                                                            |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | Course structure       | A Series holds ordered Episodes; an Episode has one `type`, one `provider` and one `content` payload (`app/Models/Episode.php`, `app/Enums/EpisodeType.php`: File ⇒ [CloudflareR2, Dropbox], Video ⇒ [Vimeo, Dropbox], Audio ⇒ [Dropbox], Live ⇒ [Zoom, Teams])                                                                                                                                   | —                                                                                   | A Zoom lesson, its slides and its worksheet become separate Episodes — five cards, five completion requirements                    |

@@ -888,3 +888,7 @@ ignores the rest rather than inventing a fifth sentence.
 `T-128` and this task each move the count, and whichever lands second makes
 the sentence true. (27 September 2026: it says eleven, with the listing, and
 the line on the broadcast mailer says the check then counts ten.)
+
+**27 September 2026:** `T-206` scheduled `qori:sessions:notify` every thirty
+minutes, so the nudge goes out on its own. Where this file says it is sent by
+hand until `T-206` lands, it describes the command before that.

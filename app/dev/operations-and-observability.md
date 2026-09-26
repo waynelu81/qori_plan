@@ -81,9 +81,10 @@ narrative pointer to the ones that do.
 ### ~~Retention with no scheduler: a Mongo TTL index~~ — superseded 2026-09-08
 
 > Kept because the requirement it solved is still real and now needs an answer.
-> Postgres has no TTL index, so retention needs a scheduled command — which is
-> the same shape `T-010`'s `qori:series:purge` takes, and the same reason `T-018`
-> has to settle a scheduler before either can run unattended. The original
+> Postgres has no TTL index, so retention needs a scheduled command — the same
+> shape `T-010`'s `qori:series:purge` takes. The scheduler it would run on has
+> run in production since 11 September 2026, with three commands on it (the
+> `operations` stream), so retention waits only on being built. The original
 > design follows.
 
 Stamp `expires_at` on each row at write time from the workspace's plan, and index

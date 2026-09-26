@@ -1149,3 +1149,10 @@ are the way to see one by hand.
 is `file`, which is fine on one machine; in production it is Valkey. A
 `CACHE_STORE=array` environment would make both no-ops, which is one more
 reason the batch is locked in the database too.
+
+**27 September 2026: the command runs on a schedule now.** `T-206` put
+`qori:sessions:notify` on the scheduler every thirty minutes, the owner's
+choice, with `withoutOverlapping(15)` and `onOneServer()` (qori `de1536f`).
+Where this file says nothing runs it, or that it runs by hand, it describes the
+command before that. Case 5 of `NotifySessionsCommandTest` now asserts the
+schedule.

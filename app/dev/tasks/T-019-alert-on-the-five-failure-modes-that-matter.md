@@ -53,7 +53,9 @@ Two things to know before writing them:
   the five conditions and making each one raise something Sentry can match on.
 - Still to decide: whether "a payment that never became access" is detectable
   as an error at all, or needs a scheduled check over `payment_fulfilments`.
-  The first is free and the second needs the scheduler, which needs `T-018`.
+  The first is free. The second is one more scheduled command: Laravel Cloud
+  has run the scheduler since 11 September 2026, `qori:sessions:notify` runs on
+  it every thirty minutes (`T-206`), and it waits on nothing from `T-018`.
 - `T-018` first: 'queue age' has no meaning until there is a queue that can age.
 - Whether two more join the five: a scheduled command that stops, and a
   session notice left `failed` after its last try. The code already names
