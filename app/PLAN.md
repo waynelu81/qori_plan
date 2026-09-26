@@ -47,8 +47,8 @@ The immediate goal: that one loop, safe, reachable, understandable and measurabl
 - **The loop closes for a new person** (22 September 2026): an invitation reaches
   an address with no account, at its own price (`T-043`, `T-181`, `D-050`).
 - **Built, with no way in**: connections and campaigns (`T-044`, `T-045`).
-- **A live Episode's recording is pasted by hand**: Peers join and watch from
-  its card, and it can be hidden (`T-125`–`T-127`); mail next (`D-024`–`D-031`).
+- **A live Episode's recording is pasted by hand** and Peers watch it from the
+  card (`T-125`–`T-127`); its email is built, untriggered until `T-204` (`D-028`).
 - **Not production-ready for real customers.** The beta gate below says why.
 
 Completed work: [`status-history.md`](dev/status-history.md). Browser evidence: [`walkthroughs.md`](dev/walkthroughs.md).
