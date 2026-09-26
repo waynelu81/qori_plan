@@ -2,8 +2,8 @@
 id: T-128
 title: Every Peer with access hears once when a recording is published
 stream: classroom
-status: draft
-owner: unassigned
+status: doing
+owner: claude
 estimate: M
 depends: T-127, T-130
 blocks: T-129, T-136, T-138, T-140, T-145
@@ -1012,13 +1012,50 @@ Total: 26 new cases.
 - The schedule interval: five minutes is provisional, and `D-028` gives the
   choice to the owner, made together with `T-091`'s interval against Laravel
   Cloud's sleep timeout (`release-prerequisites.md:27`) — the owner's.
-- `T-126` and `T-127` `ready`, so `RecordingService::paste()`'s signature,
+  _Asked_ 26 September 2026, with 15 or 30 minutes suggested against the
+  sleep timeout; built at five minutes, as provisional, meanwhile. `T-091`'s
+  half is moot (its sweep was removed under `D-040`), so this interval is
+  the only one to choose. The answer changes one line in
+  `routes/console.php` and case 5 of `NotifySessionsCommandTest`.
+- ~~`T-126` and `T-127` `ready`, so `RecordingService::paste()`'s signature,
   `EpisodeRecording`'s columns and `hidden_at` are frozen — anyone's; keep
-  draft until they are.
+  draft until they are.~~ **Answered 26 September 2026:** both are `done`
+  (qori `e40e651`, `99f2915`); the signature, the columns and `hidden_at` are
+  as this spec cites them, with what the Re-scope log says.
 
 ## Re-scope log
 
-None.
+**2026-09-26 — reconciled with `T-126`, `T-127` and the code as built.**
+
+- **`RecordingService` already has a constructor** (`T-127`:
+  `LiveSessionService $sessions`); `SessionNoticeService $notices` is promoted
+  beside it. `paste()` writes the row inside a transaction with the Episode
+  locked, and calls `queueRecordingReady()` inside that transaction, after
+  the row and `T-127`'s withdrawal of a "not recorded" declaration, so the
+  recording and its notices commit together.
+- **`routes/console.php`'s stale comment is already gone**: since
+  20 September it says the Scheduler is on and running. This task adds the
+  schedule line and its own comment, and leaves that block alone.
+- **`qori:mail:check` sends nine messages, not seven** (`T-043`'s invitation
+  and `T-151`'s reconnect came since), so this makes ten; its class docblock
+  still says eight and is corrected with it.
+- **The notice waits for the card.** `T-126` lets a recording be pasted before
+  the session ends, and `T-126`'s own Decisions keep Join on the card until
+  its window closes; a notice sent at once would say "ready to watch" while
+  the card still offered Join. `queueRecordingReady()` gives a row queued
+  before Join's window closes a `next_attempt_at` of that close, so the `due`
+  scope leaves it until then; one queued after is due at once, as specified.
+- **A live row with no start queues nothing.** It has no card for Watch to be
+  on (`T-125`'s `isScheduled()`), and no window to wait for.
+- **A Peer the sweep skipped because nothing was visible still hears once.**
+  Pasting a wrong link, hiding it and pasting again — `T-127`'s correction —
+  could leave every row `skipped` as `recording_unavailable` if a sweep ran
+  while nothing was visible, and the unique key would then ignore the new
+  paste's rows for good: the class would never hear. `queueRecordingReady()`
+  re-arms those rows (pending again, the new recording's id), and
+  `RecordingService::unhide()` calls it too, because showing a recording
+  again makes one visible just as a paste does. A row that was `sent` is never
+  re-armed: a replaced link sends nothing (`D-028`).
 
 ## Notes
 
