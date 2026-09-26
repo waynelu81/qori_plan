@@ -2,7 +2,7 @@
 id: T-134
 title: A creator can cancel a live Episode, undo it, and add the next session
 stream: classroom
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-129
@@ -786,39 +786,39 @@ Total: 19 new cases.
 
 ## Acceptance
 
-- [ ] On the creator's Series page, Cancel session on a live row makes the
+- [x] On the creator's Series page, Cancel session on a live row makes the
       Peer's card read "This session was cancelled." and the creator's row
       read the cancelled line within the same minute, at phone width and at
       desktop width, with Move and Remove still reachable
-- [ ] A Peer who follows a saved Join link to a cancelled session inside its
+- [x] A Peer who follows a saved Join link to a cancelled session inside its
       window lands on the card, never on the meeting; after Undo the same link
       opens the meeting again (owner acceptance 14: no message sends a stale
       live destination, and nothing is sent at all)
-- [ ] Cancel is refused while a recording is visible, with the line that says
+- [x] Cancel is refused while a recording is visible, with the line that says
       to hide it first; Undo puts back exactly what was there, a hidden
       recording included
-- [ ] Add the next session on a 1 October 9:00am AEST session makes an 8
+- [x] Add the next session on a 1 October 9:00am AEST session makes an 8
       October 9:00am AEDT session with the same title, link, length and
       Recorded switch and nothing else, at the end of the Series; taken after
       the class ran, it lands on the next weekly slot still ahead; the toast
       names the new start with the zone
-- [ ] The next session meets the plan's Episode cap and the over-cap lock
+- [x] The next session meets the plan's Episode cap and the over-cap lock
       exactly as the New Episode form does
-- [ ] A cancelled session is never nudged, and no email leaves for a cancel,
+- [x] A cancelled session is never nudged, and no email leaves for a cancel,
       an undo or a copy
-- [ ] Neither cancelling, undoing nor copying changes a Peer's progress or a
+- [x] Neither cancelling, undoing nor copying changes a Peer's progress or a
       certificate (owner acceptance 12); a wrong-tenant creator and a slug on
       any action are sent back with the not-found toast and write nothing
       (owner acceptance 11)
-- [ ] No line under `live.*` says "live now", "has ended", "on its way" or
+- [x] No line under `live.*` says "live now", "has ended", "on its way" or
       "processing"; the number of days is interpolated from the constant
-- [ ] `docs/flows/live-sessions.md` carries the `cancelled` row's writer and
+- [x] `docs/flows/live-sessions.md` carries the `cancelled` row's writer and
       the two chains; `docs/flows/series.md` names the second caller of
       `add()`; the `docs/tinker/live-sessions.md` recipe runs
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -830,6 +830,14 @@ Total: 19 new cases.
   builds on. Anyone's, once each is `ready`.~~ **Answered 27 September
   2026:** all of them are `done` (`T-129` qori `a03f90d`); where the names
   or shapes differ from this spec, the Re-scope log says how.
+
+## Added during execution
+
+- `docs/tinker/README.md` — the live-sessions row names cancelling and the
+  next session.
+- `LiveSessionService::withLockedContent()`'s docblock names `cancel()` among
+  the callbacks that read the recordings, so a job calling it wraps it in
+  `CurrentGroup::runFor()`, as the tinker recipe does.
 
 ## Re-scope log
 
