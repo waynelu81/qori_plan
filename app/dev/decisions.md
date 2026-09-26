@@ -131,8 +131,10 @@ answer is written into the task.
 - `T-122` — A month of Zoom Workplace Pro, the user-managed General app in
   development mode, and a beta-share request for one outside account; the
   spike waits on all three (`D-031`).
-- `T-128` — The interval for `qori:sessions:notify` against Laravel Cloud's
-  sleep timeout, chosen with `T-091`'s sweep (`D-028`).
+- `T-206` — The interval for `qori:sessions:notify` against Laravel Cloud's
+  sleep timeout (`D-028`). It was `T-128`'s, to be chosen with `T-091`'s
+  sweep, which `D-040` removed; asked 26 September 2026 with what `T-204`
+  measured of Cloud's scheduler.
 - `T-130` — Whether `odt`, `ods`, `odp` and `epub` join the upload allow-list
   (`D-030`).
 - `T-139` — The Free plan's per-Series storage figure beside the 100 MB the
