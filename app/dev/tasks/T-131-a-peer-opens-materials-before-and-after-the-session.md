@@ -2,8 +2,8 @@
 id: T-131
 title: A Peer opens materials before and after the session, and sees homework due in their own time
 stream: classroom
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: M
 depends: T-125, T-130
 blocks: T-132, T-145
@@ -816,7 +816,35 @@ Total: 20 new cases.
 
 ## Re-scope log
 
-None.
+**2026-09-26 — reconciled with `T-125`, `T-126`, `T-127` and `T-130` as
+built.** Written on 17 September beside their drafts; all four are code now,
+and these things here read them otherwise:
+
+- **`stateFor()` needs the Series' Group, and a start.** Past `open` it reads
+  the Episode's recordings (`T-126`), which are group-scoped, and the Peer
+  surface has no current Group; and it throws for a live row with no start
+  (`T-125`'s `isScheduled()`). Both callers of `isReleased()` —
+  `SharedController::show()`'s list and `MaterialService::open()` — read it
+  inside `CurrentGroup::runFor($series->group, …)`, as `liveCard()` does, and
+  `isReleased()` holds an `after_session` row on a live Episode with no start:
+  it has no session end, so "after the session" has not come.
+- **The arm order.** `T-126` put `ready` after `open`, not ahead of every
+  clock arm; `HELD_STATES` — `Upcoming`, `Open`, `Cancelled` — is unaffected,
+  since every state after Join closes releases.
+- **`errors.materials.not_found` carries `:series`**, and an `AppException`
+  fills only the replacements it is given, so `open()` throws it with the
+  Group's vocabulary, as `T-126`'s and `T-127`'s refusals are.
+- **The creator's help line says the opposite of this task.**
+  `materials.release_help` (`T-130`) says "After the session" "keeps it off
+  the list your :peer_plural see until the session's scheduled end", and
+  `MaterialRelease::AfterSession`'s docblock the same; after this task the
+  row is listed, as "Shown after the session" with no link, until Join's
+  window closes — fifteen minutes after the scheduled end, not at it. Both
+  are rewritten to what the Peer's page does, in the creator's words.
+- **Where the list mounts.** "After the row's controls and after
+  `<LiveSessionCard>`": the row's own control is its header, and "Mark as
+  done" is its closing line. The list goes after the card and
+  before Mark as done, so finishing stays the last thing on the row.
 
 ## Notes
 
