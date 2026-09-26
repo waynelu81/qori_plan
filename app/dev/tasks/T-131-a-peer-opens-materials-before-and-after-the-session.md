@@ -869,3 +869,12 @@ section and leaves that line to `T-089`'s owner.
 before this task, and `T-125` keeps the controller's constructor empty for
 this task and `T-132`; the stream's claim order (`streams/classroom.md`)
 serialises the edits.
+
+`T-126`'s report (26 September 2026): past `open`, `stateFor()` reads the
+Episode's recordings, which are group-scoped, so a call with no current
+Group throws — and `isReleased()` calls it from the Peer surface, which has
+none. Both callers, `SharedController::show()`'s list and
+`MaterialService::open()`, read it inside
+`CurrentGroup::runFor($series->group, …)`, as `liveCard()` and
+`PlaybackTicketService::watch()` do, and ask `isScheduled()` first, because
+`stateFor()` throws for a live row with no start (`T-125`).

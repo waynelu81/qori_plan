@@ -2,7 +2,7 @@
 id: T-126
 title: A creator adds a recording link to a live Episode, and Peers watch it from the same card
 stream: classroom
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-124, T-125
@@ -843,25 +843,26 @@ with no context set.
 
 | Key                                            | File                 | English                                                                                                                                                                                                     |
 | ---------------------------------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `live.state.ready`                             | `lang/en/live.php`   | The recording is here. It's a link the :creator manages, so if it stops working, let them know.                                                                                                             |
+| `live.state.ready.message`                     | `lang/en/live.php`   | The recording is here. It's a link the :creator manages, so if it stops working, let them know.                                                                                                             |
 | `live.recording.watch`                         | `lang/en/live.php`   | Watch recording                                                                                                                                                                                             |
 | `live.recording.watch_part`                    | `lang/en/live.php`   | Watch part :part                                                                                                                                                                                            |
 | `live.recording.passcode`                      | `lang/en/live.php`   | Passcode: :passcode                                                                                                                                                                                         |
 | `live.recording.available_until`               | `lang/en/live.php`   | Available until :date                                                                                                                                                                                       |
 | `live.panel.recording.title`                   | `lang/en/live.php`   | Add the recording link                                                                                                                                                                                      |
 | `live.panel.recording.url_label`               | `lang/en/live.php`   | Recording link                                                                                                                                                                                              |
-| `live.panel.recording.url_help`                | `lang/en/live.php`   | Paste the link to the recording from your meeting app, or from wherever you keep it, and set its sharing so anyone with the link can watch. :peer_plural with access see it on this :episode straight away. |
+| `live.panel.recording.url_help`                | `lang/en/live.php`   | Paste the link to the recording from your meeting app, or from wherever you keep it, and set its sharing so anyone with the link can watch. :peer_plural with access see it on this :episode after the session. |
 | `live.panel.recording.passcode_label`          | `lang/en/live.php`   | Passcode, if the link has one                                                                                                                                                                               |
 | `live.panel.recording.submit`                  | `lang/en/live.php`   | Add recording                                                                                                                                                                                               |
 | `live.panel.recording.part`                    | `lang/en/live.php`   | Part :part                                                                                                                                                                                                  |
 | `live.panel.recording.source.link`             | `lang/en/live.php`   | Added by you on :date                                                                                                                                                                                       |
 | `series.recording_added`                       | `lang/en/series.php` | Recording added to :title. :peer_plural with access can watch it from the :episode now.                                                                                                                     |
+| `series.recording_added_after_session` | `lang/en/series.php` | Recording added to :title. :peer_plural with access can watch it from the :episode after the session. |
 | `errors.live.recording_unavailable.message`    | `lang/en/errors.php` | That recording isn't available.                                                                                                                                                                             |
 | `errors.live.recording_unavailable.resolution` | `lang/en/errors.php` | Go back to the :episode. Anything you can watch is listed there.                                                                                                                                            |
 | `errors.live.not_live.message`                 | `lang/en/errors.php` | Only a live :episode can have a recording.                                                                                                                                                                  |
 
-`live.state.ready`, `live.panel.recording.url_help`, `series.recording_added`
-and the two `errors.live` lines carry a noun and go through
+`live.state.ready.message`, `live.panel.recording.url_help`, the two
+`series.recording_added` lines and the two `errors.live` lines carry a noun and go through
 `Terminology::line()` with the Group passed explicitly on the Peer surface;
 the rest carry none and are read with `__()`. `:date` in `source.link` is the
 Group's zone (the creator's page); `available_until` is a date with no zone.
@@ -870,7 +871,10 @@ Peer's says a link the :creator manages (`D-025`). No line under `live.*`
 says "live now", "has ended", "on its way" or "processing" (`D-026`).
 `errors.live.not_live` has no resolution: nothing in the product offers the
 action, so the path is final. The `live` group in `errors.php` is added by
-whichever of `T-125` and this task lands first.
+whichever of `T-125` and this task lands first. The toast is
+`recording_added` when `stateFor()` answers `ready` after the paste, and
+`recording_added_after_session` otherwise: until Join's window closes the
+card still offers Join.
 
 ## Routes
 
@@ -937,10 +941,12 @@ does; `watchUrl($series, $episode, $recordingId)` builds
     empty (owner acceptance 5).
 13. `test_a_hidden_recording_is_not_offered` — `hidden_at` set on the row:
     `recordings` empty and the state is not `ready`.
-14. `test_ready_wins_over_the_clock` — `stateFor()` answers `Ready` for an
-    Episode with a visible recording at three instants: an hour before the
-    start, inside the Join window, and `recording_wait_hours` plus one after
-    the end.
+14. `test_ready_wins_over_the_clock` — for an Episode with a visible
+    recording pasted before the session, `stateFor()` answers `Upcoming` an
+    hour before the start and `Open` inside the Join window, then `Ready` at
+    the window's close and at `recording_wait_hours` plus one after the end;
+    a "Live only" Episode with a recording is `Ready` at the close (see the
+    Re-scope log).
 15. `test_watch_redirects_to_the_recordings_link` — 302 whose `Location` is
     exactly the pasted url; no JSON.
 16. `test_watch_records_the_open_and_marks_the_episode_opened` — one
@@ -972,28 +978,28 @@ Total: 22 new cases.
 
 ## Acceptance
 
-- [ ] A creator pastes a recording link and its passcode on a live Episode's
+- [x] A creator pastes a recording link and its passcode on a live Episode's
       row and the page lists it as Part 1 with the date it was added; a second
       paste through the service is Part 2
-- [ ] A Peer with access sees Watch recording and the passcode on the same
+- [x] A Peer with access sees Watch recording and the passcode on the same
       card that offered Join, and Watch opens the pasted link in a new tab
       through `shared.episodes.open?recording=` (owner acceptance 4's page
       half; the email is `T-128`'s)
-- [ ] After the scheduled end with nothing pasted, the card shows `T-125`'s
+- [x] After the scheduled end with nothing pasted, the card shows `T-125`'s
       `waiting` line and no Watch, and nothing is emailed (owner acceptance 5)
-- [ ] Watch marks the Episode opened and writes one `access_opens` row with
+- [x] Watch marks the Episode opened and writes one `access_opens` row with
       `target = recording`; Mark as done, the Episode count and the certificate
       are untouched (owner acceptance 12)
-- [ ] A revoked Access, another Group's Series, a recording id from another
+- [x] A revoked Access, another Group's Series, a recording id from another
       Episode, a hidden recording and one held for review each meet the
       response the tests name — never a blank tab (owner acceptance 11)
-- [ ] The public page carries no recording link and no passcode
-- [ ] `docs/flows/live-sessions.md` describes the paste and the Watch chain,
+- [x] The public page carries no recording link and no passcode
+- [x] `docs/flows/live-sessions.md` describes the paste and the Watch chain,
       and `docs/tinker/live-sessions.md` pastes one by hand
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `php artisan qori:tasks --check` passes
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `php artisan qori:tasks --check` passes
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -1018,9 +1024,46 @@ Total: 22 new cases.
   draft cites them, plus `LiveSessionService::isScheduled()`, which
   `liveCard()` is only called behind.
 
+## Added during execution
+
+- `series.recording_added_after_session` in `lang/en/series.php`, and
+  `LiveSessionService` on `RecordingController::store()` to choose between
+  the two toasts — see the Re-scope log. One case beyond the 22 in
+  `RecordingTest`, `test_a_paste_before_join_closes_says_after_the_session`.
+- `docs/flows/storage.md` — its Open chain gains `?recording=` → `watch()`.
+- `docs/flows/series.md` — "Not built yet" says the creator pastes the
+  recording link and nothing finds one yet.
+- `docs/flows/README.md` and `docs/tinker/README.md` — the live-sessions rows
+  name recordings.
+
 ## Re-scope log
 
-None.
+**2026-09-26 — Join keeps winning until its window closes, and the copy says
+so.** Test 14 said `Ready` an hour before the start and inside the Join
+window; the Decisions and the Code said the arms that offer Join keep winning
+until the window closes, and that is what was built — `cancelled`,
+`upcoming`, `open`, `ready`, `not_recorded`, `waiting`, `overdue` — with test
+14 rewritten above. The same Decision made two Copy lines untrue for a paste
+before the close, which the Decisions allow: `series.recording_added` said
+Peers "can watch it … now" and `live.panel.recording.url_help` "straight
+away", while their card still offers Join. The help line says "after the
+session", `D-030`'s phrase for the same moment, and the toast keeps "now"
+only when `stateFor()` answers `ready` after the paste, otherwise
+`series.recording_added_after_session`. The Copy table above is rewritten.
+
+**2026-09-26 — smaller readings of the Code.** `paste()`'s `max('position')`
+is `reorder()->max('position')`, because Postgres refuses the relation's
+`ORDER BY` beside an aggregate. The controller calls
+`ResolvesShareSeries::episodeIn()`, which `T-130` added with the same lookup
+and key, rather than its own. Test 9's `recordingCopy` is
+`live.copy.recording`, where the Code puts it, and its date is the Group's —
+4 October in Brisbane at the spec's 14:00 UTC on the 3rd. Tests 7 and 8 post
+with `postJson()`: a plain form POST turns an `AppException` into a redirect
+with a toast. The Copy table's `live.state.ready` is
+`live.state.ready.message`. The paste form is a toggle, because the row sits
+inline in the page's `<p>`. A live row with no start (`T-125`'s
+`isScheduled()`) takes the paste time and the default length rather than
+failing `D-027`'s not-null.
 
 ## Notes
 
