@@ -2,8 +2,8 @@
 id: T-136
 title: The access email names the next session and the class chat
 stream: classroom
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: S
 depends: T-128, T-132
 blocks: none
@@ -11,12 +11,10 @@ blocks: none
 
 # T-136 — The access email names the next session and the class chat
 
-> **Draft.** Written on 18 September 2026 from `D-028`, `D-029`, `D-024` and
-> the classroom brief; not to be started — see
-> [`../PROCESS.md`](../PROCESS.md). It waits on `T-128`, whose
-> `App\Support\ZonedTime` writes every date, and on `T-132`, whose chat rows
-> it reads; what has to happen before it can be marked `ready` is listed at
-> the bottom.
+> Written on 18 September 2026 from `D-028`, `D-029`, `D-024` and the
+> classroom brief. Reconciled with `T-128`, `T-132` and `T-186` as built on
+> 27 September 2026 — the Re-scope log says what changed, and it overrides the
+> sketches below where they differ.
 
 ## Why
 
@@ -463,26 +461,43 @@ is unaffected: no notification class is added.
       notification's constructor unchanged, and `php artisan qori:mail:check`
       still reports "You're in: Mail Check Series .. ok"
 - [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `php artisan qori:tasks --check` passes
+- [ ] `bin/tasks --check` passes in `qori-plan`
 - [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
 - [ ] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
-- `T-132` `ready`, so `SeriesChat`, its `BelongsToGroup`, `series_id`,
+- ~~`T-132` `ready`, so `SeriesChat`, its `BelongsToGroup`, `series_id`,
   `platform`, `expires_on` (`immutable_date` cast) and `isExpired()` are
   frozen names — the stream owner's, once `T-132`'s own chain (`T-130`,
-  `T-131`, `T-125`, `T-123`) is.
-- `T-128` `ready`, so `App\Support\ZonedTime::zoneFor()`, `describe()`,
+  `T-131`, `T-125`, `T-123`) is.~~ **Answered 27 September 2026:** `T-132` is
+  `done` (qori `0ca1672`), and every name is as cited.
+- ~~`T-128` `ready`, so `App\Support\ZonedTime::zoneFor()`, `describe()`,
   `live.mail.when` and `live.mail.when_both` are frozen names — the stream
-  owner's.
-- If `T-005` lands first and has converted this email's lines to
+  owner's.~~ **Answered 27 September 2026:** `T-128` is `done`, and the
+  signatures are as cited.
+- ~~If `T-005` lands first and has converted this email's lines to
   `Terminology::line()`, the two lines here follow the shape it chose; check
-  before claiming — anyone's.
+  before claiming — anyone's.~~ **Checked 27 September 2026:** `T-005` is a
+  draft and the existing lines are still `__()`, so the two new ones go
+  through `Terminology::line()` as specified.
 
 ## Re-scope log
 
-None.
+**2026-09-27 — reconciled with `T-128`, `T-132`, `T-186` and the code as
+built.**
+
+- **`toMail()` ends by moving the message to the broadcast mailer** since
+  `T-186` (`D-054`): unless `qori.mail.broadcast` is `log`, it takes that
+  mailer, the broadcast from-address and the default reply-to. The sketch
+  above predates it. The two lines go between the paid-or-free line and the
+  button as specified, and the tail stays as it is.
+- **`Series::nextLiveEpisode()` is this task's to write**: `T-135` is still a
+  draft, so the declaration lands here and `T-135`'s Files row becomes the
+  no-op.
+- **`Episode::isCancelled()` reads `content.cancelled_at`, which `T-134`
+  writes**, so the "cancelled" case is one a creator can now produce.
+- **Acceptance's board check is `bin/tasks --check` in `qori-plan`.**
 
 ## Notes
 
