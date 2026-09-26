@@ -2,8 +2,8 @@
 id: T-127
 title: A recording can be hidden, added to, or declared not recorded, and an overdue session says so
 stream: classroom
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: M
 depends: T-126
 blocks: T-128, T-133
@@ -731,13 +731,15 @@ Total: 16 new cases.
 
 ## Before this can be ready
 
-- `T-126` `ready`, so `RecordingService`, `EpisodeRecording`,
+- ~~`T-126` `ready`, so `RecordingService`, `EpisodeRecording`,
   `RecordingController` and the Peer prop's recording shape are frozen: this
   draft assumes `T-126`'s creator controller is
   `App\Http\Controllers\Share\RecordingController` with `store()`, that
   `EpisodeRecording` casts `hidden_at` and `published_at` to `datetime`, and
   that `Episode::recordings(): HasMany` exists — anyone's, with `T-126`'s
-  writer.
+  writer.~~ **Answered 26 September 2026:** `T-126` is `done` (qori
+  `e40e651`), and all three hold; where its shapes differ from what this
+  draft read, the Re-scope log says so.
 - ~~`T-124`'s `withLockedContent()` callback shape: this draft assumes the
   callback receives the re-read `content` array and returns the array to
   save; if it receives the locked `Episode` instead, the two closures above
@@ -777,7 +779,81 @@ Total: 16 new cases.
 
 ## Re-scope log
 
-None.
+**2026-09-26 — reconciled with `T-125` and `T-126` as built.** Written on
+17–18 September beside four drafts; three of them are now code (qori
+`94dd6c9` and `e40e651`), and these things here read them otherwise:
+
+- **The arm order.** Decisions and the Code block say `T-126` put `ready`
+  "after `cancelled`, before every clock arm", citing its
+  `test_ready_wins_over_the_clock`. `T-126`'s own Decisions said the opposite
+  — Join keeps winning until its window closes — and that is what was built,
+  its test 14 corrected to match: `cancelled`, `upcoming`, `open`, `ready`,
+  `not_recorded`, `waiting`, `overdue`. Nothing this task builds depends on
+  the difference: every state case below reads a clock after Join closes, or
+  test 6's before-and-during, where no recording exists.
+- **The card's copy.** "`T-125`'s flat `copy.overdue` / `copy.notRecorded` with
+  no resolution slot" is not what `T-125` built: `copy.states` is keyed by
+  state, each `{ message, resolution? }`, and the card already renders a
+  `resolution` under the message. So `live.state.overdue.resolution` reaches
+  the card as `copy.states.overdue.resolution` — one key in `liveCard()`.
+  Test 10 reads that path.
+- **The panel's copy.** `livePanel` was to be a page-level prop "exactly as
+  `T-126`'s panel reads `recordingCopy`"; `T-126` put its lines inside the
+  existing `live.copy` instead (`live.copy.recording`), which the page already
+  hands the panel in both modes. The same inner keys go there, as
+  `live.copy.panel`, so there is one place the panel's copy comes from and no
+  `usePage()` read for copy. Tests 10 and 16 read `live.copy.panel.*`.
+- **`withLockedContent()`'s callback.** The Before bullet answered on
+  18 September says `Closure(Episode): void`; `T-124` built
+  `Closure(array $content, Episode $locked): array` — the callback returns the
+  content to save. The two closures are written in that shape, and
+  `declareNotRecorded()` reads the visible recordings inside the lock, where a
+  paste (which locks the same row) cannot slip in between the check and the
+  write.
+- **Nouns in the three refusals.** `errors.live.not_live`, `has_recording` and
+  `recording_not_found` carry `:episode`, `:peer_plural` and `:series`, and an
+  `AppException` fills only the replacements it is given, so each is thrown
+  with the Group's vocabulary (`Terminology::for($group)->replacements()`), as
+  `RecordingService::guardLive()` already does.
+- **A live row with no start.** `T-125` found these exist and gave
+  `LiveSessionService::isScheduled()`; `stateFor()` throws for one. The
+  creator's `state` key is `stateFor()` only behind `isScheduled()`, else null,
+  so such a row cannot 500 the creator's page.
+- **The Wayfinder names.** Wayfinder keeps a route name's underscore, so
+  `share.series.episodes.not_recorded` exports as `not_recorded`, not
+  `notRecorded`; the panel imports it under an alias.
+- **The panel's controls are not forms.** The live row renders inside the
+  page's `<p>` (`T-126` found this for its paste form), and a server-rendered
+  `<form>` there is torn out of the paragraph by the HTML parser. Hide, Show
+  again, the declaration and Undo are buttons that post through Inertia's
+  router, disabled while one is in flight or the Group is over its cap.
+- **`T-126`'s paste form** is a toggle on every live row with no recording,
+  whatever the clock says (its Decisions). This task keeps that, labels it
+  "Add another link" once a Peer can see one, and takes it off a row that has
+  been declared not recorded — Undo first — rather than hiding it in
+  `upcoming` and `open` as the panel table's first row implies.
+  `RecordingController::store()` already resolves its Episode through
+  `ResolvesShareSeries::episodeIn()`, not an inline lookup; it becomes a
+  caller of `liveEpisodeOf()` as the Code says.
+
+Three things the spec did not decide, decided here because a person sees them:
+
+- **A declared session reads "Live only" on both badges.** The Decisions give
+  the declaration "the same meaning as the 'Live only' switch"; left alone,
+  the Peer's card would print "Recorded" beside "This session wasn't
+  recorded.", and its own tick would move a declared session to `waiting`
+  when Join closes. `liveCard()`'s `records` is `records()` and not
+  `isNotRecorded()`; the creator's row badge reads the same, while its Edit
+  form keeps the switch's own value. Undo puts both back.
+- **"Join again" in `ready` too** (`T-126`'s report, Found, not fixed). The
+  route admits Join until the grace ends whatever the recording, so a class
+  that runs over keeps its way back in when Part 1 is already up; the card
+  shows the secondary above the Watch list on the same condition as in
+  `waiting` and `not_recorded`.
+- **A "Live only" session after its end** reads `not_recorded` with no
+  declaration to undo: the panel offers no Undo there (it would clear nothing)
+  and keeps `T-126`'s paste toggle, because a recording pasted anyway is
+  `ready`.
 
 ## Notes
 
