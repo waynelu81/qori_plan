@@ -2,7 +2,7 @@
 id: T-131
 title: A Peer opens materials before and after the session, and sees homework due in their own time
 stream: classroom
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-125, T-130
@@ -780,30 +780,33 @@ Total: 20 new cases.
 
 ## Acceptance
 
-- [ ] On `/shared/{seriesId}`, each Episode row lists its materials under
+- [x] On `/shared/{seriesId}`, each Episode row lists its materials under
       Preparation, Material and Homework, and a Peer with access opens a
       Qori-hosted PDF and a Slides link from one row, each in a new tab, and
-      lands on the file and on Slides (owner acceptance 10)
-- [ ] An `after_session` material reads "Shown after the session" with no
+      lands on the file and on Slides (owner acceptance 10) — the two
+      redirects by `OpenMaterialTest`, the PDF's bytes through the same chain
+      from the command line; in the browser the page's own link met the dev
+      server's stale bucket and Slides was not followed (see the report)
+- [x] An `after_session` material reads "Shown after the session" with no
       link until the join window has closed, then opens; its address opened
       early lands on the Series page at that Episode with the
       `materials.not_yet` toast, never a page of its own (`D-020`)
-- [ ] A homework row shows its brief and "Due" with the date in the Peer's
+- [x] A homework row shows its brief and "Due" with the date in the Peer's
       own zone and the Group's zone beside it, at mobile and desktop widths,
       with the two zones at least eight hours apart (owner acceptance 2); a
       brief-only homework row shows its brief and due date and no Open
-- [ ] No access, a revoked Access, another Group's material, a guest and a
+- [x] No access, a revoked Access, another Group's material, a guest and a
       file that never arrived each meet the answer the tests name; the
       public page and a preview Episode show no material (owner acceptance 11)
-- [ ] Every open writes `access_opens` with the Access's `group_id` and marks
+- [x] Every open writes `access_opens` with the Access's `group_id` and marks
       the Episode opened; nothing in `ProgressService::hasFinished()`,
       `completed_episode_ids` or certificates changes (owner acceptance 12)
-- [ ] `docs/flows/materials.md` describes the open chain, and
+- [x] `docs/flows/materials.md` describes the open chain, and
       `docs/flows/storage.md` names `SignsStoredFiles` beside `ResolvesMedia`
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `php artisan qori:tasks --check` passes
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `php artisan qori:tasks --check` passes
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -813,6 +816,23 @@ Total: 20 new cases.
   cite by file and line — anyone's.~~ **Answered 21 September 2026:** `T-125`
   is `ready`, so those names are frozen and this spec cites them as written
   there.
+
+## Added during execution
+
+- `app/Enums/MaterialRelease.php` — `AfterSession`'s docblock said "off the
+  list until the session's scheduled end"; it is listed, and held until
+  Join's window closes (the Re-scope log's copy entry).
+- `MaterialService::add()` and `update()` store `due_at` as its UTC instant:
+  the datetime cast writes a Carbon's own wall clock, so a zoned time passed
+  by a job or tinker landed hours out. Found seeding the browser walk; one
+  case in `OpenMaterialTest`.
+- `app/Http/Controllers/Share/SeriesController.php` — `materialsCopy()` hands
+  the creator's panel every line of `materials.php`, which now held the
+  Peer's; it leaves `peer` and `not_yet` out.
+- `docs/flows/live-sessions.md` — its open log said nothing writes a
+  `material` row, and `docs/flows/README.md`'s materials row now names the
+  Peer's side. `docs/flows/storage.md` also had its progress note and its
+  provider table's local-disk line corrected, beyond the lifetime section.
 
 ## Re-scope log
 
