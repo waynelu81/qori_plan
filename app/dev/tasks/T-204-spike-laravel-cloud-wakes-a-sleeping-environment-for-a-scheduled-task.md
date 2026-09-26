@@ -2,7 +2,7 @@
 id: T-204
 title: Spike laravel cloud wakes a sleeping environment for a scheduled task
 stream: operations
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -135,24 +135,29 @@ None: the page is JSON for a developer, and the console line is a diagnostic.
 
 - [x] The probe is deployed with the Scheduler toggle on, and
       `/up/scheduler` shows runs scheduled ten minutes apart
-- [ ] The report says, from the runs: the lag against the due minute; whether
-      the environment slept between runs (the container's age); and whether
-      the database or the cache stayed awake, from the Cloud dashboard
-- [ ] The owner has what they need to choose `T-128`'s trigger, and the probe
+- [x] The report says, from the runs: the lag against the due minute; whether
+      the environment slept between runs (the container's age); ~~and whether
+      the database or the cache stayed awake, from the Cloud dashboard~~ —
+      the owner's dashboards, which the runs cannot read: moved to `T-206`
+      (Notes)
+- [x] The owner has what they need to choose `T-128`'s trigger, and the probe
       is removed
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
-- The Cloud environment's sleep timeout — the owner's, to read off the App
-  cluster's Scale to Zero setting. _Asked_ 26 September 2026. The runs imply
-  it is under ten minutes (Notes).
-- Whether the database (Neon's compute) and the cache (Laravel Valkey) slept
+- ~~The Cloud environment's sleep timeout — the owner's, to read off the App
+  cluster's Scale to Zero setting.~~ _Asked_ 26 September 2026, unanswered
+  when the probe went; **moved to `T-206`** on 27 September 2026, where it
+  prices the interval. The runs put it under ten minutes (Notes).
+- ~~Whether the database (Neon's compute) and the cache (Laravel Valkey) slept
   between runs — the owner's, from the Neon Console and Cloud's cache
-  metrics. _Asked_ 26 September 2026.
+  metrics.~~ _Asked_ 26 September 2026; **moved to `T-206`** on 27 September
+  2026. The probe never queried the database, so its runs could not answer
+  it either way (Notes).
 - ~~Whether the deploy command runs migrations now.~~ **Answered 26 September
   2026:** it does, once `T-205` pointed migrations at Neon's direct
   endpoint.
@@ -162,6 +167,10 @@ None: the page is JSON for a developer, and the console line is a diagnostic.
 - `.env.example` — `QORI_CLOUD_PROBE_CRON`, which `EnvExampleTest` requires of
   every `QORI_` key the config reads; the probe's first commit left it out,
   and `T-128`'s gate caught it (qori `51f9b38`).
+- `app/Console/Commands/NotifySessionsCommand.php` and
+  `docs/flows/live-sessions.md` — both said the probe was watching Cloud's
+  scheduler. With the probe gone they say what it found, and point at
+  `T-206` for the interval.
 
 ## Re-scope log
 
@@ -202,3 +211,24 @@ The probe's page is public: it holds times and a hashed host, nothing
 personal. Every read of it wakes a sleeping environment for the sleep
 timeout, which then shows in the next run's container age, so it is read
 sparingly and each read noted.
+
+**The last read, 26 September 2026 at 14:10 UTC**, just before the probe was
+removed — 27 runs, 09:40 to 14:00:
+
+- **Every run still happened**: 27 of 27, none missed, none doubled.
+- **Lag 5 to 52 seconds**, 27.5 on average, 26 the median.
+- **18 of the 27 woke a sleeping environment** (a container 1.3 to 1.6
+  seconds old). Of the other nine: the deploy's own container; one the 12:47
+  read had woken (its container started at 12:47:28, the second the page was
+  read — which bears out the paragraph above); two a run had woken ten
+  minutes earlier that something then kept up (10:00 to 10:10, 13:00 to
+  13:10); and five started by something else, at 10:47, 12:06, 12:28, 13:17
+  and 13:45. Irregular times, so visitors or crawlers rather than a monitor:
+  something outside Qori wakes the site more than once an hour.
+- **The probe never touched the database.** It kept its runs in the cache
+  (Decisions), so nothing here says whether Neon's compute slept. The sweep
+  it stood in for queries every Group on every run, so it will wake Neon
+  each time (`T-206`).
+- **Acceptance's database-and-cache clause was never the probe's to answer.**
+  It is the owner's dashboards, asked 26 September 2026, and it moved to
+  `T-206` with the sleep timeout, where both price the interval.
