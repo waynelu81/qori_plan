@@ -48,7 +48,7 @@ The immediate goal: that one loop, safe, reachable, understandable and measurabl
   an address with no account, at its own price (`T-043`, `T-181`, `D-050`).
 - **Built, with no way in**: connections and campaigns (`T-044`, `T-045`).
 - **A live Episode's recording is pasted by hand** and Peers watch it from the
-  card (`T-125`–`T-127`); both emails go out every thirty minutes (`T-128`, `T-129`, `T-206`, `D-028`); the class chat is on the Series page and the creator sees who opened it (`T-132`, `T-207`), the access email names the next session (`T-136`), a session goes into a Peer's calendar (`T-133`), Peers are reminded the day before (`T-138`), and a buyer sees the next session before paying while the creator copies a message for the chat (`T-135`).
+  card (`T-125`–`T-127`); both emails go out every thirty minutes (`T-128`, `T-129`, `T-206`, `D-028`); the class chat is on the Series page and the creator sees who opened it (`T-132`, `T-207`), the owner reminds Peers who went quiet in one click (`T-194`), the access email names the next session (`T-136`), a session goes into a Peer's calendar (`T-133`), Peers are reminded the day before (`T-138`), and a buyer sees the next session before paying while the creator copies a message for the chat (`T-135`).
 - **Not production-ready for real customers.** The beta gate below says why.
 
 Completed work: [`status-history.md`](dev/status-history.md). Browser evidence: [`walkthroughs.md`](dev/walkthroughs.md).

@@ -177,4 +177,7 @@ None.
 
 - R-004 left Sam's new completion stamp in place, because completion is
   sticky. Reseeding removes it; the seeded certificate belongs to Priya.
+- Since `T-194` (27 September 2026) the stamp also decides who can be
+  reminded: `Access::isQuiet()` reads `completed_at`, so a Peer finished only
+  by a stamp that predates later Episodes is never offered a reminder.
 - `T-090` (a draft) also edits `docs/flows/series.md`, in another section.

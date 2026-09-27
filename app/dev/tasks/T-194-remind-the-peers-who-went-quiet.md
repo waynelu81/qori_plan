@@ -2,7 +2,7 @@
 id: T-194
 title: Remind the Peers who went quiet
 stream: classroom
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: none
@@ -305,17 +305,17 @@ three File Episodes, Peers granted and then made quiet by setting
 
 ## Acceptance
 
-- [ ] The progress section lists the quiet Peers with when they were last
+- [x] The progress section lists the quiet Peers with when they were last
       here, and says which can be reminded and why the rest cannot
-- [ ] The owner's one click sends one email each to the remindable, with a
+- [x] The owner's one click sends one email each to the remindable, with a
       link to the next Episode, and the rows show the date
-- [ ] Nothing is sent without consent, twice in a quiet spell, past the day's
+- [x] Nothing is sent without consent, twice in a quiet spell, past the day's
       or the month's allowance, or by anyone but the owner
-- [ ] `qori:mail:check` renders the reminder among fifteen
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] `qori:mail:check` renders the reminder among fifteen
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -349,6 +349,19 @@ three File Episodes, Peers granted and then made quiet by setting
   owner (Decisions).
 - **The flow file is `docs/flows/campaigns.md`**, which already owns the
   Stalled type, not `accesses.md`.
+
+**2026-09-27 — found while building.**
+
+- **A lock per Series** stops a second click, or a second tab, from mailing
+  anybody twice while the first send runs: it finds the lock held and sends
+  nothing.
+- **The button's label is null when nobody can be reminded**, and the panel
+  says so in its place, rather than a count of one on a disabled button.
+- **The test environment's broadcast mailer is `array`**, not `log`, so the
+  email case sets `log` to check the fallback, and `ses` to check the
+  broadcast path.
+- **A refusal on a form post renders as a redirect back**; the refusal cases
+  post JSON to read `error.code`, as `SeriesChatTest` does.
 
 ## Notes
 
