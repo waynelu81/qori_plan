@@ -181,4 +181,8 @@ None.
 
 ## Notes
 
-None.
+**27 September 2026: the owner read the runs in Cloud's logs.**
+`qori:sessions:notify` logged its heartbeat at 01:00:13, 01:30:27 and 02:00:07
+UTC — every thirty minutes, 7 to 27 seconds after the minute — each
+`{"due": 0, "nudges_queued": 0, "sent": 0, "dry_run": false}`, after deploy 36
+at 00:50 UTC. The second Acceptance box's reading is done.
