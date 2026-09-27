@@ -2,8 +2,8 @@
 id: T-118
 title: The words the renames mangled are put right
 stream: operations
-status: draft
-owner: unassigned
+status: doing
+owner: claude
 estimate: S
 depends: none
 blocks: none
@@ -42,25 +42,62 @@ names a word the renames made up.
 
 ## Decisions taken to make this specifiable
 
-To be written once the questions below are answered.
+Brought to ready on 28 September 2026, from the code.
+
+**The buyer's sentence is already gone.** `T-178` removed
+`accesses.consent.required` with the rule that used it (`cfc6b8c`, 22 September
+2026), so the one question that was the owner's has no sentence left to ask it
+about.
+
+**`guardGrantlable()` becomes `guardGrantable()`.** It answers whether a Series
+can be granted in — a Group behind it, published, the Group active — and the
+word the rename meant was "grantable". A longer name for what it checks would
+be a second rename of a method `T-094`'s draft already names; that draft's two
+mentions change with it.
+
+**The words go everywhere the code and the live documents say them.**
+"grantlable" becomes "grantable" and "Grantling" "Granting", in `app/`, `tests/`,
+`docs/flows` and `docs/tinker`; every `/w/` path in `docs/flows` becomes `/g/`,
+as the routes have been since the rename.
+
+**`DocumentationTest` refuses them from now on.** One more reversed claim, for
+the made-up words and a `/w/` path, so the next rename cannot leave them
+standing in a live document. The planning history keeps them: it records what
+was written on a day.
 
 ## Preconditions
 
-To be written.
+None.
+
+**Data this task verifies against:** None; no behaviour changes.
+
+**Equipment:** None.
 
 ## Scope
 
 **In:**
 
-- To be written.
+- The method's name, its caller and its comments.
+- The words in comments, tests and the live documents.
+- The `/w/` paths in `docs/flows`.
+- The reversed claim, and `T-094`'s two mentions.
 
 **Out:**
 
-- To be written.
+- The planning history and finished tasks' reports, which record the words.
 
 ## Files
 
-To be written.
+| Path                                                                                           | Change | Notes                                     |
+| ---------------------------------------------------------------------------------------------- | ------ | ----------------------------------------- |
+| `app/Services/AccessService.php`                                                               | edit   | `guardGrantable()`, its caller, a comment |
+| `app/Services/SeriesService.php`                                                               | edit   | a comment                                 |
+| `tests/Feature/Access/AccessServiceTest.php`                                                   | edit   | a comment                                 |
+| `tests/Feature/DocumentationTest.php`                                                          | edit   | the reversed claim                        |
+| `docs/flows/accesses.md` `docs/flows/series.md` `docs/flows/groups.md` `docs/flows/storage.md` | edit   | the words, and `/w/`                      |
+| `docs/tinker/README.md`                                                                        | edit   | "Granting"                                |
+
+Flows: the four above, whose words change and whose call chains do not.
 
 ## Database
 
@@ -68,11 +105,14 @@ None.
 
 ## Code
 
-To be written.
+```php
+// App\Services\AccessService
+private function guardGrantable(Series $series, ?Group $group, bool $paid = false): void;
+```
 
 ## Copy
 
-To be written.
+None.
 
 ## Routes
 
@@ -80,25 +120,27 @@ None.
 
 ## Tests
 
-To be written.
+**Changed:** `DocumentationTest`'s reversed claims gain one, which the live
+documents pass once the words are gone. No behaviour changes, so the suite as
+it stands is the rest of the proof.
 
 ## Acceptance
 
-- [ ] To be written
+- [ ] No code or live document says "grantlable", "Grantling" or a `/w/` path
+- [ ] `DocumentationTest` refuses them
 - [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `php artisan qori:tasks --check` passes
+- [ ] `bin/tasks --check` passes in `qori-plan`
 - [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
 - [ ] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
-- The buyer's consent sentence, in Qori's nouns and the buyer's own verb. It
-  is consent copy under §9, and the classroom sprint's invitee work reads the
-  same request. The owner's.
-- What `guardGrantlable()` becomes (`guardGrantable()`, or a name that says
-  what it checks), and the matching `T-094` wording. Anyone's.
-- Whether `DocumentationTest` gains a reversed claim for `/w/{group}` and the
-  made-up words, so the next rename cannot leave them. Anyone's.
+- ~~The buyer's consent sentence — the owner's.~~ **Answered from the code, 28
+  September 2026:** `T-178` removed it (Decisions).
+- ~~What `guardGrantlable()` becomes.~~ **Answered 28 September 2026:**
+  `guardGrantable()` (Decisions).
+- ~~Whether `DocumentationTest` gains a reversed claim.~~ **Answered 28
+  September 2026:** yes (Decisions).
 
 ## Re-scope log
 

@@ -285,7 +285,7 @@ creator has already shared with readers by hand, a file used by a second
 Series, and two checkouts that both pass at 599 before either writes an
 Access. So `AccessService::guardItemCapacity()` counts **the grants Qori
 holds on that physical file across the Group**, plus the outstanding
-checkouts it has admitted, and refuses from `guardGrantlable()` on the
+checkouts it has admitted, and refuses from `guardGrantable()` on the
 unpaid paths (`app/Services/AccessService.php:308`) and from
 `CheckoutService::begin()` beside the Peer cap
 (`app/Services/CheckoutService.php:48-50`); `fulfil()` never refuses
@@ -629,7 +629,7 @@ public function __construct(private ConnectionService $connections, private Vend
  * The physical file's room, not the Series' size (F09): the Group's granted and awaiting_acceptance rows on that
  * external_target_id, plus the checkouts already admitted against it, against
  * config('qori.storage.google_drive.max_peers_per_file'); errors.access.series_full. Readers the creator added by
- * hand are outside the count and the Decisions say so. Called from guardGrantlable() when ! $paid (:308), from
+ * hand are outside the count and the Decisions say so. Called from guardGrantable() when ! $paid (:308), from
  * CheckoutService::begin() beside guardPeerLimit() (:48-50), and from EpisodeService::add() when a file is picked
  * or replaced; never from fulfil() (PLAN.md rule 2).
  */
