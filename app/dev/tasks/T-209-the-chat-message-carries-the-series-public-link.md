@@ -2,7 +2,7 @@
 id: T-209
 title: The chat message carries the Series' public link
 stream: classroom
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: T-135
@@ -113,17 +113,25 @@ it.
 
 ## Acceptance
 
-- [ ] A published Series' chat message ends with the public page's address
-- [ ] A draft or archived Series' message carries none
-- [ ] The address in the message is the page that resolves
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] A published Series' chat message ends with the public page's address
+- [x] A draft or archived Series' message carries none
+- [x] The address in the message is the page that resolves
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 
-None.
+**2026-09-27 — found while building.**
+
+- **`test_it_carries_the_qori_address_and_never_the_join_link` took the
+  message's last address** and followed it as the Episode's. With the public
+  line last, it now takes the `/shared/` address by its path; the new case
+  follows the last one, the public page, signed out.
+- **The flow's calendar paragraph** said `VALARM` was asked of the owner; it
+  now gives the answer of the same day, since the file is this task's
+  neighbour in `docs/flows/live-sessions.md` and was open for the same edit.
 
 ## Notes
 
