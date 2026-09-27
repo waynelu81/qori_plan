@@ -145,6 +145,11 @@ answer is written into the task.
   carries the Series' public link, for someone in the chat without access
   yet; asked 27 September 2026, and built without it meanwhile.~~ **Answered
   27 September 2026:** yes; `T-209` adds it.
+- `T-194` — Whether the reminder to quiet Peers, which is consent-gated and
+  metered like a campaign, may leave on the default (transactional) mailer
+  while the broadcast one is still `log`, as the "you're in" email does
+  (`T-186`), or must wait for SES as campaigns do; asked 27 September 2026,
+  and built on the fallback meanwhile.
 - `T-130` — Whether `odt`, `ods`, `odp` and `epub` join the upload allow-list
   (`D-030`).
 - `T-139` — The Free plan's per-Series storage figure beside the 100 MB the
