@@ -151,11 +151,16 @@ Group gets 404.
 
 ## Before this can be ready
 
-- The proposition itself: creator-sent, consent-gated, once per spell, with
-  the non-consenting named. (the owner's; put to them 23 September 2026)
-- Counted against the plan's email allowance, so Free sends ten a day — or
-  unmetered like `T-138`'s day-before reminders? (the owner's)
-- Owner only, or admins too? (the owner's)
+- ~~The proposition itself: creator-sent, consent-gated, once per spell, with
+  the non-consenting named. (the owner's; put to them 23 September 2026)~~
+  **Answered 27 September 2026:** a manual trigger, one click, never
+  automatic. The consent gate is `D-049`'s, not this task's choice, and once
+  per spell with the non-consenting named stands as proposed.
+- ~~Counted against the plan's email allowance, so Free sends ten a day — or
+  unmetered like `T-138`'s day-before reminders? (the owner's)~~ **Answered
+  27 September 2026:** counted against the daily allowance.
+- ~~Owner only, or admins too? (the owner's)~~ **Answered 27 September
+  2026:** the owner only; no admin sends it.
 - Which "next Episode" the link opens: the first not completed, in order.
   (anyone's; proposed)
 

@@ -136,12 +136,15 @@ answer is written into the task.
   sweep, which `D-040` removed; asked 26 September 2026 with what `T-204`
   measured of Cloud's scheduler.~~ **Answered 27 September 2026:** every
   thirty minutes.
-- `T-133` — Whether a session's calendar file carries its own reminder
+- ~~`T-133` — Whether a session's calendar file carries its own reminder
   (`VALARM`), or leaves each calendar to apply its default; asked 27
-  September 2026, and built without one meanwhile.
-- `T-135` — Whether the message a creator copies for the class chat also
+  September 2026, and built without one meanwhile.~~ **Answered 27 September
+  2026:** no alarm. A reminder in a Peer's calendar is the Peer's own to set,
+  so the file stays as built.
+- ~~`T-135` — Whether the message a creator copies for the class chat also
   carries the Series' public link, for someone in the chat without access
-  yet; asked 27 September 2026, and built without it meanwhile.
+  yet; asked 27 September 2026, and built without it meanwhile.~~ **Answered
+  27 September 2026:** yes; `T-209` adds it.
 - `T-130` — Whether `odt`, `ods`, `odp` and `epub` join the upload allow-list
   (`D-030`).
 - `T-139` — The Free plan's per-Series storage figure beside the 100 MB the

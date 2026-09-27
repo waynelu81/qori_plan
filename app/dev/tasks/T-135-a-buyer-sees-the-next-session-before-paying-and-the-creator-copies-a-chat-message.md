@@ -6,7 +6,7 @@ status: done
 owner: claude
 estimate: S
 depends: T-134
-blocks: none
+blocks: T-209
 ---
 
 # T-135 — A buyer sees the next session before paying, and the creator can copy a message for the chat
