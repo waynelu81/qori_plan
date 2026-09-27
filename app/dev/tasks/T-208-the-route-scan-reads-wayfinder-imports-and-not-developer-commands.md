@@ -2,7 +2,7 @@
 id: T-208
 title: The route scan reads Wayfinder imports, and not developer commands
 stream: reachability
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -141,16 +141,16 @@ The existing cases pass unchanged.
 
 ## Acceptance
 
-- [ ] A route reached only through a Wayfinder import in a `.vue` or `.ts`
+- [x] A route reached only through a Wayfinder import in a `.vue` or `.ts`
       file is not reported
-- [ ] A route named only by a command under `app/Console` is reported
-- [ ] The sidebar and the Group settings links go where they went, as
+- [x] A route named only by a command under `app/Console` is reported
+- [x] The sidebar and the Group settings links go where they went, as
       Wayfinder calls
-- [ ] The real tree's run is recorded in `app/dev/reachability.md`
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] The real tree's run is recorded in `app/dev/reachability.md`
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -170,7 +170,13 @@ The existing cases pass unchanged.
 
 ## Re-scope log
 
-None.
+**2026-09-27 — found while building.**
+
+- **The formatter joins a short import onto one line**, so the fixture's
+  multi-line import carries aliases long enough to stay broken, as a real
+  long one is.
+- **The fixture uses every name it imports**, because the lint denies an
+  unused one; the imported modules do not exist, which is the point.
 
 ## Notes
 

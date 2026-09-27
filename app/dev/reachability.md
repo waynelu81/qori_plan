@@ -10,11 +10,12 @@ First run: 9 September 2026.
 ## What the command checks, and what it does not
 
 - **GET routes in `App\`** that no `.vue` or `.ts` file, and no PHP file
-  under `app/`, links to, by name or by a hand-built URL. Package and
-  framework routes are skipped; so is anything on the allow-list in
-  `config/qori.php`. Until `T-051` a route's own registration in `routes/`,
-  and any test that visited it, counted as a link — so no named route could
-  ever be reported (below).
+  under `app/` outside `app/Console`, links to — by name, by importing its
+  Wayfinder helper, or by a hand-built URL. Package and framework routes are
+  skipped; so is anything on the allow-list in `config/qori.php`. Until
+  `T-051` a route's own registration in `routes/`, and any test that visited
+  it, counted as a link — so no named route could ever be reported (below);
+  until `T-208` a developer command's printed address did too.
 - **Public methods on `App\Services\*`** that nothing outside their own class
   calls.
 
@@ -72,6 +73,24 @@ which only `RecordingService` calls: the same shape as `peerFor`, a public
 method that could be private. The method half still counts `tests/` as a
 caller; `T-051` left it alone so that neither change could hide the other's
 findings.
+
+## Third run, after `T-208`: 27 September 2026
+
+**Routes: none, and none by accident.** The scan now counts a Wayfinder
+import — `import { edit } from '@/routes/security'` — as the link it is, and no
+longer reads `app/Console`, whose commands print addresses for developers. The
+six `${base}/…` links in the sidebar and the Group settings layout became
+Wayfinder calls. Of the 47 GET routes, 13 are linked through an import, 4 by
+their name in the frontend, 20 by their name in `app/` — a redirect, an email,
+a vendor's return address or a URL in a prop — and 10 by a URL a page builds
+in full. Before the six links were converted, the run reported one route,
+`share.vocabulary.edit`, whose only way in was `${base}/settings/vocabulary`.
+
+**Service methods: 2**, and one of them left for the wrong reason.
+`AccessService::peerFor` and `RecordingService::recordingOf` remain.
+`SuppressionService::suppress` left the list because `T-194`'s test now calls
+it — the method half still counts `tests/` as a caller, the weakness `T-051`
+left for a separate look.
 
 ## Service methods: 2
 
