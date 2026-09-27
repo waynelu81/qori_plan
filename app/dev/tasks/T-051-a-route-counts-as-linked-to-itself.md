@@ -2,8 +2,8 @@
 id: T-051
 title: The reachability scan counts a route's own definition as a link to it
 stream: reachability
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: S
 depends: none
 blocks: none
@@ -148,7 +148,22 @@ relying on the hole.
 
 ## Re-scope log
 
-None.
+**2026-09-27 — reconciled with the code and the plan as they stand.**
+
+- **The hole is still there.** `haystack()` still reads `resources/js`, then
+  `phpFiles()` — `app/` and `tests/` — then `routes/`; nothing has narrowed
+  it since this was written.
+- **The findings file moved with planning**: `docs/planning/reachability.md`
+  is `qori-plan`'s `app/dev/reachability.md`, and the board check is
+  `bin/tasks --check` there, not `php artisan qori:tasks`.
+- **The fixture tree has one tree today, `linked`**, and `empty` is a root
+  with nothing in it. The three new cases each get a small tree of their own —
+  `defined-only`, `tested-only`, `app-linked` — holding one file that names
+  the route, Pint-clean because Pint formats every PHP file; PHPUnit only
+  collects `tests/Unit` and `tests/Feature`, so the fixtures are never run.
+- **`T-050` has linked `series.public`** (the creator's share link, through
+  `SeriesController`'s `route()` call), so the measured example in Why is no
+  longer one of the findings; the class of defect is unchanged.
 
 ## Notes
 
