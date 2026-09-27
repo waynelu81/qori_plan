@@ -2,8 +2,8 @@
 id: T-135
 title: A buyer sees the next session before paying, and the creator can copy a message for the chat
 stream: classroom
-status: draft
-owner: unassigned
+status: doing
+owner: claude
 estimate: S
 depends: T-134
 blocks: none
@@ -11,11 +11,10 @@ blocks: none
 
 # T-135 — A buyer sees the next session before paying, and the creator can copy a message for the chat
 
-> **Draft.** Not specified yet, and not to be started — see
-> [`../PROCESS.md`](../PROCESS.md). What has to be decided before it can be
-> marked `ready` is listed at the bottom. Written on 18 September 2026 from
-> `D-024`, `D-025`, `D-026` and `D-028`, and the owner's scenarios 2, 11 and
-> 14 in `docs/planning/course-classroom.md`.
+> Written on 18 September 2026 from `D-024`, `D-025`, `D-026` and `D-028`, and
+> the owner's scenarios 2, 11 and 14 in `course-classroom.md`. Reconciled with
+> `T-134`, `T-136` and `T-138` as built on 27 September 2026 — the Re-scope log
+> says what changed, and it overrides the sketches below where they differ.
 
 ## Why
 
@@ -644,37 +643,61 @@ assert the public Episode entries, which are unchanged, and stay green.
 - [ ] `docs/flows/series.md` and `docs/flows/live-sessions.md` describe the
       two reads, and `docs/tinker/live-sessions.md` mints a message by hand
 - [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `php artisan qori:tasks --check` passes
+- [ ] `bin/tasks --check` passes in `qori-plan`
 - [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
 - [ ] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
-- `T-134` `ready` and landed, so `LiveSessionService::cancel()`'s signature,
+- ~~`T-134` `ready` and landed, so `LiveSessionService::cancel()`'s signature,
   the writer of `content['cancelled_at']` and the `cancelled` row of the
   panel (where this control sits beside **Undo**) are frozen. `T-134`'s
   draft declares `cancel(Series $series, string $episodeId): Episode`; this
   draft uses it as read, and the bullet closes when `T-134` is `ready` —
-  anyone's.
-- Whether the block later becomes the first line of `T-092`'s
+  anyone's.~~ **Answered 27 September 2026:** `T-134` is `done`, with that
+  signature.
+- ~~Whether the block later becomes the first line of `T-092`'s
   `BuyerRequirements` list (`D-021`, part 1) or stays its own block above it
   — the storage stream owner's, with `T-092`; noted, not blocking: the block
-  is a component, and moving it is a mount.
-- Whether the message should also carry the public link (`series.public`)
+  is a component, and moving it is a mount.~~ **Left to `T-092`, 27 September
+  2026:** it decides where its own list goes, and moving this block into it
+  is a mount.
+- ~~Whether the message should also carry the public link (`series.public`)
   for someone in the chat who has not got access yet — the owner's; this
   draft says no, because `D-024` mints every copied message against
   `shared.episodes.show` and the public link has its own panel; not
-  blocking.
-- How `T-127`'s `LiveSessionPanel.vue` takes its row and its copy: the whole
+  blocking.~~ _Asked_ 27 September 2026, and built as drafted: the message
+  carries the Episode's address alone. Adding the public link later is one
+  lang line per state.
+- ~~How `T-127`'s `LiveSessionPanel.vue` takes its row and its copy: the whole
   `live` object and the whole `livePanel` object (`T-127`'s decision, and
   this draft's assumption, so neither page changes) — anyone's; if either
   arrives field by field, the one line on `share/series/Show.vue` is a
   departure under **Added during execution**, made only while `T-130`,
-  `T-132` and `T-137` are not `doing` on the page.
+  `T-132` and `T-137` are not `doing` on the page.~~ **Answered from the code,
+  27 September 2026:** the panel takes each row whole and the page's
+  `live.copy` whole, so neither page changes; the Re-scope log names the keys.
 
 ## Re-scope log
 
-None.
+**2026-09-27 — reconciled with `T-134`, `T-136`, `T-138` and the code as
+built.**
+
+- **`Series::nextLiveEpisode()` already exists**, written by `T-136` as
+  `nextLiveEpisode(?CarbonImmutable $now = null): ?Episode` with the rule
+  above; this task calls it with the clock and its Files row is the no-op the
+  Notes foresaw.
+- **The creator's rows carry their facts as flat keys** (`state`,
+  `cancelledAt`, `recordingEmail`), so the message is `chatMessage` on the row,
+  not `live.chatMessage`; and the panel's lines are `live.copy.panel`, so the
+  labels are `live.copy.panel.chat`, not `livePanel.chat` (`T-129` and `T-134`
+  found the same).
+- **`state` is computed inline per row** as
+  `isScheduled() ? stateFor(now)->value : null`; this task hoists it once per
+  row and hands the same value to `SessionChatMessage::for()`.
+- **`T-138` sends reminders on Start and above**, so the chat message is the
+  only nudge on Free and a second one elsewhere; nothing here changes for it.
+- **Acceptance's board check is `bin/tasks --check` in `qori-plan`.**
 
 ## Notes
 
