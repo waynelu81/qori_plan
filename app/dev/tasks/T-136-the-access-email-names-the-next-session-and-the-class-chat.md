@@ -2,7 +2,7 @@
 id: T-136
 title: The access email names the next session and the class chat
 stream: classroom
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: T-128, T-132
@@ -443,27 +443,27 @@ is unaffected: no notification class is added.
 
 ## Acceptance
 
-- [ ] A Peer given access to a Series with a live Episode ahead reads its
+- [x] A Peer given access to a Series with a live Episode ahead reads its
       title and start in their own zone, with the zone named and the Group's
       zone beside it when different, and the title links to that Episode's
       anchor (`shared.episodes.show`) — the owner's scenario 2 in
       `docs/planning/course-classroom.md`: a Brisbane creator, a London Peer
       and a New York Peer across 1 November 2026
-- [ ] A Peer with no timezone reads the start in the Group's zone, never UTC
-- [ ] A session already under way, a cancelled one and a past one are never
+- [x] A Peer with no timezone reads the start in the Group's zone, never UTC
+- [x] A session already under way, a cancelled one and a past one are never
       named; with none ahead, the email is today's
-- [ ] A Series with a current chat invite tells the Peer it is on the Series
+- [x] A Series with a current chat invite tells the Peer it is on the Series
       page, linking its `#chat`; an expired code or no chat says nothing, and
       no platform name, invite link or image reaches the email
-- [ ] No join link, recording, passcode or meeting vendor name reaches the
+- [x] No join link, recording, passcode or meeting vendor name reaches the
       email
-- [ ] The email still comes from `AccessService::grant()` alone, with the
+- [x] The email still comes from `AccessService::grant()` alone, with the
       notification's constructor unchanged, and `php artisan qori:mail:check`
       still reports "You're in: Mail Check Series .. ok"
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -482,6 +482,14 @@ is unaffected: no notification class is added.
   draft and the existing lines are still `__()`, so the two new ones go
   through `Terminology::line()` as specified.
 
+## Added during execution
+
+- `docs/flows/accesses.md` — what the email says: the two lines, when each
+  appears and what each links to. The spec left the flow unchanged because the
+  call chain is, but the flow describes the message too.
+- `docs/flows/chats.md` — the card's section names the email's line, and "Not
+  built yet" no longer lists this task.
+
 ## Re-scope log
 
 **2026-09-27 — reconciled with `T-128`, `T-132`, `T-186` and the code as
@@ -498,6 +506,16 @@ built.**
 - **`Episode::isCancelled()` reads `content.cancelled_at`, which `T-134`
   writes**, so the "cancelled" case is one a creator can now produce.
 - **Acceptance's board check is `bin/tasks --check` in `qori-plan`.**
+
+**2026-09-27 — found while building.**
+
+- **A creator's title is escaped as a link's text.** A lone `]` would end the
+  link early, and `](…)` inside a title would point it elsewhere, so
+  `linkText()` escapes `\`, `[` and `]`, and a fifteenth case renders the HTML
+  and finds no link a title made.
+- **Case 10 dates a code, not a link.** `T-132` refuses a date on an invite
+  link, so the helper writes a WeChat code through `SeriesChatFactory::code()`
+  when given a date.
 
 ## Notes
 
