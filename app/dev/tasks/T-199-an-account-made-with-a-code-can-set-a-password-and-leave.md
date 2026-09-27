@@ -2,7 +2,7 @@
 id: T-199
 title: An account made with a code can set a password and leave
 stream: identity
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: none
@@ -206,13 +206,13 @@ test's user still has a password it knows. Confirm rather than assume.
 
 ## Acceptance
 
-- [ ] A Peer who came in by code sets a password and deletes their account without using "Forgot password"
-- [ ] Two-factor and passkeys open to them once confirmed by code
-- [ ] Nothing changes for a person who chose a password
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] A Peer who came in by code sets a password and deletes their account without using "Forgot password"
+- [x] Two-factor and passkeys open to them once confirmed by code
+- [x] Nothing changes for a person who chose a password
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -226,6 +226,15 @@ test's user still has a password it knows. Confirm rather than assume.
 - ~~Deleting an account is the person's to do whatever the policy wording
   says.~~ **Answered:** the place is built here; the words are release
   checklist (`D-043`).
+
+## Added during execution
+
+- `resources/js/pages/settings/Profile.vue` — hands the dialog its two new
+  props; the table named the dialog and its controller, not the page between
+  them.
+- `errors.auth.confirmation_lapsed` in `lang/en/errors.php` — the refusal for
+  a first password chosen after the confirmation went out of date, which the
+  Copy table left out; failures belong in `errors.php`.
 
 ## Re-scope log
 
