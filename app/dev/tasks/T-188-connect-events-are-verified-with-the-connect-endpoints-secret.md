@@ -2,8 +2,8 @@
 id: T-188
 title: Connect events are verified with the Connect endpoint's secret
 stream: selling
-status: draft
-owner: unassigned
+status: doing
+owner: claude
 estimate: S
 depends: none
 blocks: none
@@ -34,39 +34,80 @@ terms was checked against the code.
 
 ## Decisions taken to make this specifiable
 
-None yet.
+Brought to ready on 28 September 2026, from the code and Stripe's documents.
+
+**A URL each: `POST /webhooks/stripe` for Qori's own account, `POST
+/webhooks/stripe/connect` for connected accounts, each verified with its own
+secret.** Not one URL trying both secrets: that accepts either stream under
+either secret, so an endpoint subscribed to the wrong events, or pointed at
+the wrong URL, would go on working and nobody would learn which secret signed
+what. With a URL each, the secret that verifies is the endpoint's own, and the
+route says which. Both routes reach the one `StripeWebhookController`, whose
+dispatch by event type does not change; only the secret it checks against
+does, `services.stripe.webhook_secret` or the new
+`services.stripe.connect_webhook_secret` (`STRIPE_CONNECT_WEBHOOK_SECRET`).
+
+**The check moves into the Stripe folder.** Stripe's signature scheme is vendor
+code (CLAUDE.md, "Where code lives"), and `app/Integrations/Stripe/Webhooks.php`
+already builds the same signature for `qori:e2e`. `Webhooks::verify()` sits
+beside `signature()`, and the controller hands it the raw body, the header and
+the secret. The rest of the controller's reading of Stripe's payload stays for
+`T-114`.
+
+**What each endpoint subscribes to.** Qori's own: `checkout.session.completed`
+and `customer.subscription.created`, `.updated` and `.deleted`. The Connect
+endpoint: `checkout.session.completed` and `account.application.deauthorized`.
+`T-102`, `T-103` and `T-166` add theirs when they are built.
+
+**Locally one secret signs both.** `stripe listen --forward-to …/webhooks/stripe
+--forward-connect-to …/webhooks/stripe/connect` signs both streams with the one
+secret it prints, so both keys take that value in `.env`; `qori:e2e` mints a
+different one for each, so its run proves the two are kept apart.
 
 ## Preconditions
 
+None.
+
 **Data this task verifies against:** a clean database.
 
-**Equipment:** a Stripe sandbox with two webhook endpoints, one of them created
-with `connect: true`, to confirm each delivery is refused under the other's
-secret and accepted under its own.
+**Equipment:** none for the tests. The sandbox check — each delivery refused
+under the other endpoint's secret — needs a second, `connect: true` endpoint in
+the Stripe sandbox, the owner's to create; the tests sign both kinds of
+delivery themselves.
 
 ## Scope
 
 **In:**
 
-- Accepting a delivery signed by either endpoint's secret, or separating the
-  two endpoints, whichever **Before this can be ready** settles.
-- The release checklist's live-mode step naming both endpoints and both secrets.
+- The Connect route and its secret, and the check in the Stripe folder.
+- `qori:e2e` and `qori:e2e:checkout-paid` signing the Peer's payment with the
+  Connect secret, to the Connect URL.
+- The docs that name the webhook, and `release-prerequisites.md`'s live-mode
+  step naming both endpoints, their events and their secrets.
 
 **Out:**
 
-- What the Connect endpoint subscribes to beyond `checkout.session.completed`
-  and `account.application.deauthorized`: refunds are `T-103`, delayed
-  payments `T-102`.
+- The rest of the payload reading: `T-114`.
+- Creating the live endpoints and setting the secrets in Laravel Cloud: the
+  owner's release checklist.
+- Refunds, delayed payments and account changes: `T-103`, `T-102`, `T-166`.
 
 ## Files
 
-| Path                                          | Change | Notes                                      |
-| --------------------------------------------- | ------ | ------------------------------------------ |
-| `config/services.php`                         | edit   | A second secret, or a list of them         |
-| `app/Integrations/Stripe/Webhooks.php`        | edit   | Verification against the Connect secret    |
-| `app/Http/Controllers/StripeWebhookController.php` | edit | Only if the endpoints are separated        |
-| `.env.example`                                | edit   | The second key                             |
-| `docs/flows/checkout.md`                      | edit   | Which endpoint carries which events        |
+| Path                                                                                 | Change | Notes                                                    |
+| ------------------------------------------------------------------------------------ | ------ | -------------------------------------------------------- |
+| `config/services.php`                                                                | edit   | `connect_webhook_secret`, and the comment put right      |
+| `.env.example`                                                                       | edit   | `STRIPE_CONNECT_WEBHOOK_SECRET`                          |
+| `routes/web.php`                                                                     | edit   | `webhooks.stripe.connect`                                |
+| `app/Integrations/Stripe/Webhooks.php`                                               | edit   | `verify()`                                               |
+| `app/Http/Controllers/StripeWebhookController.php`                                   | edit   | the route's secret, checked through `Webhooks::verify()` |
+| `app/Console/Commands/EndToEndCommand.php`                                           | edit   | mints both secrets                                       |
+| `app/Console/Commands/EndToEndCheckoutPaidCommand.php`                               | edit   | the Connect secret and URL                               |
+| `tests/Feature/Checkout/StripeWebhookTest.php`                                       | edit   | 4 cases                                                  |
+| `tests/Feature/Checkout/PaidFulfilmentTest.php`                                      | edit   | the Peer's payment to the Connect URL                    |
+| `tests/Feature/Console/EndToEndCheckoutPaidCommandTest.php`                          | edit   | the same                                                 |
+| `docs/flows/checkout.md` `docs/flows/billing.md`                                     | edit   | which endpoint carries which events                      |
+| `docs/tinker/e2e.md` `docs/tinker/e2e-first-share.md` `docs/tinker/design-review.md` | edit   | `--forward-connect-to`, and the second key               |
 
 ## Database
 
@@ -74,7 +115,11 @@ None.
 
 ## Code
 
-To be settled when the draft is brought to ready.
+```php
+// App\Integrations\Stripe\Webhooks
+/** Stripe's scheme: a t= within five minutes, and a v1 HMAC over "t.body" that matches. */
+public static function verify(string $body, string $header, #[\SensitiveParameter] string $secret, ?int $now = null): bool;
+```
 
 ## Copy
 
@@ -82,18 +127,29 @@ None.
 
 ## Routes
 
-None, unless the endpoints are separated.
+| Verb | Path                      | Name                      | Action                    |
+| ---- | ------------------------- | ------------------------- | ------------------------- |
+| POST | `webhooks/stripe/connect` | `webhooks.stripe.connect` | `StripeWebhookController` |
+
+Without `PreventRequestForgery`, as `webhooks.stripe` is.
 
 ## Tests
 
-To be written when the draft is brought to ready: a delivery signed with the
-Connect secret is accepted, one signed with neither secret is refused.
+**Changed: `tests/Feature/Checkout/StripeWebhookTest.php` — 4 new cases**
+
+1. `test_a_connected_accounts_payment_is_taken_on_the_connect_url` — signed
+   with the Connect secret; access is granted.
+2. `test_the_connect_url_refuses_the_platform_secret`.
+3. `test_the_platform_url_refuses_the_connect_secret`.
+4. `test_a_url_with_no_secret_set_refuses_everything`.
+
+**Changed:** `PaidFulfilmentTest` and `EndToEndCheckoutPaidCommandTest` post a
+Peer's payment to the Connect URL under the Connect secret.
 
 ## Acceptance
 
-- [ ] A delivery signed with either endpoint's secret is accepted, and one
-      signed with neither is refused
-- [ ] `release-prerequisites.md` names both live endpoints and both secrets
+- [ ] Each endpoint's deliveries are accepted under its own secret and refused under the other's
+- [ ] `release-prerequisites.md` names both live endpoints, their events and both secrets
 - [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
 - [ ] `bin/tasks --check` passes in `qori-plan`
 - [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
@@ -101,11 +157,10 @@ Connect secret is accepted, one signed with neither secret is refused.
 
 ## Before this can be ready
 
-- One URL for both endpoints, trying each secret, or a URL each
-  (`/webhooks/stripe` and `/webhooks/stripe/connect`)? Qori's existing controller
-  already tells the two kinds apart by the event's `account` field.
-- Read the live-mode endpoint set-up in `release-prerequisites.md` and name the
-  events each endpoint subscribes to.
+- ~~One URL for both endpoints, trying each secret, or a URL each?~~
+  **Answered 28 September 2026:** a URL each (Decisions).
+- ~~Name the events each endpoint subscribes to.~~ **Answered 28 September
+  2026** (Decisions).
 
 ## Re-scope log
 
