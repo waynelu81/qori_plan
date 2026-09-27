@@ -2,7 +2,7 @@
 id: T-188
 title: Connect events are verified with the Connect endpoint's secret
 stream: selling
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -148,12 +148,12 @@ Peer's payment to the Connect URL under the Connect secret.
 
 ## Acceptance
 
-- [ ] Each endpoint's deliveries are accepted under its own secret and refused under the other's
-- [ ] `release-prerequisites.md` names both live endpoints, their events and both secrets
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Each endpoint's deliveries are accepted under its own secret and refused under the other's
+- [x] `release-prerequisites.md` names both live endpoints, their events and both secrets
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -161,6 +161,13 @@ Peer's payment to the Connect URL under the Connect secret.
   **Answered 28 September 2026:** a URL each (Decisions).
 - ~~Name the events each endpoint subscribes to.~~ **Answered 28 September
   2026** (Decisions).
+
+## Added during execution
+
+- `tests/Feature/Console/EndToEndCommandTest.php` — one case: the run mints
+  a Connect secret of its own beside the platform's. Without it, dropping the
+  new key from `qori:e2e`'s environment failed nothing, since the only journey
+  that reads it stops earlier on the lapsed Google Drive token.
 
 ## Re-scope log
 
