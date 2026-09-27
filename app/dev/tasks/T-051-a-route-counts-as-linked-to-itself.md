@@ -2,7 +2,7 @@
 id: T-051
 title: The reachability scan counts a route's own definition as a link to it
 stream: reachability
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -138,13 +138,13 @@ relying on the hole.
 
 ## Acceptance
 
-- [ ] A route named only in `routes/` is reported
-- [ ] A route reached only from a test is reported
-- [ ] A route named from `app/` is still counted as linked
-- [ ] The first real run's findings are written down, not fixed
-- [ ] `composer ci:check` green from a clean tree
-- [ ] Board regenerated (`php artisan qori:tasks`)
-- [ ] Report written in `reports/`
+- [x] A route named only in `routes/` is reported
+- [x] A route reached only from a test is reported
+- [x] A route named from `app/` is still counted as linked
+- [x] The first real run's findings are written down, not fixed
+- [x] `composer ci:check` green from a clean tree
+- [x] Board regenerated (`bin/tasks --check` in `qori-plan`, as reconciled)
+- [x] Report written in `reports/`
 
 ## Re-scope log
 
@@ -164,6 +164,21 @@ relying on the hole.
 - **`T-050` has linked `series.public`** (the creator's share link, through
   `SeriesController`'s `route()` call), so the measured example in Why is no
   longer one of the findings; the class of defect is unchanged.
+
+**2026-09-27 — found while building.**
+
+- **The first honest run reports no route**, which this spec expected not to
+  happen. Classifying the evidence for all 47 GET routes shows why: 45 are
+  named in the frontend or in `app/`, and two are URLs a Vue file builds by
+  hand. Three of the 45 — `security.edit`, `share.vocabulary.edit`,
+  `share.peers.index` — pass only because `DesignReviewCommand`, a developer
+  command, names them; each is reachable through a Wayfinder import or a
+  `${base}/…` template the scan cannot see. Written up in
+  `app/dev/reachability.md` and drafted as `T-208`, not fixed here: the
+  match is out of this task's scope by its own Decisions.
+- **The allow-list is empty**, and `app/dev/reachability.md` still said
+  `share.payouts.return` was on it; that route is `payments.oauth.finalise`
+  now (`D-033`). The file says so under the second run.
 
 ## Notes
 

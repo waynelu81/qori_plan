@@ -9,9 +9,12 @@ First run: 9 September 2026.
 
 ## What the command checks, and what it does not
 
-- **GET routes in `App\`** that no `.vue`, `.ts`, controller or route file
-  links to, by name or by a hand-built URL. Package and framework routes are
-  skipped; so is anything on the allow-list in `config/qori.php`.
+- **GET routes in `App\`** that no `.vue` or `.ts` file, and no PHP file
+  under `app/`, links to, by name or by a hand-built URL. Package and
+  framework routes are skipped; so is anything on the allow-list in
+  `config/qori.php`. Until `T-051` a route's own registration in `routes/`,
+  and any test that visited it, counted as a link — so no named route could
+  ever be reported (below).
 - **Public methods on `App\Services\*`** that nothing outside their own class
   calls.
 
@@ -37,6 +40,38 @@ campaign routes at all. `CampaignService` and the `campaigns` table exist, and
 nothing has ever been routed to them. A tool that looks for unreachable routes
 cannot see a feature that was never routed, which is a real limit of this
 approach and worth remembering before treating a clean run as a clean bill.
+
+## Second run, after `T-051`: 27 September 2026
+
+**Routes: none, and three of them by accident.** With `routes/` and `tests/`
+out of the haystack, all 47 GET routes still count as linked: 45 by their
+name in the frontend or in `app/`, two by a URL a Vue file builds by hand
+(`shared.play`, `share.payments.begin`). The name in `app/` is almost always a
+real way in — a redirect, an email, a vendor's return address, a prop that
+carries a URL — with three exceptions:
+
+| Route                   | Named in `app/` only by | How a person actually gets there                               |
+| ----------------------- | ----------------------- | -------------------------------------------------------------- |
+| `security.edit`         | `DesignReviewCommand`   | The settings layout imports `@/routes/security`                |
+| `share.vocabulary.edit` | `DesignReviewCommand`   | The Group settings layout builds `${base}/settings/vocabulary` |
+| `share.peers.index`     | `DesignReviewCommand`   | The sidebar builds `${base}/peers`                             |
+
+All three are reachable, and the scan cannot see how: a Wayfinder import names
+a module and an export rather than a route, and `${base}/…` hides the
+`/g/{group}` prefix the URI pattern needs. A developer command that prints
+review URLs is what makes them pass, so the scan would call them unreachable
+the day it stopped naming them. `T-208` teaches the scan Wayfinder imports and
+stops counting developer commands.
+
+The allow-list is empty today. `share.payouts.return`, allow-listed at the
+first run, became `payments.oauth.finalise` (`D-033`), which
+`PaymentsController` names as the address Stripe sends the creator back to.
+
+**Service methods: 3.** The two below, and `RecordingService::recordingOf`,
+which only `RecordingService` calls: the same shape as `peerFor`, a public
+method that could be private. The method half still counts `tests/` as a
+caller; `T-051` left it alone so that neither change could hide the other's
+findings.
 
 ## Service methods: 2
 
