@@ -2,7 +2,7 @@
 id: T-211
 title: Removing an Episode says what happened to the Series
 stream: onboarding
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -62,7 +62,7 @@ None.
 | Path                                               | Change | Notes       |
 | -------------------------------------------------- | ------ | ----------- |
 | `app/Http/Controllers/Share/EpisodeController.php` | edit   | `destroy()` |
-| `tests/Feature/Series/EpisodeRoutesTest.php`       | edit   | 3 cases     |
+| `tests/Feature/Series/EpisodeRoutesTest.php`       | edit   | 4 cases     |
 
 Flows: none — the call chain is unchanged, and no flow names which toast
 `destroy()` shows.
@@ -91,20 +91,22 @@ None.
 
 ## Tests
 
-**Changed: `tests/Feature/Series/EpisodeRoutesTest.php` — 3 new cases**
+**Changed: `tests/Feature/Series/EpisodeRoutesTest.php` — 4 new cases**
 
 1. `test_removing_one_of_several_episodes_from_a_draft_says_only_that`.
 2. `test_removing_the_only_episode_of_a_draft_says_only_that`.
-3. `test_removing_the_last_episode_of_a_published_series_says_it_went_back_to_draft`.
+3. `test_removing_one_of_several_episodes_from_a_published_series_says_only_that`
+   (Notes).
+4. `test_removing_the_last_episode_of_a_published_series_says_it_went_back_to_draft`.
 
 ## Acceptance
 
-- [ ] The "went back to draft" line appears only when the removal unpublished
+- [x] The "went back to draft" line appears only when the removal unpublished
       the Series
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Re-scope log
 
@@ -112,4 +114,6 @@ None.
 
 ## Notes
 
-None.
+The fourth case was added while building: with only the three first
+written, choosing the line on "was published" alone passed them all, because
+nothing removed one of several Episodes from a published Series.
