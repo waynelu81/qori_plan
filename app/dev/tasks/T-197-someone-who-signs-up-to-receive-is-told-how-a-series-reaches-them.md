@@ -2,8 +2,8 @@
 id: T-197
 title: Someone who signs up to receive is told how a Series reaches them
 stream: onboarding
-status: ready
-owner: unassigned
+status: doing
+owner: claude
 estimate: S
 depends: T-048
 blocks: none
