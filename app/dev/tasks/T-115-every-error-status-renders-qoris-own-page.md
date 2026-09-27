@@ -2,7 +2,7 @@
 id: T-115
 title: Every error status renders Qori's own page
 stream: recovery
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -138,13 +138,13 @@ the fallbacks included.
 
 ## Acceptance
 
-- [ ] Every status an `AppException` can carry renders Qori's page with its own message on a page load
-- [ ] A status the framework raises with no page of its own renders Qori's 4xx or 5xx page
-- [ ] The design review renders every error page
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every status an `AppException` can carry renders Qori's page with its own message on a page load
+- [x] A status the framework raises with no page of its own renders Qori's 4xx or 5xx page
+- [x] The design review renders every error page
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
