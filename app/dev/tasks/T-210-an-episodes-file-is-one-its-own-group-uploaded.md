@@ -2,7 +2,7 @@
 id: T-210
 title: An Episode's file is one its own Group uploaded
 stream: storage
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: none
@@ -178,14 +178,14 @@ None.
 
 ## Acceptance
 
-- [ ] An Episode cannot be made from another Group's upload, a material's or a
+- [x] An Episode cannot be made from another Group's upload, a material's or a
       chat's, an unfinished upload, or an upload another Episode holds
-- [ ] No Qori-hosted Episode is signed unless its key is an Episode upload of
+- [x] No Qori-hosted Episode is signed unless its key is an Episode upload of
       its Group
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -199,6 +199,14 @@ None.
   upload behind it**, if `add()` refuses one.~~ **Answered 27 September
   2026:** `add()` does not refuse; the signing wall does, and the playback
   tests that open such an Episode write the upload's row (Decisions, Tests).
+
+## Added during execution
+
+- `tests/Feature/Series/LiveSessionTest.php` and
+  `tests/Feature/Series/EpisodeRoutesTest.php` — each posted the Episode form
+  with a key no upload wrote, which the form now refuses; each writes the
+  upload's register row first. Tests → Changed invited the full run to find
+  the rest, and these were the rest.
 
 ## Re-scope log
 
