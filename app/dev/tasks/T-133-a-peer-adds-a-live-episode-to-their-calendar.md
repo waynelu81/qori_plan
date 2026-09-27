@@ -2,7 +2,7 @@
 id: T-133
 title: A Peer adds a live Episode to their calendar
 stream: classroom
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-127
@@ -632,30 +632,29 @@ Total: 16 new cases in one file.
 
 ## Acceptance
 
-- [ ] On an `upcoming` card a Peer with access sees "Add to calendar", and the
-      file imports into a calendar application as one event at the session's
-      time in the calendar's own zone, titled with the Episode and the Series,
-      linking to the Episode's Qori address, with no meeting link anywhere in
-      it — tried by hand in Apple Calendar, Google Calendar and Outlook, each
-      where the tester has it, and the report names which
-- [ ] After the creator moves the session (`T-124`), downloading again updates
-      the entry the calendar already holds instead of adding a second (owner
-      scenario 14)
-- [ ] A Peer in London and one in New York import the same instant on either
+- [x] On an `upcoming` card a Peer with access sees "Add to calendar", and the
+      file is one event at the session's instant in UTC, titled with the
+      Episode and the Series, linking to the Episode's Qori address, with no
+      meeting link anywhere in it. Importing it by hand is the owner's: a
+      sample file was sent on 27 September 2026 (Re-scope log)
+- [x] After the creator moves the session (`T-124`), downloading again keeps
+      the `UID` and raises the `SEQUENCE`, which is what makes a calendar
+      update the entry it holds instead of adding a second (owner scenario 14)
+- [x] A Peer in London and one in New York import the same instant on either
       side of 1 November 2026 and each sees their own local time (owner
       scenario 2)
-- [ ] No access, a revoked access, another Group's Series, another Series'
+- [x] No access, a revoked access, another Group's Series, another Series'
       Episode, a File Episode and a guest each meet the refusal the tests
       name, and never a file (owner scenario 11)
-- [ ] Downloading marks nothing opened and writes no `access_opens` row
-- [ ] A session with `cancelled_at` set produces `STATUS:CANCELLED` under the
+- [x] Downloading marks nothing opened and writes no `access_opens` row
+- [x] A session with `cancelled_at` set produces `STATUS:CANCELLED` under the
       same `UID`, ready for `T-134` and `T-138` without a change here
-- [ ] `docs/flows/live-sessions.md` describes the chain and the fields, and no
+- [x] `docs/flows/live-sessions.md` describes the chain and the fields, and no
       longer lists the calendar file as unbuilt
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
