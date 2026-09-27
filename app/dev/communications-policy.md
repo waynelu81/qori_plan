@@ -59,26 +59,38 @@ product.
 | Reminders before a session | None | **One**, Qori's own, fixed timing | **Several**, each with its own offset and send time |
 | Template                   | —    | Qori's                            | Theirs (with the §9 template gate)                  |
 
+Until custom templates ship, Pro and School get Start's one fixed reminder
+(`D-028`, `T-138`): `qori.plans.<plan>.session_reminders` is the same boolean
+on all three.
+
 Consistent with the rest of the Pro ladder: not more capacity, but control over
 how the creator appears and when. It also pairs naturally with Pro's custom
 templates — same tier, same idea — so the two should ship together.
 
-Open questions this raises, none answered yet:
+Open questions this raises, each answered by `D-028` on 18 September 2026 and
+built by `T-138` on 27 September 2026:
 
 1. **Reminders before _what_?** `Lesson.starts_at` exists on live lessons (§8.1),
    so a live session has something to count back from. A self-paced course has no
    start date at all — `Course` carries no such field. Either reminders are a
    live-lesson feature, or `Course` gains a start date and the feature widens.
+   **Answered 18 September 2026 (`D-028`):** before a live Episode's
+   `starts_at`, `qori.live.reminder_minutes_before` (a day) ahead; live
+   Episodes only.
 2. **Whose clock is "send time"?** No model carries a timezone — not `Workspace`,
    not `User`, not `Contact`. "Send at 9am" is meaningless until that is decided,
    and the two readings differ: the creator's timezone is simpler and matches who
    configured it, the student's is kinder and matches who reads it. A creator
    teaching across timezones will eventually want the second.
+   **Answered 18 September 2026 (`D-028`):** the fixed reminder is an instant
+   and needs no zone to send; it is written in the recipient's own zone, else
+   the Group's, with the Group's beside it.
 3. **Do reminders count against the monthly EDM allowance?** They cost the same
    to send, but by the table above they are service messages rather than
    marketing, and metering them would meter something a student is owed. Leaning
    no — and if so, they need their own guard so a reminder schedule cannot become
-   an unmetered send channel.
+   an unmetered send channel. **Answered 18 September 2026 (`D-028`):** not
+   metered; the per-run cap and the ledger's unique key are the guard.
 4. **This needs a scheduler, and one runs.** Unlike campaign sending, a
    reminder has no user action to hang off: it fires because a date arrived.
    Laravel Cloud has run Qori's schedule since 11 September 2026, and since 27

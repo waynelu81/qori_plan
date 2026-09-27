@@ -2,7 +2,7 @@
 id: T-138
 title: Peers are reminded the day before a live Episode, and told when it is cancelled
 stream: classroom
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: T-128, T-133, T-134
@@ -1066,46 +1066,48 @@ Total: 30 new cases.
 
 ## Acceptance
 
-- [ ] On a Start Group, every Peer with access to a live Episode receives one
+- [x] On a Start Group, every Peer with access to a live Episode receives one
       reminder `qori.live.reminder_minutes_before` before the start, with
       the session in their own zone and the Group's zone beside it when they
       differ, the calendar file attached under its download name, and a
       button that lands on the Episode's card; a Peer granted later is
       reminded on the next run while the start is more than an hour away
       (owner acceptance 2)
-- [ ] On a Free Group nobody is reminded, the card promises no reminder, and
+- [x] On a Free Group nobody is reminded, the card promises no reminder, and
       the creator's panel, edit form and cancel toast keep `T-124`'s and
       `T-134`'s wording; on a plan that reminds they say who is told
-- [ ] Moving a session's time or length deletes its reminders and they go
+- [x] Moving a session's time or length deletes its reminders and they go
       again for the new time; a link or switch change leaves them; no
       "moved" email goes (owner acceptance 14)
-- [ ] Cancelling a session tells every Peer who was reminded of it, once, and
+- [x] Cancelling a session tells every Peer who was reminded of it, once, and
       nobody who was not; Undo sends nothing and reminds nobody twice; no
       message carries the join link or a vendor destination
-- [ ] A reminder for a session whose start has passed, for a Group that
+- [x] A reminder for a session whose start has passed, for a Group that
       dropped to Free, for a suppressed address or for a revoked Access is
       skipped with its reason in the ledger, never sent
-- [ ] `qori:sessions:notify` queues reminders before it sends, in the same
+- [x] `qori:sessions:notify` queues reminders before it sends, in the same
       run, and its heartbeat counts them; `--dry-run` queues nothing and
       sends nothing
-- [ ] A Group with its own vocabulary gets its own words in both messages,
+- [x] A Group with its own vocabulary gets its own words in both messages,
       with the Group passed to `Terminology::line()` explicitly
-- [ ] `php artisan qori:mail:check` sends and reads twelve messages, and the
-      attached `.ics` imports into a calendar at the right hour
-- [ ] `docs/flows/live-sessions.md` describes the queue, both chains and the
+- [x] `php artisan qori:mail:check` sends and reads fourteen messages (twelve
+      in the draft, before `T-129`'s and `T-133`'s landed), and the attached
+      `.ics` is `T-133`'s file, whose import by hand is the owner's with its
+      sample (Re-scope log)
+- [x] `docs/flows/live-sessions.md` describes the queue, both chains and the
       skips, and no longer lists a cancellation email as unbuilt;
       `docs/flows/series.md`'s "Editing a live Episode" names
       `forgetReminders()`; the recipes in `docs/tinker/live-sessions.md` and
       `docs/tinker/mail.md` run as written; `communications-policy.md`'s
       open questions carry their answers
-- [ ] No `acrossAllGroups()` caller is added in app code (the tinker recipe
+- [x] No `acrossAllGroups()` caller is added in app code (the tinker recipe
       resolves one Series by key, as `T-128`'s does), no `ShouldQueue`, no new
       inline English in Vue, and `LiveSessionService` gains no constructor
       dependency
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -1130,6 +1132,11 @@ Total: 30 new cases.
   `T-128`; nothing here adds a scheduled line.~~ **Answered 27 September
   2026:** every thirty minutes (`T-206`), so a reminder leaves within half an
   hour of its time.
+
+## Added during execution
+
+- `docs/flows/README.md` and `docs/tinker/README.md` — their live-sessions rows
+  name the day-before reminder.
 
 ## Re-scope log
 
@@ -1167,6 +1174,15 @@ the code as built.**
 - **The attached file imports by hand is the owner's**, as for `T-133`, whose
   sample file stands for this one: it is the same `CalendarInvite::for()`.
 - **Acceptance's board check is `bin/tasks --check` in `qori-plan`.**
+
+**2026-09-27 — found while building.**
+
+- **No " Reminders not queued." on the dry run's console line.** The option's
+  own description already says a dry run writes and sends nothing, and
+  `NotifySessionsCommandTest` pins the line as it is; the heartbeat's
+  `dry_run` says the rest.
+- **"Remind, then cancel" sits after `T-134`'s recipe**, not `T-129`'s, and
+  reminds the copy `T-134` makes there, so no earlier section's values move.
 
 ## Notes
 
