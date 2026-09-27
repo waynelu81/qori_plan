@@ -2,20 +2,19 @@
 id: T-133
 title: A Peer adds a live Episode to their calendar
 stream: classroom
-status: draft
-owner: unassigned
-estimate: S
+status: doing
+owner: claude
+estimate: M
 depends: T-127
 blocks: T-138
 ---
 
 # T-133 — A Peer adds a live Episode to their calendar
 
-> **Draft.** Not specified to the last name yet, and not to be started — see
-> [`../PROCESS.md`](../PROCESS.md). Written on 18 September 2026 from `D-024`,
-> `D-026` and `D-028`, beside `T-125` to `T-127`, whose finished specs it
-> reads; what has to be confirmed before it is `ready` is listed at the
-> bottom.
+> Written on 18 September 2026 from `D-024`, `D-026` and `D-028`, beside
+> `T-125` to `T-127`. Reconciled with the code as built on 27 September 2026
+> — the Re-scope log says what changed, and it overrides the sketches below
+> where they differ.
 
 ## Why
 
@@ -274,8 +273,7 @@ read or guessed.
 | `app/Http/Controllers/Shared/CalendarInviteController.php` | new    | the gate, the Episode lookup, the `text/calendar` attachment                                   |
 | `routes/shared.php`                                        | edit   | `shared.episodes.calendar`, after `shared.episodes.open`                                       |
 | `app/Http/Controllers/Shared/SharedController.php`         | edit   | `liveCard()`: `calendarUrl`, `copy.addToCalendar`                                              |
-| `resources/js/pages/shared/Show.vue`                       | edit   | `LiveCard` gains `calendarUrl` and `copy.addToCalendar` — type only, no template change        |
-| `resources/js/components/series/LiveSessionCard.vue`       | edit   | the `<a download>` in `upcoming`                                                               |
+| `resources/js/components/series/LiveSessionCard.vue`       | edit   | `LiveCard` gains `calendarUrl` and `copy.addToCalendar`; the `<a download>` in `upcoming`      |
 | `lang/en/live.php`                                         | edit   | `calendar.add`, `calendar.summary`, `calendar.description`                                     |
 | `lang/en/errors.php`                                       | edit   | `live.no_calendar` in the `live` group `T-126` creates                                         |
 | `docs/flows/live-sessions.md`                              | edit   | "Adding a session to a calendar": the chain and the fields; "Not built yet" loses the calendar |
@@ -655,30 +653,51 @@ Total: 16 new cases in one file.
 - [ ] `docs/flows/live-sessions.md` describes the chain and the fields, and no
       longer lists the calendar file as unbuilt
 - [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `php artisan qori:tasks --check` passes
+- [ ] `bin/tasks --check` passes in `qori-plan`
 - [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
 - [ ] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
-- `T-127` `ready`, and with it `T-125` and `T-126`, so the `live` prop and
+- ~~`T-127` `ready`, and with it `T-125` and `T-126`, so the `live` prop and
   its `copy` shape on `LiveSessionCard.vue` and `lang/en/live.php` (`T-125`)
   are frozen, and the `errors.live` group is frozen once `T-126`, which
   creates it with `not_live` and `recording_unavailable`, is `ready` — the
-  names above are theirs — anyone's.
-- Whether the estimate stays `S` with the 16 cases below, or becomes `M` —
-  the stream owner's, when setting it `ready`; see Notes.
-- Whether `UID`'s domain is the constant `useqori.com` this draft uses, or
-  the host of `config('app.url')` — anyone's; the draft's reason is above.
-- Whether the file carries a `VALARM` — the owner's; this draft writes none,
-  so each calendar applies its own reminder.
-- Whether "Add to calendar" also shows in `open`, for the Peer who arrives
+  names above are theirs — anyone's.~~ **Answered 27 September 2026:**
+  `T-125` to `T-127` and `T-134` are `done`; the Re-scope log names what moved.
+- ~~Whether the estimate stays `S` with the 16 cases below, or becomes `M` —
+  the stream owner's, when setting it `ready`; see Notes.~~ **Decided 27
+  September 2026: `M`**, keeping the 16 cases, for the reason the Notes give.
+- ~~Whether `UID`'s domain is the constant `useqori.com` this draft uses, or
+  the host of `config('app.url')` — anyone's; the draft's reason is above.~~
+  **Decided 27 September 2026: the constant**, for the reason above: an
+  identity must not follow `APP_URL` between environments.
+- ~~Whether the file carries a `VALARM` — the owner's; this draft writes none,
+  so each calendar applies its own reminder.~~ _Asked_ 27 September 2026.
+  Built without one, as drafted: adding it later is one component and one
+  case, and nothing else here depends on the answer.
+- ~~Whether "Add to calendar" also shows in `open`, for the Peer who arrives
   during the window and wants the next one in their calendar — anyone's;
-  this draft follows the brief and renders it in `upcoming` only.
+  this draft follows the brief and renders it in `upcoming` only.~~
+  **Decided 27 September 2026: `upcoming` only.** In `open` the Peer is
+  joining this session, and the next one's card is `upcoming` and carries its
+  own.
 
 ## Re-scope log
 
-None.
+**2026-09-27 — reconciled with the code as built.**
+
+- **`LiveCard` is exported from `LiveSessionCard.vue`**, not declared on
+  `shared/Show.vue`, as the Notes foresaw: the type edit is in the card, and
+  the page's Files row is gone.
+- **`SharedController::liveCard()` delegates to `liveCardInGroup()`**, which
+  builds the array inside the Series' Group; the two keys go there.
+- **`T-134` writes `cancelled_at`**, so case 5 cancels through
+  `LiveSessionService::cancel()` instead of writing the key on the row.
+- **The by-hand import is the owner's to try.** No calendar application on
+  this machine is one this task may import into, and none is needed to build
+  the file; the report sends a sample file to import, and the box says so.
+- **Acceptance's board check is `bin/tasks --check` in `qori-plan`.**
 
 ## Notes
 

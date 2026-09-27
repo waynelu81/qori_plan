@@ -136,6 +136,9 @@ answer is written into the task.
   sweep, which `D-040` removed; asked 26 September 2026 with what `T-204`
   measured of Cloud's scheduler.~~ **Answered 27 September 2026:** every
   thirty minutes.
+- `T-133` — Whether a session's calendar file carries its own reminder
+  (`VALARM`), or leaves each calendar to apply its default; asked 27
+  September 2026, and built without one meanwhile.
 - `T-130` — Whether `odt`, `ods`, `odp` and `epub` join the upload allow-list
   (`D-030`).
 - `T-139` — The Free plan's per-Series storage figure beside the 100 MB the
