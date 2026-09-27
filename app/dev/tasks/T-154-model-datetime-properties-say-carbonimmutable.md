@@ -2,8 +2,8 @@
 id: T-154
 title: Model datetime properties say CarbonImmutable
 stream: workflow
-status: draft
-owner: unassigned
+status: doing
+owner: claude
 estimate: S
 depends: none
 blocks: none
@@ -35,42 +35,61 @@ rather than by a user.
 
 ## Decisions taken to make this specifiable
 
-**None yet.** See "Before this can be ready".
+Brought to ready on 28 September 2026, from the code.
+
+**The docblocks name `CarbonImmutable`.** It is what every `datetime` cast
+returns, since `AppServiceProvider` calls `Date::use(CarbonImmutable::class)`,
+and it is the precision that catches `T-151`'s mistake: told a property is a
+`CarbonImmutable`, PHPStan reports `instanceof Carbon` as always false, where
+told `CarbonInterface` it lets the check stand, since a `Carbon` is one too.
+Coupling to `Date::use()` is the point, not the cost: if that call ever
+changes, the docblocks should be made to change with it.
+
+**Nothing outside `app/Models` makes the claim.** Three files use
+`Illuminate\Support\Carbon` — `CheckoutPending`, `ConnectionService` and
+`LoginCodeService` — and each parses with it and declares what that returns,
+so their types are true. `app/Data` holds `CarbonInterface`. Checked on 28
+September 2026: 65 `@property` lines across 24 models, grown from the draft's
+40 across 17.
+
+**One guard, in `ArchitectureTest`: no model imports a mutable `Carbon`.** A
+docblock cannot name `Carbon` without the import, so refusing
+`use Illuminate\Support\Carbon;` and `use Carbon\Carbon;` in `app/Models`
+holds the line without reading docblocks. And the rule goes into `CLAUDE.md`'s
+Persistence section, so the next model is written right the first time.
+
+**PHPStan's findings from the sweep are fixed at the call site.** A model
+property now typed `CarbonImmutable` may be assigned a mutable `Carbon`
+somewhere; each such site is corrected to what the cast would give, not the
+docblock loosened.
 
 ## Preconditions
 
-**Data this task verifies against:** a clean database.
+None.
 
-**Equipment:** none.
+**Data this task verifies against:** None; no behaviour changes.
 
-**Spike:** none.
+**Equipment:** None.
 
 ## Scope
 
 **In:**
 
-- The `@property` lines for `datetime`-cast attributes across `app/Models`, so
-  they name what the cast returns.
-- Whatever the change breaks in PHPStan, which is the point of making it.
+- Every `@property` naming `Carbon` in `app/Models`, and the imports.
+- Whatever PHPStan then reports at a call site.
+- The guard and the `CLAUDE.md` line.
 
 **Out:**
 
-- Changing `Date::use(CarbonImmutable::class)`. Immutable dates are the right
-  default and this task is about telling the truth, not reversing the
-  decision.
-- Any behaviour change. If fixing a docblock reveals a second live bug of the
-  `isDue()` shape, that bug is its own task with its own test, and this one
-  records it under "Found, not fixed" rather than quietly fixing it.
-- `app/Data` and anything that is not an Eloquent model, unless the sweep
-  finds the same inaccuracy there.
+- The three files outside the models whose `Carbon` is true.
 
 ## Files
 
-> To be filled in. The sweep is `grep -rln '@property ?Carbon' app/Models`,
-> seventeen files at the time of writing.
-
-| Path | Change | Notes |
-| ---- | ------ | ----- |
+| Path                                 | Change | Notes                                       |
+| ------------------------------------ | ------ | ------------------------------------------- |
+| `app/Models/*.php`                   | edit   | `CarbonImmutable` in docblocks; the imports |
+| `tests/Feature/ArchitectureTest.php` | edit   | 1 case                                      |
+| `CLAUDE.md`                          | edit   | one line under Persistence                  |
 
 Flows: none — no call chain changes.
 
@@ -80,7 +99,7 @@ None.
 
 ## Code
 
-> To be filled in once the type question below is answered.
+None: docblocks and imports only, and whatever call sites PHPStan names.
 
 ## Copy
 
@@ -92,39 +111,30 @@ None.
 
 ## Tests
 
-> Probably none of its own: PHPStan is the check, and a test that asserts a
-> docblock is a test of a comment. Say so explicitly rather than leaving the
-> section blank — and if the answer turns out to be that one guard test is
-> worth having, name it here.
+**Changed: `tests/Feature/ArchitectureTest.php` — 1 new case**
+
+1. `test_models_type_their_dates_as_carbon_immutable` — no file in
+   `app/Models` imports `Illuminate\Support\Carbon` or `Carbon\Carbon`.
+
+PHPStan is the rest of the proof: it reads the docblocks this changes.
 
 ## Acceptance
 
-- [ ] No `@property` line in `app/Models` claims a `datetime` cast returns
-      something it does not
-- [ ] PHPStan is green afterwards, and any error the change surfaced is either
-      fixed with a test or recorded as a finding with a disposition
+- [ ] Every model datetime property says `CarbonImmutable`
+- [ ] `ArchitectureTest` refuses a mutable `Carbon` in a model, and `CLAUDE.md` says why
 - [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `php artisan qori:tasks --check` passes
+- [ ] `bin/tasks --check` passes in `qori-plan`
 - [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
 - [ ] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
-- **Which type should the docblocks name: `CarbonImmutable` or
-  `CarbonInterface`?** `CarbonImmutable` is what is actually returned and is
-  the most informative. `CarbonInterface` is what call sites should usually
-  depend on, is what `EpisodeService:287` already uses correctly, and would
-  survive `Date::use()` being changed again. They pull in different
-  directions — precision against coupling — and the answer decides every line
-  in the sweep. Anyone's, but it wants deciding once and writing into
-  `CLAUDE.md` so the next model does not reintroduce it.
-- **Does anything outside `app/Models` carry the same claim?** `app/Data`
-  shapes hold `CarbonInterface` today, which is right, but the sweep has only
-  been run over the models. Ten minutes; anyone's.
-- **Is one guard worth having?** An `ArchitectureTest` case that walks the
-  models and refuses a `@property ?Carbon` beside a `datetime` cast would stop
-  it coming back, and this codebase already prefers a test to a convention
-  where a test can hold the line (`CLAUDE.md`). Anyone's.
+- ~~`CarbonImmutable` or `CarbonInterface`?~~ **Answered from the code, 28
+  September 2026:** `CarbonImmutable` (Decisions).
+- ~~Does anything outside `app/Models` carry the same claim?~~ **Answered 28
+  September 2026:** no (Decisions).
+- ~~Is one guard worth having?~~ **Answered 28 September 2026:** yes, on the
+  imports (Decisions).
 
 ## Re-scope log
 
