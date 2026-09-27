@@ -73,16 +73,16 @@ quota"). Both guards run before anything is sent, through a new public
 `CampaignService::guardAllowance(Group, int $wanted)`, and refuse with the
 campaign's own errors. A paused Group sends none (`errors.campaign.group_paused`).
 
-**On the broadcast mailer, and on the default while that is `log` —
-_asked_.** The reminder is consent-gated, metered mail, so it leaves on the
-broadcast mailer and domain as campaigns do, from the creator's name. Until
-SES is set up the broadcast mailer is `log` everywhere, production included
-(`D-054`), and a campaign written to a log reaches nobody while the page says
-"sent". `SeriesAccessNotification` meets the same gap by staying on the
-default mailer while the broadcast one is `log` (`T-186`), and the reminder
-does the same, bounded by the daily cap. Whether this mail may travel on the
-transactional provider until SES is live is the owner's; asked 27 September
-2026, and built this way meanwhile — a one-line change either way.
+**On the broadcast mailer, and on the default while that is `log`.** The
+reminder is consent-gated, metered mail, so it leaves on the broadcast mailer
+and domain as campaigns do, from the creator's name. Until SES is set up the
+broadcast mailer is `log` everywhere, production included (`D-054`), and a
+campaign written to a log reaches nobody while the page says "sent".
+`SeriesAccessNotification` meets the same gap by staying on the default mailer
+while the broadcast one is `log` (`T-186`), and the reminder does the same,
+bounded by the daily cap. Whether this mail may travel on the transactional
+provider until SES is live was the owner's; asked 27 September 2026 and
+answered the same day: "Postmark is fine until SES".
 
 **The link opens the first Episode not completed, in position order**, at
 its own address, `shared.episodes.show` (`D-024`); the Series page when every

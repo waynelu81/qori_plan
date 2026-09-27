@@ -121,14 +121,17 @@ certificate; the length limit holds.
 
 ## Before this can be ready
 
-- Is the note also shown on the Series page's Peer list, beside progress, or
-  only on the Peers page? (the owner's) _Asked again_ 27 September 2026.
-- Can an admin of the Group write it, or only the owner? (the owner's; the
-  Peers page itself is readable by admins) **The owner, 27 September 2026:**
-  "No admin don't write it. It is data for creator and collaborator." Read as:
-  the owner writes it, and the owner and the Group's collaborators read it;
-  _asked_ the same day to confirm that reading. The owner also asked whether
-  the note shows in an email: it never does (Why).
+- ~~Is the note also shown on the Series page's Peer list, beside progress, or
+  only on the Peers page? (the owner's)~~ **Answered 27 September 2026:**
+  both — edited on the Peers page, and shown on the Series page's Peer list
+  (the owner's "yes to notes", given to that question and the next together;
+  the reading is stated back to the owner).
+- ~~Can an admin of the Group write it, or only the owner? (the owner's; the
+  Peers page itself is readable by admins)~~ **Answered 27 September 2026:**
+  "No admin don't write it. It is data for creator and collaborator", read
+  back to the owner as: the owner writes it, the owner and the Group's
+  collaborators read it — confirmed ("yes to notes"). It never shows in an
+  email, or anywhere a Peer sees (Why).
 - Which flow doc describes the Peers page today — confirm the row above.
   (anyone's)
 - The length: 500 characters is proposed. (anyone's)
