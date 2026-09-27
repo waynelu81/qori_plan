@@ -2,7 +2,7 @@
 id: T-154
 title: Model datetime properties say CarbonImmutable
 stream: workflow
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -120,12 +120,12 @@ PHPStan is the rest of the proof: it reads the docblocks this changes.
 
 ## Acceptance
 
-- [ ] Every model datetime property says `CarbonImmutable`
-- [ ] `ArchitectureTest` refuses a mutable `Carbon` in a model, and `CLAUDE.md` says why
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every model datetime property says `CarbonImmutable`
+- [x] `ArchitectureTest` refuses a mutable `Carbon` in a model, and `CLAUDE.md` says why
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
