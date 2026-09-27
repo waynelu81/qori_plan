@@ -2,7 +2,7 @@
 id: T-192
 title: A private note on each Peer
 stream: classroom
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -177,14 +177,14 @@ owner and an admin as Collaborators, a published Series, Peers granted through
 
 ## Acceptance
 
-- [ ] A note the owner types on a Peer's row is there on reload, on the Peers
+- [x] A note the owner types on a Peer's row is there on reload, on the Peers
       page and on the Series page's Peer list
-- [ ] A collaborator reads it and cannot write it
-- [ ] No shared-side page, email or serialised Peer carries the column
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] A collaborator reads it and cannot write it
+- [x] No shared-side page, email or serialised Peer carries the column
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -207,7 +207,11 @@ owner and an admin as Collaborators, a published Series, Peers granted through
 
 ## Re-scope log
 
-None.
+**2026-09-27 — found while building.**
+
+- **The dev database took the migration** before the browser check, the one
+  pending migration, a nullable column; the note the check wrote was cleared
+  through the page afterwards.
 
 ## Notes
 
