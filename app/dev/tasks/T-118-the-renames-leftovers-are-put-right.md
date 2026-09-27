@@ -2,7 +2,7 @@
 id: T-118
 title: The words the renames mangled are put right
 stream: operations
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -126,12 +126,12 @@ it stands is the rest of the proof.
 
 ## Acceptance
 
-- [ ] No code or live document says "grantlable", "Grantling" or a `/w/` path
-- [ ] `DocumentationTest` refuses them
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] No code or live document says "grantlable", "Grantling" or a `/w/` path
+- [x] `DocumentationTest` refuses them
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -148,4 +148,9 @@ None.
 
 ## Notes
 
-None.
+Written while building, 28 September 2026: the reversed claim matches `grantl`
+anywhere, case-insensitive, rather than as a word — a word boundary missed
+`guardGrantlable` inside the flows' call chains. No English word contains
+"grantl". `tests/Feature/Settings/PasskeyEndpointsTest.php` keeps the word on
+purpose, in `T-116`'s account of the bug it fixed; tests are not live
+documents, and that one is a record.
