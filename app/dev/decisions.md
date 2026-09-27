@@ -139,6 +139,9 @@ answer is written into the task.
 - `T-133` — Whether a session's calendar file carries its own reminder
   (`VALARM`), or leaves each calendar to apply its default; asked 27
   September 2026, and built without one meanwhile.
+- `T-135` — Whether the message a creator copies for the class chat also
+  carries the Series' public link, for someone in the chat without access
+  yet; asked 27 September 2026, and built without it meanwhile.
 - `T-130` — Whether `odt`, `ods`, `odp` and `epub` join the upload allow-list
   (`D-030`).
 - `T-139` — The Free plan's per-Series storage figure beside the 100 MB the
