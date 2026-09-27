@@ -2,7 +2,7 @@
 id: T-135
 title: A buyer sees the next session before paying, and the creator can copy a message for the chat
 stream: classroom
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: T-134
@@ -617,35 +617,35 @@ assert the public Episode entries, which are unchanged, and stay green.
 
 ## Acceptance
 
-- [ ] The public page of a published Series with a live session ahead shows
+- [x] The public page of a published Series with a live session ahead shows
       "Next live session" above the buy controls — the title, the start and
       end in the viewer's zone with the Group's zone beside it when it
       differs, and "Recorded — …" or "Live only — …" — and a Series with none
       ahead shows nothing there
-- [ ] Every session row on the public page shows the Group's zone beside the
+- [x] Every session row on the public page shows the Group's zone beside the
       viewer's own
-- [ ] A Brisbane creator's 9:00 on 2 November 2026 reads 23:00 GMT on 1
+- [x] A Brisbane creator's 9:00 on 2 November 2026 reads 23:00 GMT on 1
       November in a browser set to London and 18:00 EST on 1 November in one
       set to New York (owner scenario 2)
-- [ ] Nothing on the public page carries a join link, signed out or signed in
+- [x] Nothing on the public page carries a join link, signed out or signed in
       (owner scenario 11)
-- [ ] On the creator's Series page a live row in `upcoming`, `open`, `ready`
+- [x] On the creator's Series page a live row in `upcoming`, `open`, `ready`
       or `cancelled` offers Copy message for your chat; pressing it puts the
       message on the clipboard and says so; pasted into a chat or an editor
       the message keeps its line breaks; a row in `waiting`, `overdue` or
       `not_recorded` offers nothing
-- [ ] The message names the session, its start in the Group's zone with the
+- [x] The message names the session, its start in the Group's zone with the
       zone named, the Series page, and a `/shared/{seriesId}/episodes/{episodeId}`
       address, and never a meeting link (owner scenario 14)
-- [ ] A Peer with access who follows the address lands on the Series page at
+- [x] A Peer with access who follows the address lands on the Series page at
       that Episode; where the clipboard is refused the creator can read and
       select the message
-- [ ] `docs/flows/series.md` and `docs/flows/live-sessions.md` describe the
+- [x] `docs/flows/series.md` and `docs/flows/live-sessions.md` describe the
       two reads, and `docs/tinker/live-sessions.md` mints a message by hand
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -678,6 +678,13 @@ assert the public Episode entries, which are unchanged, and stay green.
   27 September 2026:** the panel takes each row whole and the page's
   `live.copy` whole, so neither page changes; the Re-scope log names the keys.
 
+## Added during execution
+
+- `app/Models/Episode.php` — `isCancelled()`'s docblock said nothing wrote
+  the key; `T-134`'s `cancel()` does, and `restore()` removes it.
+- `app/Concerns/FormatsSessionStart.php` — the session toasts' format reads
+  `SessionChatMessage::FORMAT` (below).
+
 ## Re-scope log
 
 **2026-09-27 — reconciled with `T-134`, `T-136`, `T-138` and the code as
@@ -698,6 +705,40 @@ built.**
 - **`T-138` sends reminders on Start and above**, so the chat message is the
   only nudge on Free and a second one elsewhere; nothing here changes for it.
 - **Acceptance's board check is `bin/tasks --check` in `qori-plan`.**
+
+**2026-09-27 — found while building.**
+
+- **The status line is a `<span aria-live>`, not a `<p>`.** The row renders
+  inside the creator page's `<p>`, and the parser closes a paragraph opened
+  inside another. It stays mounted and only its words change, as
+  `ShareLink.vue`'s does, so a copy is announced.
+- **The textarea is the project's `Textarea` component**, which sizes to its
+  content; `rows="4"` stays for a browser without `field-sizing`.
+- **The Copy button may wrap.** At 375 px its label ran 34 px out of the row's
+  column into the row's own controls; it now wraps to two lines inside the
+  column and is the usual 32 px on one line.
+- **`NextSessionBeforeBuyingTest`'s case 5 looks for the meeting id, not
+  `zoom.us/j/`.** `inertia-laravel` writes the page with `json_encode()`'s
+  default flags, which escape slashes, so the link's own text never reaches
+  the HTML and that check could not fail. A mutation putting the link on the
+  block under another key fails the case.
+- **A file row carries `chatMessage` null**, as it carries `state` null,
+  rather than no key: the rows carry flat keys. `SessionChatMessageTest`'s
+  case 6 asserts that, and a string on the live row beside it.
+- **The format literal moved to `App\Concerns\FormatsSessionStart`** (`T-134`),
+  which the session toasts read. `T-124` and `T-126` finishing was the reason
+  to leave it, so it reads `SessionChatMessage::FORMAT` now and the toast and
+  the message cannot disagree about the hour.
+- **The chat-message chain sits after "Adding a session to a calendar"** in
+  `docs/flows/live-sessions.md`, beside the address both are minted against,
+  rather than beside Join.
+- **Two acceptance lines were read short of a real device.** The browser pane
+  clicks by script, which carries no user activation, so the clipboard refused
+  every copy: the walk exercised the refusal and the textarea, which held the
+  message's three lines, and the tests pin the newlines. The pane's zone is
+  Brisbane and cannot be changed, so London and New York were read through
+  `SessionTime`'s own `Intl` options pinned to each zone. A paste into a chat,
+  and a browser set to each zone, are the owner's to see.
 
 ## Notes
 
