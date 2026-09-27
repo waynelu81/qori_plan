@@ -2,7 +2,7 @@
 id: T-197
 title: Someone who signs up to receive is told how a Series reaches them
 stream: onboarding
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: T-048
@@ -135,17 +135,39 @@ None.
 
 ## Acceptance
 
-- [ ] A learner with nothing shared with them is told on the receiving home how a Series reaches them, at their own address, and what to do if it does not
-- [ ] Someone with a Series, finished or not, never sees it
-- [ ] A browser walk: register to learn, verify, land on the welcome, at 375px and desktop
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] A learner with nothing shared with them is told on the receiving home how a Series reaches them, at their own address, and what to do if it does not
+- [x] Someone with a Series, finished or not, never sees it
+- [x] A browser walk: register to learn, verify, land on the welcome, at 375px and desktop
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
+
+## Added during execution
+
+- `docs/flows/auth.md` — one sentence where the learner's path reaches the
+  receiving home, saying what it tells someone with nothing shared.
+- `resources/js/components/shell/EmptyState.vue` — its description may break
+  anywhere (`wrap-anywhere`), found in the walk (below).
 
 ## Re-scope log
 
-None.
+**2026-09-27 — found while building.**
+
+- **`Terminology` is method-injected into `index()`**, not resolved with
+  `app()`, as the controllers take their per-action dependencies.
+- **Case 2 checks a finished Series too**, because Acceptance says "finished
+  or not" and the Code's `$shared === []` is what makes it so; case 3 follows
+  the verification link's redirect to the page it lands on, rather than
+  asking for `/dashboard` afterwards.
+- **"Flows: none" became one sentence in `docs/flows/auth.md`**, where the
+  learner's path already reaches the receiving home, so the flow says what is
+  found there.
+- **A long address overflowed the welcome at 375 px.** An email has no space
+  to break at, and in the empty state's centred column an unbreakable word
+  sets the line's width: a 67-character address made the line 346 px wide in
+  a 301 px box. `EmptyState`'s description now wraps anywhere; the address a
+  person actually signed up with wraps as it did.
 
 ## Notes
 
