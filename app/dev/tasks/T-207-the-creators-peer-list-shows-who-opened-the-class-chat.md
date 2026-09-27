@@ -2,7 +2,7 @@
 id: T-207
 title: The creator's Peer list shows who opened the class chat
 stream: classroom
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: T-132
@@ -225,17 +225,17 @@ the chat panel, which do not change.
 
 ## Acceptance
 
-- [ ] A creator sees, on each Peer row, whether that Peer has opened the
+- [x] A creator sees, on each Peer row, whether that Peer has opened the
       class chat card, and on which day in the Group's zone
-- [ ] A Series with no chat says nothing about one on its Peer rows
-- [ ] A chat removed and added again starts afresh; an edited one keeps its
+- [x] A Series with no chat says nothing about one on its Peer rows
+- [x] A chat removed and added again starts afresh; an edited one keeps its
       opens
-- [ ] `docs/flows/chats.md` describes the read, and `docs/tinker/uploads.md`
+- [x] `docs/flows/chats.md` describes the read, and `docs/tinker/uploads.md`
       reads it by hand
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -250,9 +250,28 @@ the chat panel, which do not change.
   27 September 2026:** shown, while the Series has a chat; nothing while it
   has none (Decisions).
 
+## Added during execution
+
+- `app/dev/tasks/T-006-convert-the-remaining-inline-english-in-vue-to-lang.md`
+  (in `qori-plan`) — a note that the Peer row's inline "joined" date and the
+  new line's lang date spell a month two ways.
+
 ## Re-scope log
 
-None.
+**2026-09-27 — found while building.**
+
+- **`lastOpens()` reads the latest open through the model's own cast**, the
+  aggregate aliased `opened_at`, rather than parsing a plucked string in UTC:
+  the same answer, and no zone written into the code.
+- **The test helpers reach the person through `accesses.user_id`.**
+  `$access->peer` is the Group's CRM row, and group-scoped, so it cannot be
+  read outside a Group, as the Peer's side of a test runs.
+- **`docs/flows/chats.md` still listed `T-135`'s message as not built**; it
+  is built, so the line moved out of "Not built yet" into a pointer on the
+  creator's page, beside this task's own removal from that list.
+- **`docs/tinker/uploads.md`'s 30 MB confirm is refused only on Free**, whose
+  cap is 20 MB; on Start the file is stored. The recipe takes
+  `Group::first()` whatever its plan, so its comment now says so.
 
 ## Notes
 

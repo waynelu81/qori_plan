@@ -53,3 +53,8 @@ None.
   given no `suggestedNote`. Since `T-125` (26 September 2026) that includes
   the timezone prompt on a Peer's Series page, beside `live.timezone.why`
   and `live.timezone.save`, which are lang keys.
+- The creator's Peer rows on `resources/js/pages/share/series/Show.vue` say
+  "joined 7 Sept 2026" inline, dated by the browser, and since `T-207`
+  (27 September 2026) a line under it from `chats.creator.opened` dated
+  `'j M Y'` on the server — "27 Sep 2026" — so one row can spell a month two
+  ways. Converting "joined" should date it as the page's lang lines do.
