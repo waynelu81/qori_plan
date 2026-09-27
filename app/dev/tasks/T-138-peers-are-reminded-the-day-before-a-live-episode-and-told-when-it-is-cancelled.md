@@ -2,8 +2,8 @@
 id: T-138
 title: Peers are reminded the day before a live Episode, and told when it is cancelled
 stream: classroom
-status: draft
-owner: unassigned
+status: doing
+owner: claude
 estimate: M
 depends: T-128, T-133, T-134
 blocks: none
@@ -11,11 +11,10 @@ blocks: none
 
 # T-138 — Peers are reminded the day before a live Episode, and told when it is cancelled
 
-> **Draft.** Written on 18 September 2026 from `D-028` and the classroom
-> brief; not to be started — see [`../PROCESS.md`](../PROCESS.md). It builds
-> on names three drafts hold (`T-128`'s ledger, `T-133`'s calendar file,
-> `T-134`'s cancel), so it waits on all three becoming `ready`; what has to
-> happen before it can be marked `ready` is listed at the bottom.
+> Written on 18 September 2026 from `D-028` and the classroom brief.
+> Reconciled with `T-128`, `T-129`, `T-133`, `T-134` and `T-206` as built on
+> 27 September 2026 — the Re-scope log says what changed, and it overrides the
+> sketches below where they differ.
 
 ## Why
 
@@ -326,8 +325,7 @@ file is an open standard (`T-133`) and the mailer is Laravel's.
 | `app/Http/Controllers/Shared/SharedController.php`     | edit   | `copy.reminder` on the live card                                                                                                                                                                                |
 | `app/Http/Controllers/Share/SeriesController.php`      | edit   | `livePanel.cancelled` and `edit.noEmail` picked by plan                                                                                                                                                         |
 | `app/Http/Controllers/Share/LiveSessionController.php` | edit   | `cancel()`'s toast picked by plan                                                                                                                                                                               |
-| `resources/js/components/series/LiveSessionCard.vue`   | edit   | The reminder line under `upcoming`                                                                                                                                                                              |
-| `resources/js/pages/shared/Show.vue`                   | edit   | Type only: `LiveCard['copy']` gains `reminder: string \| null`                                                                                                                                                  |
+| `resources/js/components/series/LiveSessionCard.vue`   | edit   | `LiveCard['copy']` gains `reminder: string \| null`; the reminder line under `upcoming`                                                                                                                         |
 | `lang/en/live.php`                                     | edit   | `mail.day_before.*`, `mail.session_cancelled.*`, `mail.outro`, `state.upcoming.reminder`, `panel.cancelled_notified`                                                                                            |
 | `lang/en/series.php`                                   | edit   | `session_cancelled_notified`, `live.edit.reminders_again`                                                                                                                                                       |
 | `app/Console/Commands/MailCheckCommand.php`            | edit   | `EXPECTED` 12; the scratch Group on `start`; a second live Episode; queue, send, cancel, send                                                                                                                   |
@@ -1105,29 +1103,70 @@ Total: 30 new cases.
       inline English in Vue, and `LiveSessionService` gains no constructor
       dependency
 - [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `php artisan qori:tasks --check` passes
+- [ ] `bin/tasks --check` passes in `qori-plan`
 - [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
 - [ ] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
-- The config key's shape: `qori.plans.<plan>.session_reminders`, a boolean
+- ~~The config key's shape: `qori.plans.<plan>.session_reminders`, a boolean
   read through `Group::allows()`, Free `false` and Start, Pro and School
-  `true`, from `communications-policy.md:55-64` — confirm — anyone's.
-- Who is told of a cancellation: this draft reads `D-028`'s "those who
+  `true`, from `communications-policy.md:55-64` — confirm — anyone's.~~
+  **Decided 27 September 2026: as drafted.** `Group::allows()` reads a plan's
+  boolean keys (`public_listing`, `custom_vocabulary`), and this is one more.
+- ~~Who is told of a cancellation: this draft reads `D-028`'s "those who
   already hold a `day_before` row" as a `sent` row, and drops a pending or
-  failed one so Undo can queue it afresh — confirm — the stream owner's.
-- `T-128` `ready`, so the ledger, `sendDue()`'s checks, `ZonedTime` and the
+  failed one so Undo can queue it afresh — confirm — the stream owner's.~~
+  **Decided 27 September 2026: as drafted.** The person who received the
+  reminder is the one who might turn up; a reminder that never went is
+  nothing to retract.
+- ~~`T-128` `ready`, so the ledger, `sendDue()`'s checks, `ZonedTime` and the
   row shape are frozen; `T-133` `ready`, so `CalendarInvite::for()`,
   `filenameFor()`, its `URL` and `SEQUENCE` are; `T-134` `ready`, so
   `cancel(Series, string)`, `restore()` and `cancelled_at` are — anyone's;
-  keep draft until all three are.
-- The schedule interval is the owner's (`D-028`) and is inherited from
-  `T-128`; nothing here adds a scheduled line.
+  keep draft until all three are.~~ **Answered 27 September 2026:** all three
+  are `done`; the Re-scope log names what moved.
+- ~~The schedule interval is the owner's (`D-028`) and is inherited from
+  `T-128`; nothing here adds a scheduled line.~~ **Answered 27 September
+  2026:** every thirty minutes (`T-206`), so a reminder leaves within half an
+  hour of its time.
 
 ## Re-scope log
 
-None.
+**2026-09-27 — reconciled with `T-128`, `T-129`, `T-133`, `T-134`, `T-206` and
+the code as built.**
+
+- **`LiveCard` is exported from `LiveSessionCard.vue`**, not declared on
+  `shared/Show.vue` (`T-133` found the same): the type edit is in the card,
+  and the page's Files row is gone.
+- **The Peer's card array is built in `liveCardInGroup()`**, which
+  `liveCard()` delegates to; `copy.reminder` goes there.
+- **The creator's lines live in `live.copy`**: the edit form's `noEmail` at
+  `live.copy.edit.noEmail` and the cancelled line at `live.copy.panel.cancelled`
+  (`T-129` and `T-134` found the same), not `edit.noEmail` and
+  `livePanel.cancelled`. The prop names stay, so `LiveSessionPanel.vue` is
+  still not edited.
+- **`cancel()` returns the content with `cancelled_at` added**, keeping the
+  first time on a second click (`T-134`); `queueCancellation()` is called only
+  when the key was not already there, still through `app()`.
+- **`EpisodeService`'s constructor has three dependencies**
+  (`LiveSessionService`, `MaterialService`, `ConnectionService`), and gains
+  `SessionNoticeService` as a fourth; nothing on that side points back.
+- **`send()`'s checks run in this order as built**: stale, the person gone,
+  suppressed, the Episode, the Series and the Access (the owner's nudge
+  excepted), cancelled, then each kind's own. The cancelled check becomes
+  kind-aware and the three new skips follow it.
+- **The heartbeat already carries `nudges_queued`** (`T-129`); it gains
+  `reminders_queued`, and `NotifySessionsCommandTest`'s heartbeat case changes
+  with it, which the Tests list missed.
+- **`qori:mail:check` sends eleven today**, not nine: the three new messages
+  make fourteen, and the scratch Group moves to Start.
+- **`communications-policy.md` is `qori-plan`'s `app/dev/communications-policy.md`**,
+  since planning moved; its fourth question was annotated on 27 September
+  2026 when the plan was told the scheduler runs.
+- **The attached file imports by hand is the owner's**, as for `T-133`, whose
+  sample file stands for this one: it is the same `CalendarInvite::for()`.
+- **Acceptance's board check is `bin/tasks --check` in `qori-plan`.**
 
 ## Notes
 
