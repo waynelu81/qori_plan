@@ -2,7 +2,7 @@
 id: T-117
 title: Episode writes count what the database holds
 stream: operations
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: none
@@ -149,18 +149,18 @@ The last three record the SQL, as `AdvisoryLockTest` does:
    read of the Series comes before the count and the insert, in one
    transaction.
 6. `test_remove_and_reorder_write_positions_under_the_lock`.
-7. `test_a_material_is_numbered_under_the_same_lock`.
+7. `test_a_material_is_numbered_and_renumbered_under_the_same_lock` (Notes).
 
 **Changed:** none expected. Confirm rather than assume.
 
 ## Acceptance
 
-- [ ] Every Episode write decides from what the database holds
-- [ ] Two writes to one Series' positions cannot interleave, Episodes or materials
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every Episode write decides from what the database holds
+- [x] Two writes to one Series' positions cannot interleave, Episodes or materials
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -180,4 +180,14 @@ None.
 
 ## Notes
 
-None.
+Written while building, 28 September 2026:
+
+- The seventh case covers a material's `remove()` as well as its `add()`, and
+  is named for both; the fifth sets an Episode cap in config, because no plan
+  sets one yet (§17.4) and without one the cap's count never runs.
+- A material's upload is checked under the lock too, not only its cap and
+  position: a double submit could otherwise attach one file to two materials,
+  which `assetOrFail()` refuses only when the first has already committed.
+- `lockSeriesRow()` refuses to run outside a transaction, where the lock would
+  end with its own statement. Nothing reaches that today; it guards the next
+  caller.
