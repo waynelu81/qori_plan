@@ -2,7 +2,7 @@
 id: T-203
 title: A test request starts with no current group
 stream: workflow
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -91,18 +91,18 @@ None.
 
 ## Files
 
-| Path                                               | Change | Notes                                |
-| -------------------------------------------------- | ------ | ------------------------------------ |
-| `tests/TestCase.php`                               | edit   | `call()` and `artisan()` reset       |
-| `tests/Feature/TestHarnessTest.php`                | new    | 4 cases                              |
-| `tests/Feature/Series/RecordingStateTest.php`      | edit   | `asPeer()` drops its `forget()`      |
-| `tests/Feature/Shared/OpenChatTest.php`            | edit   | the same                             |
-| `tests/Feature/Shared/OpenMaterialTest.php`        | edit   | the same, in `asPeer()` only         |
-| `tests/Feature/Shared/CalendarInviteTest.php`      | edit   | the same, and a `Terminology` one    |
-| `tests/Feature/Series/CancelLiveEpisodeTest.php`   | edit   | `peerPage()` and two inline calls    |
-| `tests/Feature/Share/PeerNoteTest.php`             | edit   | one before a request                 |
-| `tests/Feature/Series/SeriesChatTest.php`          | edit   | one before a command                 |
-| `tests/Feature/Series/QuietReminderTest.php`       | edit   | one at the end of a test             |
+| Path                                             | Change | Notes                             |
+| ------------------------------------------------ | ------ | --------------------------------- |
+| `tests/TestCase.php`                             | edit   | `call()` and `artisan()` reset    |
+| `tests/Feature/TestHarnessTest.php`              | new    | 4 cases                           |
+| `tests/Feature/Series/RecordingStateTest.php`    | edit   | `asPeer()` drops its `forget()`   |
+| `tests/Feature/Shared/OpenChatTest.php`          | edit   | the same                          |
+| `tests/Feature/Shared/OpenMaterialTest.php`      | edit   | the same, in `asPeer()` only      |
+| `tests/Feature/Shared/CalendarInviteTest.php`    | edit   | the same, and a `Terminology` one |
+| `tests/Feature/Series/CancelLiveEpisodeTest.php` | edit   | `peerPage()` and two inline calls |
+| `tests/Feature/Share/PeerNoteTest.php`           | edit   | one before a request              |
+| `tests/Feature/Series/SeriesChatTest.php`        | edit   | one before a command              |
+| `tests/Feature/Series/QuietReminderTest.php`     | edit   | one at the end of a test          |
 
 ## Database
 
@@ -146,14 +146,14 @@ as before.
 
 ## Acceptance
 
-- [ ] A test request and a test command start with no current Group and no
+- [x] A test request and a test command start with no current Group and no
       remembered vocabulary
-- [ ] The harness test fails without the reset
-- [ ] The workarounds before a request or a command are gone
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] The harness test fails without the reset
+- [x] The workarounds before a request or a command are gone
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
