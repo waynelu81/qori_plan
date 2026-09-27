@@ -2,7 +2,7 @@
 id: T-162
 title: Mail check stops emptying the shared inbox
 stream: workflow
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -169,13 +169,13 @@ those plus fourteen new ones to the four inboxes)
 
 ## Acceptance
 
-- [ ] `qori:mail:check` leaves every message it did not send where it was
-- [ ] A real run against a Mailpit holding other mail reads its own fourteen
+- [x] `qori:mail:check` leaves every message it did not send where it was
+- [x] A real run against a Mailpit holding other mail reads its own fourteen
       and leaves the rest
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -187,7 +187,14 @@ those plus fourteen new ones to the four inboxes)
 
 ## Re-scope log
 
-None.
+**2026-09-27 — found while building.**
+
+- **The faked Mailpit gains a message from the other project arriving during
+  the run**, not only one already there. With only the baseline's, a scan
+  that dropped the recipient filter would still pass, because that message is
+  excluded as old; the other project keeps sending while a run waits.
+- **The cases also assert the sleeps**: none when all fourteen are there at
+  the first look, thirty-nine across the forty looks of a short count.
 
 ## Notes
 
