@@ -2,7 +2,7 @@
 id: T-182
 title: Every page renders the same on the server and in the browser
 stream: design
-status: doing
+status: done
 owner: claude
 estimate: M
 depends: none
@@ -133,21 +133,32 @@ console at 375 and 1280px on the pages above, before and after.
 
 ## Acceptance
 
-- [ ] No page logs a hydration mismatch at 375 or 1280px: the Series list, a Series, `/pricing`, the Peers page, the dashboard
-- [ ] Money still reads in the reader's own locale
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] No page logs a hydration mismatch at 375 or 1280px: the Series list, a Series, `/pricing`, the Peers page, the dashboard
+- [x] Money still reads in the reader's own locale
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
 - ~~What differs.~~ **Measured 28 September 2026** (Decisions).
 - ~~Whether one shared cause explains every page.~~ **Two do** (Decisions).
 
+## Added during execution
+
+- `resources/js/components/series/SessionTime.vue` — its formatter passed
+  `undefined` as the locale like the rest, so it takes the reader's locale too.
+  Its zone rule is unchanged (`T-027`); the zone it cannot know on the server is
+  `T-212`, drafted with this.
+
 ## Re-scope log
 
-None.
+- **28 September 2026, while building.** The Scope put `SessionTime.vue` out
+  whole, on the belief that it already names its zone. It does only when given
+  one: a Peer's line is in the browser's own zone, which the server cannot
+  know. The locale half is the same fix as every other formatter here and is
+  done; the zone half changes what a Peer sees and is `T-212`.
 
 ## Notes
 
