@@ -2,7 +2,7 @@
 id: T-156
 title: Deleting an Episode takes its file and its asset row with it
 stream: operations
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -62,16 +62,17 @@ what Qori is holding, a row in it is a claim that an object exists, and a
 register that lies is worse than no register — the owner's cleanup sweeps, and
 anyone reasoning about storage later, have nothing else to read.
 
-**Only an object the Group's own register holds is deleted, and only when no
-other Episode of the Group still names it** (27 September 2026, from the
-code). An Episode's `content['path']` is the `reference` the form posted
+**Only an Episode upload the Group's own register holds is deleted, and only
+when no other Episode of the Group still names it** (27 September 2026, from
+the code; the purpose added while building, Re-scope log). An Episode's `content['path']` is the `reference` the form posted
 (`StoreEpisodeRequest::content()`), checked for nothing but its length, so it
 can name any key in the bucket — another Group's included, and a Peer sees
 keys in every signed link. `purge()` deletes that path as it finds it, so today
 a creator can have another Group's file deleted by pointing an Episode at it
 and deleting their own Series; `remove()` doing the same would make it
-immediate. So the delete looks the key up among the Series' Group's stored
-`media_assets` and deletes nothing it does not find there. And a hand-made
+immediate. So the delete looks the key up among the Series' Group's
+`media_assets` of purpose `episode` and deletes nothing it does not find
+there — a material's or a chat code's upload is another row's file. And a hand-made
 request can put one key in two Episodes, so an object another Episode of the
 Group still names stays, with its row. Stopping such a path being written at
 all is `T-210`, drafted with this finding.
@@ -168,7 +169,7 @@ production bucket is not touched by any check here.
 | `app/Services/EpisodeService.php`                     | edit   | `remove()`: the object, the Episode row, the asset row             |
 | `app/Services/SeriesService.php`                      | edit   | `purge()` calls the service, and deletes the asset row it orphaned |
 | `app/Http/Controllers/Settings/ProfileController.php` | edit   | `destroy()` deletes the owned Group's objects first                |
-| `tests/Feature/Media/OrphanedObjectTest.php`          | new    | 9 cases                                                            |
+| `tests/Feature/Media/OrphanedObjectTest.php`          | new    | 10 cases                                                           |
 | `docs/flows/series.md` `docs/flows/storage.md`        | edit   | What removing, purging and deleting an account take with them      |
 
 ## Database
@@ -186,8 +187,8 @@ class MediaAssetService
      * The object behind a Qori-hosted Episode, deleted, and its media_assets row
      * handed back for the caller to delete after the Episode row. Null, and
      * nothing deleted, when the Episode is not Qori-hosted, has no path, names a
-     * key the Series' Group holds no stored asset for, or shares it with another
-     * of the Group's Episodes. A storage failure is logged and swallowed.
+     * key the Series' Group holds no Episode upload for, or shares it with
+     * another of the Group's Episodes. A storage failure is logged and swallowed.
      */
     public function deleteEpisodeObject(Series $series, Episode $episode): ?MediaAsset;
 
@@ -215,7 +216,7 @@ None.
 
 ## Tests
 
-**New: `tests/Feature/Media/OrphanedObjectTest.php` — 9 cases**
+**New: `tests/Feature/Media/OrphanedObjectTest.php` — 10 cases**
 
 1. `test_removing_an_episode_deletes_its_object_and_asset_row` — through the
    creator's delete request.
@@ -226,12 +227,14 @@ None.
 5. `test_purging_a_series_deletes_the_asset_rows_too`.
 6. `test_an_episode_naming_another_groups_file_deletes_nothing` — neither
    removing it nor purging its Series touches the other Group's object or row.
-7. `test_a_file_another_episode_still_names_is_kept`.
-8. `test_deleting_an_account_deletes_the_owned_groups_objects` — an Episode's,
+7. `test_an_episode_naming_a_materials_file_deletes_nothing` — the
+   material's object, row and link all stay (Re-scope log).
+8. `test_a_file_another_episode_still_names_is_kept`.
+9. `test_deleting_an_account_deletes_the_owned_groups_objects` — an Episode's,
    a material's and a chat code's; the account, the Group and every asset row
    gone with them.
-9. `test_deleting_an_account_leaves_a_group_it_only_helps_run_alone` — the
-   person is an admin in another Group, whose objects stay.
+10. `test_deleting_an_account_leaves_a_group_it_only_helps_run_alone` — the
+    person is an admin in another Group, whose objects stay.
 
 **Changed:**
 
@@ -241,16 +244,16 @@ None.
 
 ## Acceptance
 
-- [ ] Removing an Episode through the interface leaves no object and no asset row
-- [ ] Purging a Series leaves no asset row
-- [ ] Neither ever deletes an object its Group's register does not hold, or one
+- [x] Removing an Episode through the interface leaves no object and no asset row
+- [x] Purging a Series leaves no asset row
+- [x] Neither ever deletes an object its Group's register does not hold, or one
       another of its Episodes names
-- [ ] Deleting an account leaves no object belonging to the Group it owned
-- [ ] A storage failure never blocks a row delete
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Deleting an account leaves no object belonging to the Group it owned
+- [x] A storage failure never blocks a row delete
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -271,9 +274,22 @@ None.
   27 September 2026:** yes — a removed Episode never comes back, whatever the
   Series' state (Decisions).
 
+## Added during execution
+
+- `tests/Feature/Series/DeleteSeriesTest.php` — two cases purged Episodes whose
+  paths no upload had written, and expected the files deleted; its
+  `seriesWithFile()` now writes the register row an upload writes, since a
+  path the register does not hold is left alone.
+
 ## Re-scope log
 
-None.
+- **27 September 2026, while building.** The register check looked for any
+  upload of the Group at the Episode's key. A hand-made path can name a
+  material's or a chat code's upload in the same Group, and removing that
+  Episode would then delete the material's file — and fail on the material's
+  CHECK when its asset row went. The check now wants an upload of purpose
+  `episode`, and one case was added for it (Tests, 7). Nothing a person sees
+  changes.
 
 ## Notes
 
@@ -284,3 +300,7 @@ materials. Each thought about the object problem in its own frame and only one
 of them was looking at the Episode's own file. That is worth remembering the
 next time a second path is added to delete the same kind of row — the check is
 not "is this code careful" but "do the two paths agree".
+
+Tests → Changed said the existing tests "assert rows, not objects". Not all of
+them: `DeleteSeriesTest` asserts the objects too, and is listed above under
+Added during execution.
