@@ -2,8 +2,8 @@
 id: T-153
 title: The Integrations page is checked for what it claims
 stream: reachability
-status: draft
-owner: unassigned
+status: doing
+owner: claude
 estimate: S
 depends: T-044
 blocks: none
@@ -81,7 +81,34 @@ two half-answers.
 
 ## Decisions taken to make this specifiable
 
-**None yet.** See "Before this can be ready".
+Brought to ready on 28 September 2026, from the code.
+
+**No comment on the count's query.** The recommendation below, taken: the
+trait is the guarantee (`CLAUDE.md`, Tenancy), so a comment on one of the
+thirty bare group-scoped queries would say the other twenty-nine were not
+checked. Two minutes to reverse if the owner wants one.
+
+**The case goes in `IntegrationsPageTest`.** Its subject is what the page does
+to a non-owner — "The Integrations page does not send a non-owner to a door
+that answers 403" — and the case is about one such door.
+
+**It sends what the page sends.** The page's writes are Inertia `<Form>`
+components, so a browser's request is an XHR carrying `X-Inertia`,
+`X-Requested-With: XMLHttpRequest` and `Accept: text/html,
+application/xhtml+xml` (`@inertiajs/core`'s `getHeaders()`). That does not
+ask for JSON, so `AppException::render()` flashes the toast and redirects
+back — 303 for a DELETE, which Inertia's middleware makes of a 302. The case
+sends those headers, rather than a bare form POST, so it reads the path a
+browser takes.
+
+**Which writes an admin can press.** Since `T-044`, `ProviderSection` shows
+its Connect, Reconnect and Disconnect to the owner alone and the owner note in
+their place, and the Stripe section shows Connect Stripe to the owner alone
+(`PaymentDoors`). Stripe's Disconnect is the exception: its dialog shows
+whenever an account is held, to anyone, and an admin who confirms it is
+refused. The case covers it and `share.connections.begin` both, since the
+refusal copy of each is read by no test; Disconnect is the one an admin meets
+on the page today, which is a finding of its own.
 
 ## Preconditions
 
@@ -121,12 +148,9 @@ no file `T-044` holds.
 
 ## Files
 
-> One row, unless the comment question below is answered yes — in which case
-> `IntegrationsController.php` joins it and this task must rebase onto `T-044`.
-
-| Path                                                                                                 | Change | Notes                                                     |
-| ---------------------------------------------------------------------------------------------------- | ------ | --------------------------------------------------------- |
-| `tests/Feature/Share/IntegrationsPageTest.php` _or_ `tests/Feature/Share/ConnectionsConnectTest.php` | edit   | The browser-path refusal case; which file is question two |
+| Path                                           | Change | Notes                                  |
+| ---------------------------------------------- | ------ | -------------------------------------- |
+| `tests/Feature/Share/IntegrationsPageTest.php` | edit   | the browser-path refusal case (1 case) |
 
 Flows: none — this changes no call chain.
 
@@ -148,10 +172,13 @@ None.
 
 ## Tests
 
-> One case, once question two is answered: acting as a non-owner collaborator
-> against `share.connections.begin` and `share.payments.disconnect` with a
-> plain form POST, asserting the redirect and the flashed toast copy — the part
-> `test_an_admin_is_refused()` leaves unasserted.
+**Changed: `tests/Feature/Share/IntegrationsPageTest.php` — 1 new case**
+
+1. `test_an_admin_refused_a_write_on_the_page_is_sent_back_with_why` — as an
+   admin, with the headers the page's forms send: Connect for Google Drive, then
+   Stripe's Disconnect. Each redirects back to Integrations with an error toast
+   carrying its `owner_only` message and resolution, and nothing is written —
+   no connection, and the account id kept.
 
 ## Acceptance
 
@@ -163,7 +190,7 @@ None.
       is asserted once — the redirect and the toast copy — beside `T-044`'s
       JSON cases
 - [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `php artisan qori:tasks --check` passes
+- [ ] `bin/tasks --check` passes in `qori-plan`
 - [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
 - [ ] Report written in `reports/` (see [its README](reports/README.md))
 
@@ -181,12 +208,13 @@ None.
   other 29 were checked and this one was special. There is also a cost: the
   file is `T-044`'s, so a comment turns a no-file task into one that clashes
   with a task in flight and must rebase, for no behaviour. The owner's, and it
-  is two minutes either way.
-- **Whether the browser-path assertion belongs in
+  is two minutes either way. **Decided 28 September 2026: no** (Decisions).
+- ~~**Whether the browser-path assertion belongs in
   `tests/Feature/Share/IntegrationsPageTest.php` or beside the cases it
   complements in `ConnectionsConnectTest.php`.** That file's own docblock says
   the page is Vue and there is no JavaScript test runner, which is the honest
-  limit on what any of this can assert. Anyone's.
+  limit on what any of this can assert. Anyone's.~~ **Answered 28 September
+  2026: `IntegrationsPageTest`** (Decisions).
 - ~~**Whether `T-064` would rather own the first half**~~ **Moot: there is no
   first half.** With the count verified and already covered, nothing here
   touches `IntegrationsController.php` or the Stripe Dialog, so the task is
