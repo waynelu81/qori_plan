@@ -111,4 +111,15 @@ None.
 
 ## Notes
 
-None.
+- **Added 28 September 2026, from `T-166`:** a webhook that fails inside Qori
+  answers Stripe with a redirect. `AppException::render()` treats Stripe's
+  POST as a form — it does not ask for JSON — so it flashes a toast into a
+  session nobody reads and returns `back()`, a 302. Stripe counts a redirect
+  as a failure and retries, so nothing is lost, but its delivery log then shows
+  "302 ERR" and suggests pointing the endpoint "to the URL resolved by the
+  redirect" ([docs.stripe.com/webhooks](https://docs.stripe.com/webhooks)),
+  which would send whoever reads it after the wrong fault. `T-166`'s failed
+  account read and `CheckoutService::fulfil()`'s transient failures both land
+  there. When this task moves the webhook's reading, it can have
+  `webhooks/stripe*` render errors as JSON with their status, so a failed read
+  shows as the 502 it is.

@@ -2,7 +2,7 @@
 id: T-166
 title: Payments readiness moves when Stripe says the account changed
 stream: selling
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: T-164
@@ -144,12 +144,12 @@ with Stripe's reads faked from the fixtures:
 
 ## Acceptance
 
-- [ ] `account.updated` moves the readiness of every Group holding that account
-- [ ] `release-prerequisites.md` names `account.updated` among the Connect endpoint's events
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] `account.updated` moves the readiness of every Group holding that account
+- [x] `release-prerequisites.md` names `account.updated` among the Connect endpoint's events
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
