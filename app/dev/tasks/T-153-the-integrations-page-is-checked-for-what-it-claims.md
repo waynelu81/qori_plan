@@ -2,7 +2,7 @@
 id: T-153
 title: The Integrations page is checked for what it claims
 stream: reachability
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: T-044
@@ -186,13 +186,13 @@ None.
       Series, by a test that would fail if the scope were removed — **already
       true** via `PaymentsDisconnectTest:153`; verified 20 September 2026, no
       change needed
-- [ ] What a non-owner sees when a write on this page is refused in a browser
+- [x] What a non-owner sees when a write on this page is refused in a browser
       is asserted once — the redirect and the toast copy — beside `T-044`'s
       JSON cases
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
