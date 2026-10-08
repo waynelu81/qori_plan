@@ -675,3 +675,9 @@ Each comes with the default that will be built if you say "the defaults".
   MyFareWatch's side, not a dependency.
 - **Telescope first.** In the owner's words: "So installed telescope Qori
   first?" It became `T-214`.
+- **Then CI** ("yes, please pick up the next task"). It became `T-215`; CI's
+  first green run since 7 September came the same day. The owner said "ok
+  please push" for the push that runs it.
+- **The restore's leftovers committed** ("commit please"): T-097's companion
+  edits, the account register with its three fixes, and T-201 parked as
+  blocked (§5).
