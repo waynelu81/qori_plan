@@ -5,7 +5,7 @@ stream: storage
 status: draft
 owner: unassigned
 estimate: L
-depends: T-044, T-091, T-092, T-094, T-095
+depends: T-044, T-091, T-092, T-094, T-095, T-201
 blocks: none
 ---
 
@@ -1072,7 +1072,8 @@ Total: 46.
   are not told, so the buyer copy neither mentions it nor promises that buyers
   are hidden from each other; and whether a second Peer with a Dropbox account
   is listed to the first is not pursued. Still open: the team policy and the
-  invite cap.
+  invite cap. **The team policy is `T-201`'s**, a spike drafted the same day,
+  once the owner's Business Development Account arrived.
 - ~~`T-095` rows 1 and 2: whether a Basic creator, and a Plus creator, may add a
   read-only member at all — still the spike's to observe. **What its answer
   changes is settled (`D-018`, 17 September 2026):** no tier is dropped. A
@@ -1292,7 +1293,7 @@ links to it after `T-089` — `opensAs()` answers `tab` for Dropbox — and `T-0
 is expected to delete the route with the Vimeo embed; until then that is a
 route with one unreachable branch, not a dead page a Peer can reach.
 
-`release-prerequisites.md:20` already carries Dropbox production approval as an
+~~`release-prerequisites.md:20`~~ `release-prerequisites.md:29` (22 September 2026) already carries Dropbox production approval as an
 owner prerequisite. A development app is capped at 500 linked users and frozen
 for new ones two weeks after its 50th
 (https://www.dropbox.com/developers/reference/developer-guide), and every Peer
