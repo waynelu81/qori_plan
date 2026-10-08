@@ -2,7 +2,7 @@
 id: T-214
 title: Telescope runs only on a developer's machine
 stream: workflow
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -145,15 +145,15 @@ None new. `phpunit.xml` pins `TELESCOPE_ENABLED=false` and the tests run in
 
 ## Acceptance
 
-- [ ] The migration is in `database/migrations/local/` and only `TelescopeServiceProvider` loads it
-- [ ] Locally `migrate:status` reads its row as Ran; under `testing` it is not listed
-- [ ] OAuth token fields, sign-in and 2FA codes are masked in every environment
-- [ ] The storage connection defaults to `pgsql`, and `wayfinder:generate` is ignored
-- [ ] `qori/CLAUDE.md` says what Telescope is and where it runs
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] The migration is in `database/migrations/local/` and only `TelescopeServiceProvider` loads it
+- [x] Locally `migrate:status` reads its row as Ran; under `testing` it is not listed
+- [x] OAuth token fields, sign-in and 2FA codes are masked in every environment
+- [x] The storage connection defaults to `pgsql`, and `wayfinder:generate` is ignored
+- [x] `qori/CLAUDE.md` says what Telescope is and where it runs
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
