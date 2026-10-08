@@ -2,7 +2,7 @@
 id: T-215
 title: CI runs the gate again
 stream: workflow
-status: doing
+status: done
 owner: claude
 estimate: S
 depends: none
@@ -102,6 +102,15 @@ that carries the fix, read with `gh run view`.
 | `.github/workflows/tests.yml` | edit   | timeout and comments; what the run shows   |
 | `README.md`                  | edit   | Node 24                                    |
 
+### Added during execution
+
+| Path | Change | Notes |
+| --- | --- | --- |
+| `tests/Feature/Access/AccessServiceTest.php` | edit | `namespace Tests\Feature\Accesses` in a folder called `Access`; `composer install` warned on every run, CI's included |
+| `tests/Feature/Access/ConsentTest.php` | edit | the same |
+| `tests/Feature/Access/ShareAccessRoutesTest.php` | edit | the same |
+| `tests/Feature/Access/SharedRoutesTest.php` | edit | the same |
+
 Flows: none — no call chain changes.
 
 ## Database
@@ -127,14 +136,14 @@ first GitHub run.
 
 ## Acceptance
 
-- [ ] `.nvmrc` is committed, and README names the same version
-- [ ] A fresh clone runs the workflow's steps in order to a green `composer ci:check`
-- [ ] `tests.yml`'s timeout and comments say what is true on 8 October
-- [ ] One GitHub run of `tests` for the fix passes, read with `gh run view`
-- [ ] Every box above ticked, `status: done` and `owner:` set in the front matter
-- [ ] `bin/tasks --check` passes in `qori-plan`
-- [ ] `npm run check:fix` run, then `composer ci:check` green from a clean tree
-- [ ] Report written in `reports/` (see [its README](reports/README.md))
+- [x] `.nvmrc` is committed, and README names the same version
+- [x] A fresh clone runs the workflow's steps in order to a green `composer ci:check`
+- [x] `tests.yml`'s timeout and comments say what is true on 8 October
+- [x] One GitHub run of `tests` for the fix passes, read with `gh run view`
+- [x] Every box above ticked, `status: done` and `owner:` set in the front matter
+- [x] `bin/tasks --check` passes in `qori-plan`
+- [x] `npm run check:fix` run, then `composer ci:check` green from a clean tree
+- [x] Report written in `reports/` (see [its README](reports/README.md))
 
 ## Before this can be ready
 
@@ -145,7 +154,15 @@ first GitHub run.
 
 ## Re-scope log
 
-None.
+**8 October 2026.** The first GitHub run (37721828269) passed Setup Node, the
+install and the build, then failed `vue-tsc` on `ManagePasskeys.vue`: the
+passkey route's id was typed `number`. The build step generates Wayfinder's
+types against no database at all (`.env` names `qori`, which the runner
+lacks), so Wayfinder fell back to docblocks. The fresh-clone check missed it
+because a clone on this Mac reaches the migrated development database. The
+build step now migrates the service's `qori_testing` before Wayfinder runs,
+as `composer setup` does for a developer. `tests.yml` was already in Files;
+nothing else in the scope moves.
 
 ## Notes
 

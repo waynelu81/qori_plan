@@ -37,7 +37,8 @@ stops them recurring, not this file.
 - Sign in: Enter in the email field does not advance to the next step; only
   clicking Next does. `resources/js/pages/auth/Login.vue` (21 Sep)
 - A file Episode shows "No materials" under itself straight after upload (21 Sep)
-- CI reads a `.nvmrc` that was never committed (`T-081` listed it). `.github/workflows/tests.yml` (21 Sep)
+- CI's timeout comment says a hosted runner is slower; on 8 October the job took
+  3 min 46 s (the suite 82 s), so 30 minutes can go back to 15. `.github/workflows/tests.yml` (8 Oct)
 - `php artisan qori:reachability` exits 1 on two public methods nothing calls from
   outside their own class: `AccessService::peerFor()` and
   `SuppressionService::suppress()` — private, probably. `app/Services/` (22 Sep)
