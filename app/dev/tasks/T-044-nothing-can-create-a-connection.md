@@ -481,7 +481,7 @@ address per environment for Google Drive and `T-090`'s YouTube alike
 (`docs/planning/vendor-accounts.md:158-164`), of which the creator's connect
 requests `drive.file` alone. Publishing status Testing is enough for the round
 trip; **In production** is the owner's prerequisite for release, not for this
-task (`docs/planning/release-prerequisites.md:20`), because while the app is
+task (~~`docs/planning/release-prerequisites.md:20`~~ `release-prerequisites.md:29` on 22 September 2026, which records it done on 20 September), because while the app is
 Testing every refresh token dies after seven days
 (https://support.google.com/cloud/answer/15549945), and the report records
 which status the round trip ran under. A visible browser for one real round
@@ -1392,7 +1392,7 @@ which took eight to `T-151` and three to `T-152`; 47 and 42 before
   other under the lock; `onOneServer()` comes with that replica, which is
   `operations`'.
 - The Google Cloud app published and brand-verified, and the redirect URI for
-  production registered (`release-prerequisites.md:20`); until then every
+  production registered (~~`release-prerequisites.md:20`~~ `release-prerequisites.md:29` on 22 September 2026, for the publishing, done 20 September, and the branding that waits on `T-155`; the production redirect URI is `vendor-accounts.md:169-178`'s); until then every
   token dies in seven days and the connect step shows an unverified consent
   screen — the owner's. This gates release, not this task: Testing is enough
   for its round trip.

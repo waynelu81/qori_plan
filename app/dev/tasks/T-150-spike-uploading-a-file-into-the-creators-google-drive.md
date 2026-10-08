@@ -137,7 +137,7 @@ touches Qori's own database; every row it reads is Google's.
   and display names become roles, tokens and the session URI's `upload_id`
   become `REDACTED`, ids stay — and indexed in a new section of
   `tests/Fixtures/google/README.md`.
-- The report, `docs/planning/tasks/reports/T-150-YYYY-MM-DD-<owner>.md`,
+- The report, ~~`docs/planning/tasks/reports/T-150-YYYY-MM-DD-<owner>.md`~~ `app/dev/tasks/reports/T-150-YYYY-MM-DD-<owner>.md` in `qori-plan` (22 September 2026),
   whose Outcome answers Q1 to Q7 in order and names the fixture for each.
 - Carrying the answers into `T-149`: its two probe bullets struck with the
   date, the answer and the fixture, and its Upload scope written to whichever
@@ -159,15 +159,15 @@ touches Qori's own database; every row it reads is Google's.
 
 ## Files
 
-| Path                                                                            | Change | Notes                                                                                    |
-| ------------------------------------------------------------------------------- | ------ | ---------------------------------------------------------------------------------------- |
-| `tests/Fixtures/google/README.md`                                               | edit   | A new section for this spike's steps, in the existing table shape, with its own run note |
-| `tests/Fixtures/google/*.json`                                                  | new    | One per observed response, named under Code                                              |
-| `tests/Fixtures/google/upload-resumable-session.txt`                            | new    | Status line and headers of the initiating call, the session URI's `upload_id` redacted   |
-| `tests/Fixtures/google/upload-resumable-put-308.txt`                            | new    | Status line and headers of a chunk `PUT`, including every CORS header that came back     |
-| `tests/Fixtures/google/upload-cors-preflight.txt`                               | new    | The `OPTIONS` response, or the browser error where there was none                        |
-| `docs/planning/tasks/reports/T-150-YYYY-MM-DD-<owner>.md`                       | new    | The report; Q1 to Q7 in order                                                            |
-| `docs/planning/tasks/T-149-one-dialog-adds-files-from-any-connected-storage.md` | edit   | The probe bullets struck with the date, the answer and the fixture                       |
+| Path                                                                      | Change | Notes                                                                                                                                                                |
+| ------------------------------------------------------------------------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/Fixtures/google/README.md`                                         | edit   | A new section for this spike's steps, in the existing table shape, with its own run note                                                                             |
+| `tests/Fixtures/google/*.json`                                            | new    | One per observed response, named under Code                                                                                                                          |
+| `tests/Fixtures/google/upload-resumable-session.txt`                      | new    | Status line and headers of the initiating call, the session URI's `upload_id` redacted                                                                               |
+| `tests/Fixtures/google/upload-resumable-put-308.txt`                      | new    | Status line and headers of a chunk `PUT`, including every CORS header that came back                                                                                 |
+| `tests/Fixtures/google/upload-cors-preflight.txt`                         | new    | The `OPTIONS` response, or the browser error where there was none                                                                                                    |
+| `app/dev/tasks/reports/T-150-YYYY-MM-DD-<owner>.md`                       | new    | In `qori-plan`, where planning moved on 21 September 2026; this row and the next read `docs/planning/tasks/…` until 22 September 2026. The report; Q1 to Q7 in order |
+| `app/dev/tasks/T-149-one-dialog-adds-files-from-any-connected-storage.md` | edit   | In `qori-plan`. The probe bullets struck with the date, the answer and the fixture                                                                                   |
 
 Flows: none — nothing under `app/` or `routes/` changes, so no call chain exists to describe yet.
 

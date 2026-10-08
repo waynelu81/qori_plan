@@ -470,33 +470,33 @@ z() { curl -sS -i -w '\ntime_total=%{time_total}\n' -X "$1" "$API$2" \
 The report's **Outcome** is this table, one row per question, each cell
 "observed" with its fixture or "not observed" with why:
 
-| #   | Question                                                                            | Decides in `T-100`                                                   |
-| --- | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| 1   | Does a registrant carry into an occurrence added later, and does the old link work? | One grant per Series, or one per occurrence                          |
-| 2   | Does the returned `join_url` admit a Peer with no Zoom account, before and during?  | When a grant is `granted`, and what Open redirects to                |
-| 3   | The same for a Peer added mid-session                                               | Whether priority 1 holds for a late buyer                            |
-| 4   | Does a repeat add return the same id and link, and does it spend one of the three?  | Whether the ensure step must list before every add                   |
-| 5   | The cap: the 429 body, any `Retry-After`, the observed reset                        | Zoom's retry rule against `next_attempt_at`                          |
-| 6   | Manual approval: is a `join_url` returned, and where does the Peer land?            | The `needs_creator` row for a meeting Qori cannot fix                |
-| 7   | Do the two registrant email settings stick, and when?                               | Whether `D-016`'s "notification off" holds for Zoom                  |
-| 8   | Rescheduling one occurrence, and changing the series time                           | What the creator is told never to do                                 |
-| 9   | A required question, and registration off then on: is the list restored?            | The breakers in the tier copy, and what the scheduled check watches  |
-| 10  | Does `3043` fire at room size or at 4,999?                                          | Whether a Zoom Series needs a Peer ceiling checked before payment    |
-| 11  | `3161`, `1001`, `3000`, `401`: status, code and message for each                    | The error-to-state mapping and the creator's sentence                |
-| 12  | A second account's token reading the stored meeting id                              | `T-091`'s "connected a different account" trigger                    |
-| 13  | Cancel and delete: the running session, the link afterwards, the two lists          | What `revoked` is checked against, and which call revoke uses        |
-| 14  | Re-adding a cancelled registrant                                                    | The restored-access path                                             |
-| 15  | Meeting recordings versus user recordings, per instance                             | Whether recordings list without polling per instance                 |
-| 16  | The two recording-registrant calls: which recording each `share_url` opens          | Whether recordings keep a per-Peer grant at all                      |
-| 17  | Does `recording.completed` carry `share_url` and passcode per instance?             | Webhook or scheduled poll                                            |
-| 18  | Is the old refresh token refused after a refresh?                                   | Whether the refresh command needs a per-connection lock              |
-| 19  | Which fields the meeting list returns, and what PICK needs a second call for        | The picker's check, and how many calls it costs                      |
-| 20  | Seconds per call, and the stopwatch from grant to first join                        | `REQUEST_TIMEOUT_SECONDS` against Zoom, and when to say `pending`    |
-| 21  | The Marketplace console: what review asks, any lead time, the admin-approval screen | `release-prerequisites.md:20`, and whether Business creators connect |
-| 22  | The walkthrough: first access, a later session, a repeat, a recovery                | The release check `T-100` cites                                      |
-| 23  | What a re-check of a `granted` row reads, and whether the list carries `join_url`   | The `checked_at` cadence, and what Open re-reads before trusting     |
-| 24  | Does any call answer with a job to poll rather than a result?                       | Whether a Zoom grant is ever asynchronous                            |
-| 25  | What a Basic host is refused, in Zoom's own words                                   | The Basic tier entry's stated limit, and its recommendation          |
+| #   | Question                                                                            | Decides in `T-100`                                                                                                         |
+| --- | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Does a registrant carry into an occurrence added later, and does the old link work? | One grant per Series, or one per occurrence                                                                                |
+| 2   | Does the returned `join_url` admit a Peer with no Zoom account, before and during?  | When a grant is `granted`, and what Open redirects to                                                                      |
+| 3   | The same for a Peer added mid-session                                               | Whether priority 1 holds for a late buyer                                                                                  |
+| 4   | Does a repeat add return the same id and link, and does it spend one of the three?  | Whether the ensure step must list before every add                                                                         |
+| 5   | The cap: the 429 body, any `Retry-After`, the observed reset                        | Zoom's retry rule against `next_attempt_at`                                                                                |
+| 6   | Manual approval: is a `join_url` returned, and where does the Peer land?            | The `needs_creator` row for a meeting Qori cannot fix                                                                      |
+| 7   | Do the two registrant email settings stick, and when?                               | Whether `D-016`'s "notification off" holds for Zoom                                                                        |
+| 8   | Rescheduling one occurrence, and changing the series time                           | What the creator is told never to do                                                                                       |
+| 9   | A required question, and registration off then on: is the list restored?            | The breakers in the tier copy, and what the scheduled check watches                                                        |
+| 10  | Does `3043` fire at room size or at 4,999?                                          | Whether a Zoom Series needs a Peer ceiling checked before payment                                                          |
+| 11  | `3161`, `1001`, `3000`, `401`: status, code and message for each                    | The error-to-state mapping and the creator's sentence                                                                      |
+| 12  | A second account's token reading the stored meeting id                              | `T-091`'s "connected a different account" trigger                                                                          |
+| 13  | Cancel and delete: the running session, the link afterwards, the two lists          | What `revoked` is checked against, and which call revoke uses                                                              |
+| 14  | Re-adding a cancelled registrant                                                    | The restored-access path                                                                                                   |
+| 15  | Meeting recordings versus user recordings, per instance                             | Whether recordings list without polling per instance                                                                       |
+| 16  | The two recording-registrant calls: which recording each `share_url` opens          | Whether recordings keep a per-Peer grant at all                                                                            |
+| 17  | Does `recording.completed` carry `share_url` and passcode per instance?             | Webhook or scheduled poll                                                                                                  |
+| 18  | Is the old refresh token refused after a refresh?                                   | Whether the refresh command needs a per-connection lock                                                                    |
+| 19  | Which fields the meeting list returns, and what PICK needs a second call for        | The picker's check, and how many calls it costs                                                                            |
+| 20  | Seconds per call, and the stopwatch from grant to first join                        | `REQUEST_TIMEOUT_SECONDS` against Zoom, and when to say `pending`                                                          |
+| 21  | The Marketplace console: what review asks, any lead time, the admin-approval screen | ~~`release-prerequisites.md:20`~~ `release-prerequisites.md:29` (22 September 2026), and whether Business creators connect |
+| 22  | The walkthrough: first access, a later session, a repeat, a recovery                | The release check `T-100` cites                                                                                            |
+| 23  | What a re-check of a `granted` row reads, and whether the list carries `join_url`   | The `checked_at` cadence, and what Open re-reads before trusting                                                           |
+| 24  | Does any call answer with a job to poll rather than a result?                       | Whether a Zoom grant is ever asynchronous                                                                                  |
+| 25  | What a Basic host is refused, in Zoom's own words                                   | The Basic tier entry's stated limit, and its recommendation                                                                |
 
 The report's **States** table reads the same rows the other way: each outcome,
 its fixture, the `VendorGrantStatus` it maps to and who resolves it. The mapping

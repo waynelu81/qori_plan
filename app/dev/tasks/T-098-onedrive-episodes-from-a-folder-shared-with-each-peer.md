@@ -151,7 +151,7 @@ read is what shows a link-type permission covering several people — the case
 the developer review asks to inspect before removal is built. A `GET` is not a
 sharing call, so it does not spend the sharing budget a work tenant is held to,
 which the research records as 300 sharing calls per five minutes per app per
-tenant and Microsoft's throttling guidance describes without that figure
+tenant ~~and Microsoft's throttling guidance describes without that figure~~ — the guidance does give it, for "Specific Sharing APIs" it does not name (22 September 2026, under Before this can be ready)
 ([throttling](https://learn.microsoft.com/en-us/sharepoint/dev/general-development/how-to-avoid-getting-throttled-or-blocked-in-sharepoint-online));
 a 429 is handled by its `Retry-After` either way. Grants on one folder still
 run one at a time under `T-091`'s container lock, which it takes through
@@ -251,7 +251,7 @@ every call and marks the connection for reconnect on this answer, and an
 integration never calls a Service. A 404 on the folder is
 `needs_creator` with `ERROR_CONTAINER_MISSING`. A personal-account gate —
 `accountVerificationRequired`, `hipCheckRequired` — is `needs_creator`; both
-codes are reported rather than documented on the invite reference, so the
+codes are ~~reported rather than~~ documented on the invite reference, as codes for a notification that failed rather than a share refused (22 September 2026, under Before this can be ready), so the
 branch is written against the code string and owes a body from `T-097` step 8.
 The daily sharing refusal is `pending` with `next_attempt_at` a day out,
 because retrying sooner cannot work and nobody can act; `T-097` Q9 gives the
@@ -1163,14 +1163,35 @@ today, and the second walks the new lang lines. `T-044`'s test that every
   limits send a file caller to, gives 3,000 requests per five minutes per user,
   tenant resource budgets that depend on the licence, and five resource units
   for every permission operation, reads included. Two lines above rest on the
-  older reading: the 300 sharing calls per five minutes, struck from `T-097`'s
+  older reading: ~~the 300 sharing calls per five minutes, struck from `T-097`'s
   sources table on the same date and to go from the paragraph on `grant()` with
-  it, and the argument beside it that a `GET` costs nothing because it is not a
+  it, and~~ the argument beside it that a `GET` costs nothing because it is not a
   sharing call — a permission list spends five units like any other permission
   call, so listing before every invite doubles what a fan-out costs. A 429 is
   the user's and the tenant's rather than the row's, and `failure()` gives its
   `Retry-After` to one grant while `T-091`'s sweep takes the next Peer on the
-  same token — anyone's, with `T-091`'s sweep.
+  same token — anyone's, with `T-091`'s sweep. **Corrected 22 September 2026:
+  the 300 figure is on the page, so only the second of those two lines rests
+  on a wrong reading.** `T-097` found the same of its own sources row that
+  day, which is the row this bullet says the figure was struck from. The
+  page's per-app, per-tenant table lists "Specific Sharing APIs" at 300 every
+  five minutes with no licence bound, and its source has carried that row
+  since at least 28 May 2025 (commit `d6363692a5` of `SharePoint/sp-dev-docs`,
+  line 124 of the page then and line 132 now). The paragraph on `grant()`
+  keeps the figure and loses only its claim that the guidance omits it,
+  struck there. What the page does not say is which calls those are, so "300
+  sharing calls" claims more than it does, and whether an invite, a permission
+  list or neither counts against the 300 is not stated: the paragraph's "a
+  `GET` is not a sharing call" is no better supported than before, and the
+  five units per permission call, reads included, still stand. On headers the
+  same page now says two things. A change of 7 August 2026 (`f7e7c530c3`)
+  replaced its `RateLimit` preview section with one saying SharePoint Online
+  neither returns nor supports the IETF `RateLimit` headers and that callers
+  should honour `Retry-After`, while an older paragraph on it still advises
+  using the `Retry-After` and `RateLimit` headers together (lines 158 and 165
+  of the source now). `GraphClient::retryAfter()` reads `Retry-After` alone,
+  which both parts of the page support, and nothing here may rest on a
+  `RateLimit` header unless `T-097` step 7 records one arriving.
 - **From the storage review, F11 and its evidence table (20 September 2026):**
   every Graph payload named under Code is documented and unobserved, and the
   row `T-097` owns is what settles it — personal and work walked separately,
@@ -1190,6 +1211,91 @@ today, and the second walks the new lang lines. `T-044`'s test that every
   reshaped around Drive's per-file grants before `T-097` has said what
   OneDrive's unit is; the queries and tests that read a container are settled
   with `T-091` before either task freezes — anyone's, with `T-091`.
+- **From `T-097` brought to ready (22 September 2026): a grant on one file,
+  and what Open does with it.** `T-097`'s step 0 now asks whether a OneDrive
+  grant can sit on one file through `T-160`'s item contract,
+  `GrantsItemAccess::grantReader(Connection $connection, string $itemId, string $email, int $timeoutSeconds): GrantResult`
+  (`app/Integrations/Contracts/GrantsItemAccess.php:16-26`), instead of on
+  the folder through `T-091`'s: Q14 asks it of the work tenant, Q15 of free
+  personal. This draft predates that contract and assumes the folder
+  throughout. If the spike says the file route works, this task may take it,
+  but reusing the contract is not free, and this bullet and the next two say
+  what it costs. The first cost is Open's, which sends a Peer on to the
+  vendor only when the row is `granted`. `VendorAccessService::ensureGrant()`
+  answers null for a `granted` row or a result that `isGranted()`, and the
+  state otherwise (`app/Services/VendorAccessService.php:71-73`, `:117`);
+  `PlaybackTicketService::open()` turns any state into `VendorLink::blocked()`
+  (`app/Services/PlaybackTicketService.php:74-81`), and
+  `OpenEpisodeController` redirects that to the Series page with the state's
+  `shared.vendor_notice` line
+  (`app/Http/Controllers/Shared/OpenEpisodeController.php:40-53`). There are
+  lines for `awaiting_identity`, `needs_creator` and `pending` only
+  (`lang/en/shared.php:28-30`), so an `awaiting_acceptance` Peer gets the
+  fallback, `redirected`, which names no step, and pressing Open again sends
+  the invite again rather than taking them to Microsoft. If Q14 or Q15 finds
+  that a silent file invite leaves the Peer a step to take there, its 200 is
+  `awaiting_acceptance`, and this task changes Open as well as adding a
+  granter: a line for that state and a way to the file, which the folder route
+  gets from `T-091`'s notice and `open_folder` (the invitation-step paragraph
+  under Decisions) and the file route would have to bring itself — anyone's,
+  with `T-097` Q14 and Q15.
+- **From `T-097` (22 September 2026): the file route names the item by its id
+  alone.** `ensureGrant()` fills `vendor_grants.external_target_id` from the
+  Episode's `content['file_id']` and passes that one string to
+  `grantReader()` as `$itemId`, with no drive
+  (`app/Services/VendorAccessService.php:60-69`, `:88-93`), while this draft
+  keeps a drive id beside every item id: `{driveId}!{itemId}` in
+  `series_containers.external_id`, and `drive_id` beside `item_id` in
+  `episodes.content` (Decisions, Database). Graph's invite also takes
+  `POST /me/drive/items/{item-id}/invite`, which needs no drive id
+  ([invite](https://learn.microsoft.com/en-us/graph/api/driveitem-invite?view=graph-rest-1.0),
+  read 22 September 2026), and the creator's own OneDrive is the only drive
+  this task reaches (Out), so the file route may need the item id and nothing
+  else. That changes this task's storage in three ways. The item id is read
+  from `file_id`, where `T-160`'s service looks, unless `ensureGrant()` learns
+  a key per provider, which would be a change to `T-160`'s code carried here.
+  `drive_id` in `content` stays only for whatever else reads it: the grant
+  does not, and what it still buys is knowing without a call which drive a
+  file came from once the creator connects another account, since an item id
+  is unique only within its drive (the `external_id` paragraph's own reason).
+  And `{driveId}!{itemId}` with `OneDrive::split()` belongs to the folder
+  route alone, unless the file route packs the same string into `file_id` and
+  splits it in `grantReader()` because the drive has to travel after all —
+  anyone's, with `T-097` Q14 and Q15.
+- **From `T-097` (22 September 2026): the file route shortens this task's
+  dependency on `T-091` and does not cut it.** A grant on a file needs none of
+  `T-091`'s container machinery, so on that route the direct `T-091` in
+  `depends:` could go. `T-091` stays upstream all the same: `depends:` also
+  names `T-092` and `T-094`, and both depend on `T-091` as they are drafted
+  (their front matter, read 22 September 2026). Saying the file route drops
+  `T-091` overstated it, as `T-095` found of `T-096` the same day, and
+  `T-097`'s own answer to the storage review's F10 still says a grant on a
+  file "needs nothing from `T-091`". Cutting the chain would mean re-cutting
+  `T-092` and `T-094`, which is theirs to decide — anyone's, with those two
+  tasks.
+- **From `T-097` (22 September 2026): the two personal-account codes are
+  documented.** `accountVerificationRequired` and `hipCheckRequired` are on
+  the invite reference
+  ([invite](https://learn.microsoft.com/en-us/graph/api/driveitem-invite?view=graph-rest-1.0),
+  read 22 September 2026), and have been since 16 September 2025 (commit
+  `a42ed0c0bf` of `microsoftgraph/microsoft-graph-docs-contrib`), so the
+  refusals paragraph's "reported rather than documented" was wrong when it
+  was written, and is struck there. What the page documents is narrower than
+  that paragraph's reading. Both are in its table of send invitation
+  notification errors: codes found in a nested `innererror` when sending the
+  notification fails, each described as unblocking the sending of
+  notifications, and ones apps are not required to handle. Its 207 example
+  carries `accountVerificationRequired` under an `error.code` of `notAllowed`,
+  in an entry that still holds a permission `id`. Three things follow, none
+  settled here. This task sends `sendInvitation: false`, which the page says
+  grants the permission without a notification, so whether either code
+  arises on a silent invite at all is what `T-097` step 8's body shows. If one
+  does, `failure()` reads `error.innererror.code`, where
+  `GraphClient::errorCode()` as drafted reads `error.code` and would see
+  `notAllowed`. And if the permission stands beside the error, the row may be
+  `granted` or `awaiting_acceptance` rather than `needs_creator`, and
+  `connections.grants.reasons.account_gated`'s "before it will share anything
+  else" says more than the page does — anyone's, with `T-097` step 8.
 
 ## Re-scope log
 
@@ -1241,3 +1347,16 @@ holds it.~~ Answered 17 September 2026 (`D-020`): `T-089` creates
 `shared.vendor_notice.reasons.*` there beside the notice's buttons and flashes,
 and each provider's own sentences stay under `accesses.vendor.<provider>.*`, as
 this task's rows already are.
+
+**22 September 2026.** What `T-097`'s author found here while bringing that
+spike to ready, and left for this file, is folded in, each finding checked
+against its source that day: the sharing-API figure and the throttling page's
+two answers on `RateLimit` headers, as a correction to the storage review's
+rate-limit bullet; and the file route's cost at Open, its item id, what it
+does to `depends:`, and the two documented codes, as four bullets at the end
+of Before this can be ready. The two sentences they contradict, in the
+paragraph on `grant()` and the refusals paragraph, are struck on the lines
+they were already on. `T-097` cites this file by line — `T-098:164`,
+`:252-255`, `:255`, `:333`, `:685` and `:923` — so nothing above Before this
+can be ready gained or lost a line, and each of those still points where it
+did.
